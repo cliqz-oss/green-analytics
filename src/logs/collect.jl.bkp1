@@ -1,0 +1,842 @@
+{"p": "http://site1.com/", "type": "page_load", "ts": "201601182209"}
+{"p": "site1.com", "type": "site_load", "ts": "201601182209"}
+{"p": "http://site1.com/", "type": "page_visit_by_year", "ts": "201601182209"}
+{"p": "http://site1.com/", "type": "page_visit_by_month", "ts": "201601182209"}
+{"p": "http://site1.com/", "type": "page_visit_by_day", "ts": "201601182209"}
+{"p": "http://site1.com/", "type": "page_visit_by_hour", "ts": "201601182209"}
+{"p": "http://site1.com/", "type": "page_visit_by_min", "ts": "201601182209"}
+{"p": "site1.com", "returning_from_ts": "0000000000", "type": "site_visit_by_year", "ts": "201601182209"}
+{"p": "site1.com", "returning_from_ts": "0000000000", "type": "site_visit_by_month", "ts": "201601182209"}
+{"p": "site1.com", "returning_from_ts": "0000000000", "type": "site_visit_by_day", "ts": "201601182209"}
+{"p": "site1.com", "returning_from_ts": "0000000000", "type": "site_visit_by_hour", "ts": "201601182209"}
+{"p": "site1.com", "returning_from_ts": "0000000000", "type": "site_visit_by_min", "ts": "201601182209"}
+{"type": "new_all", "ts": "201601182209"}
+{"type": "new_year", "ts": "201601182209"}
+{"type": "new_month", "ts": "201601182209"}
+{"type": "new_day", "ts": "201601182209"}
+{"type": "new_hour", "ts": "201601182209"}
+{"type": "new_min", "ts": "201601182209"}
+{"p": ["http://site1.com/"], "type": "pattern_by_hour", "ts": "201601182209"}
+{"p": "http://site1.com/page-3.html", "type": "page_load", "ts": "201601182215"}
+{"p": "site1.com", "type": "site_load", "ts": "201601182215"}
+{"p": "http://site1.com/page-3.html", "type": "page_visit_by_year", "ts": "201601182215"}
+{"p": "http://site1.com/page-3.html", "type": "page_visit_by_month", "ts": "201601182215"}
+{"p": "http://site1.com/page-3.html", "type": "page_visit_by_day", "ts": "201601182215"}
+{"p": "http://site1.com/page-3.html", "type": "page_visit_by_hour", "ts": "201601182215"}
+{"p": "http://site1.com/page-3.html", "type": "page_visit_by_min", "ts": "201601182215"}
+{"p": "site1.com", "returning_from_ts": "2016011822", "type": "site_visit_by_min", "ts": "201601182215"}
+{"type": "new_min", "ts": "201601182215"}
+{"p": ["http://site1.com/page-3.html"], "type": "pattern_by_hour", "ts": "201601182215"}
+{"p": "http://site1.com/page-7.html", "type": "page_load", "ts": "201601182218"}
+{"p": "site1.com", "type": "site_load", "ts": "201601182218"}
+{"p": "http://site1.com/page-7.html", "type": "page_visit_by_year", "ts": "201601182218"}
+{"p": "http://site1.com/page-7.html", "type": "page_visit_by_month", "ts": "201601182218"}
+{"p": "http://site1.com/page-7.html", "type": "page_visit_by_day", "ts": "201601182218"}
+{"p": "http://site1.com/page-7.html", "type": "page_visit_by_hour", "ts": "201601182218"}
+{"p": "http://site1.com/page-7.html", "type": "page_visit_by_min", "ts": "201601182218"}
+{"p": "site1.com", "returning_from_ts": "2016011822", "type": "site_visit_by_min", "ts": "201601182218"}
+{"type": "new_min", "ts": "201601182218"}
+{"p": ["http://site1.com/", "http://site1.com/page-3.html", "http://site1.com/page-7.html"], "type": "pattern_by_hour", "ts": "201601182218"}
+{"p": "http://site1.com/page-9.html", "type": "page_load", "ts": "201601182222"}
+{"p": "site1.com", "type": "site_load", "ts": "201601182222"}
+{"p": "http://site1.com/page-9.html", "type": "page_visit_by_year", "ts": "201601182222"}
+{"p": "http://site1.com/page-9.html", "type": "page_visit_by_month", "ts": "201601182222"}
+{"p": "http://site1.com/page-9.html", "type": "page_visit_by_day", "ts": "201601182222"}
+{"p": "http://site1.com/page-9.html", "type": "page_visit_by_hour", "ts": "201601182222"}
+{"p": "http://site1.com/page-9.html", "type": "page_visit_by_min", "ts": "201601182222"}
+{"p": "site1.com", "returning_from_ts": "2016011822", "type": "site_visit_by_min", "ts": "201601182222"}
+{"type": "new_min", "ts": "201601182222"}
+{"p": ["http://site1.com/page-3.html", "http://site1.com/page-7.html", "http://site1.com/page-9.html"], "type": "pattern_by_hour", "ts": "201601182222"}
+{"p": "http://site2.com/", "type": "page_load", "ts": "201601182226"}
+{"p": "site2.com", "type": "site_load", "ts": "201601182226"}
+{"p": "http://site2.com/", "type": "page_visit_by_year", "ts": "201601182226"}
+{"p": "http://site2.com/", "type": "page_visit_by_month", "ts": "201601182226"}
+{"p": "http://site2.com/", "type": "page_visit_by_day", "ts": "201601182226"}
+{"p": "http://site2.com/", "type": "page_visit_by_hour", "ts": "201601182226"}
+{"p": "http://site2.com/", "type": "page_visit_by_min", "ts": "201601182226"}
+{"p": "site2.com", "returning_from_ts": "0000000000", "type": "site_visit_by_year", "ts": "201601182226"}
+{"p": "site2.com", "returning_from_ts": "0000000000", "type": "site_visit_by_month", "ts": "201601182226"}
+{"p": "site2.com", "returning_from_ts": "0000000000", "type": "site_visit_by_day", "ts": "201601182226"}
+{"p": "site2.com", "returning_from_ts": "0000000000", "type": "site_visit_by_hour", "ts": "201601182226"}
+{"p": "site2.com", "returning_from_ts": "0000000000", "type": "site_visit_by_min", "ts": "201601182226"}
+{"type": "new_min", "ts": "201601182226"}
+{"p": ["http://site1.com/page-7.html", "http://site1.com/page-9.html", "(obfuscated)"], "type": "pattern_by_hour", "ts": "201601182226"}
+{"p": ["site1.com", "site2.com"], "type": "site_correlation_by_hour", "ts": "201601182226"}
+{"p": "http://site5.com/", "type": "page_load", "ts": "201601182230"}
+{"p": "site5.com", "type": "site_load", "ts": "201601182230"}
+{"p": "http://site5.com/", "type": "page_visit_by_year", "ts": "201601182230"}
+{"p": "http://site5.com/", "type": "page_visit_by_month", "ts": "201601182230"}
+{"p": "http://site5.com/", "type": "page_visit_by_day", "ts": "201601182230"}
+{"p": "http://site5.com/", "type": "page_visit_by_hour", "ts": "201601182230"}
+{"p": "http://site5.com/", "type": "page_visit_by_min", "ts": "201601182230"}
+{"p": "site5.com", "returning_from_ts": "0000000000", "type": "site_visit_by_year", "ts": "201601182230"}
+{"p": "site5.com", "returning_from_ts": "0000000000", "type": "site_visit_by_month", "ts": "201601182230"}
+{"p": "site5.com", "returning_from_ts": "0000000000", "type": "site_visit_by_day", "ts": "201601182230"}
+{"p": "site5.com", "returning_from_ts": "0000000000", "type": "site_visit_by_hour", "ts": "201601182230"}
+{"p": "site5.com", "returning_from_ts": "0000000000", "type": "site_visit_by_min", "ts": "201601182230"}
+{"type": "new_min", "ts": "201601182230"}
+{"p": ["http://site1.com/page-9.html", "(obfuscated)", "(obfuscated)"], "type": "pattern_by_hour", "ts": "201601182230"}
+{"p": ["site1.com", "site5.com"], "type": "site_correlation_by_hour", "ts": "201601182230"}
+{"p": "http://site1.com/", "type": "page_load", "ts": "201601182245"}
+{"p": "site1.com", "type": "site_load", "ts": "201601182245"}
+{"p": "http://site1.com/", "type": "page_visit_by_year", "ts": "201601182245"}
+{"p": "http://site1.com/", "type": "page_visit_by_month", "ts": "201601182245"}
+{"p": "http://site1.com/", "type": "page_visit_by_day", "ts": "201601182245"}
+{"p": "http://site1.com/", "type": "page_visit_by_hour", "ts": "201601182245"}
+{"p": "http://site1.com/", "type": "page_visit_by_min", "ts": "201601182245"}
+{"p": "site1.com", "returning_from_ts": "0000000000", "type": "site_visit_by_year", "ts": "201601182245"}
+{"p": "site1.com", "returning_from_ts": "0000000000", "type": "site_visit_by_month", "ts": "201601182245"}
+{"p": "site1.com", "returning_from_ts": "0000000000", "type": "site_visit_by_day", "ts": "201601182245"}
+{"p": "site1.com", "returning_from_ts": "0000000000", "type": "site_visit_by_hour", "ts": "201601182245"}
+{"p": "site1.com", "returning_from_ts": "0000000000", "type": "site_visit_by_min", "ts": "201601182245"}
+{"type": "new_all", "ts": "201601182245"}
+{"type": "new_year", "ts": "201601182245"}
+{"p": "http://site1.com/page-3.html", "type": "page_load", "ts": "201601182249"}
+{"p": "site1.com", "type": "site_load", "ts": "201601182249"}
+{"p": "http://site1.com/page-3.html", "type": "page_visit_by_year", "ts": "201601182249"}
+{"p": "http://site1.com/page-3.html", "type": "page_visit_by_month", "ts": "201601182249"}
+{"p": "http://site1.com/page-3.html", "type": "page_visit_by_day", "ts": "201601182249"}
+{"p": "http://site1.com/page-3.html", "type": "page_visit_by_hour", "ts": "201601182249"}
+{"p": "http://site1.com/page-3.html", "type": "page_visit_by_min", "ts": "201601182249"}
+{"p": "site1.com", "returning_from_ts": "2016011822", "type": "site_visit_by_min", "ts": "201601182249"}
+{"type": "new_min", "ts": "201601182249"}
+{"p": ["http://site1.com/page-3.html"], "type": "pattern_by_hour", "ts": "201601182249"}
+{"p": "http://site3.com/page-10.html", "type": "page_load", "ts": "201601182253"}
+{"p": "site3.com", "type": "site_load", "ts": "201601182253"}
+{"p": "http://site3.com/page-10.html", "type": "page_visit_by_year", "ts": "201601182253"}
+{"p": "http://site3.com/page-10.html", "type": "page_visit_by_month", "ts": "201601182253"}
+{"p": "http://site3.com/page-10.html", "type": "page_visit_by_day", "ts": "201601182253"}
+{"p": "http://site3.com/page-10.html", "type": "page_visit_by_hour", "ts": "201601182253"}
+{"p": "http://site3.com/page-10.html", "type": "page_visit_by_min", "ts": "201601182253"}
+{"p": "site3.com", "returning_from_ts": "0000000000", "type": "site_visit_by_year", "ts": "201601182253"}
+{"p": "site3.com", "returning_from_ts": "0000000000", "type": "site_visit_by_month", "ts": "201601182253"}
+{"p": "site3.com", "returning_from_ts": "0000000000", "type": "site_visit_by_day", "ts": "201601182253"}
+{"p": "site3.com", "returning_from_ts": "0000000000", "type": "site_visit_by_hour", "ts": "201601182253"}
+{"p": "site3.com", "returning_from_ts": "0000000000", "type": "site_visit_by_min", "ts": "201601182253"}
+{"type": "new_min", "ts": "201601182253"}
+{"p": ["http://site1.com/", "http://site1.com/page-3.html", "(obfuscated)"], "type": "pattern_by_hour", "ts": "201601182253"}
+{"p": "http://site1.com/page-10.html", "type": "page_load", "ts": "201601182257"}
+{"p": "site1.com", "type": "site_load", "ts": "201601182257"}
+{"p": "http://site1.com/page-10.html", "type": "page_visit_by_year", "ts": "201601182257"}
+{"p": "http://site1.com/page-10.html", "type": "page_visit_by_month", "ts": "201601182257"}
+{"p": "http://site1.com/page-10.html", "type": "page_visit_by_day", "ts": "201601182257"}
+{"p": "http://site1.com/page-10.html", "type": "page_visit_by_hour", "ts": "201601182257"}
+{"p": "http://site1.com/page-10.html", "type": "page_visit_by_min", "ts": "201601182257"}
+{"p": "site1.com", "returning_from_ts": "2016011822", "type": "site_visit_by_min", "ts": "201601182257"}
+{"type": "new_min", "ts": "201601182257"}
+{"p": ["http://site1.com/page-3.html", "(obfuscated)", "http://site1.com/page-10.html"], "type": "pattern_by_hour", "ts": "201601182257"}
+{"p": "http://site1.com/", "type": "page_load", "ts": "201601182301"}
+{"p": "site1.com", "type": "site_load", "ts": "201601182301"}
+{"p": "http://site1.com/", "type": "page_visit_by_hour", "ts": "201601182301"}
+{"p": "http://site1.com/", "type": "page_visit_by_min", "ts": "201601182301"}
+{"p": "site1.com", "returning_from_ts": "2016011822", "type": "site_visit_by_hour", "ts": "201601182301"}
+{"p": "site1.com", "returning_from_ts": "2016011822", "type": "site_visit_by_min", "ts": "201601182301"}
+{"type": "new_hour", "ts": "201601182301"}
+{"type": "new_min", "ts": "201601182301"}
+{"p": ["http://site3.com/page-10.html", "(obfuscated)", "(obfuscated)"], "type": "pattern_by_hour", "ts": "201601182301"}
+{"p": "http://site3.com/", "type": "page_load", "ts": "201601182304"}
+{"p": "site3.com", "type": "site_load", "ts": "201601182304"}
+{"p": "http://site3.com/", "type": "page_visit_by_year", "ts": "201601182304"}
+{"p": "http://site3.com/", "type": "page_visit_by_month", "ts": "201601182304"}
+{"p": "http://site3.com/", "type": "page_visit_by_day", "ts": "201601182304"}
+{"p": "http://site3.com/", "type": "page_visit_by_hour", "ts": "201601182304"}
+{"p": "http://site3.com/", "type": "page_visit_by_min", "ts": "201601182304"}
+{"p": "site3.com", "returning_from_ts": "2016011822", "type": "site_visit_by_hour", "ts": "201601182304"}
+{"p": "site3.com", "returning_from_ts": "2016011822", "type": "site_visit_by_min", "ts": "201601182304"}
+{"type": "new_min", "ts": "201601182304"}
+{"p": ["http://site1.com/page-10.html", "http://site1.com/", "(obfuscated)"], "type": "pattern_by_hour", "ts": "201601182304"}
+{"p": ["site1.com", "site3.com"], "type": "site_correlation_by_hour", "ts": "201601182304"}
+{"p": "http://site1.com/", "type": "page_load", "ts": "201601182316"}
+{"p": "site1.com", "type": "site_load", "ts": "201601182316"}
+{"p": "http://site1.com/", "type": "page_visit_by_year", "ts": "201601182316"}
+{"p": "http://site1.com/", "type": "page_visit_by_month", "ts": "201601182316"}
+{"p": "http://site1.com/", "type": "page_visit_by_day", "ts": "201601182316"}
+{"p": "http://site1.com/", "type": "page_visit_by_hour", "ts": "201601182316"}
+{"p": "http://site1.com/", "type": "page_visit_by_min", "ts": "201601182316"}
+{"p": "site1.com", "returning_from_ts": "0000000000", "type": "site_visit_by_year", "ts": "201601182316"}
+{"p": "site1.com", "returning_from_ts": "0000000000", "type": "site_visit_by_month", "ts": "201601182316"}
+{"p": "site1.com", "returning_from_ts": "0000000000", "type": "site_visit_by_day", "ts": "201601182316"}
+{"p": "site1.com", "returning_from_ts": "0000000000", "type": "site_visit_by_hour", "ts": "201601182316"}
+{"p": "site1.com", "returning_from_ts": "0000000000", "type": "site_visit_by_min", "ts": "201601182316"}
+{"p": "http://site5.com/page-10.html", "type": "page_load", "ts": "201601182320"}
+{"p": "site5.com", "type": "site_load", "ts": "201601182320"}
+{"p": "http://site5.com/page-10.html", "type": "page_visit_by_year", "ts": "201601182320"}
+{"p": "http://site5.com/page-10.html", "type": "page_visit_by_month", "ts": "201601182320"}
+{"p": "http://site5.com/page-10.html", "type": "page_visit_by_day", "ts": "201601182320"}
+{"p": "http://site5.com/page-10.html", "type": "page_visit_by_hour", "ts": "201601182320"}
+{"p": "http://site5.com/page-10.html", "type": "page_visit_by_min", "ts": "201601182320"}
+{"p": "site5.com", "returning_from_ts": "0000000000", "type": "site_visit_by_year", "ts": "201601182320"}
+{"p": "site5.com", "returning_from_ts": "0000000000", "type": "site_visit_by_month", "ts": "201601182320"}
+{"p": "site5.com", "returning_from_ts": "0000000000", "type": "site_visit_by_day", "ts": "201601182320"}
+{"p": "site5.com", "returning_from_ts": "0000000000", "type": "site_visit_by_hour", "ts": "201601182320"}
+{"p": "site5.com", "returning_from_ts": "0000000000", "type": "site_visit_by_min", "ts": "201601182320"}
+{"type": "new_min", "ts": "201601182320"}
+{"p": ["http://site5.com/page-10.html"], "type": "pattern_by_hour", "ts": "201601182320"}
+{"p": "http://site4.com/page-10.html", "type": "page_load", "ts": "201601182327"}
+{"p": "site4.com", "type": "site_load", "ts": "201601182327"}
+{"p": "http://site4.com/page-10.html", "type": "page_visit_by_year", "ts": "201601182327"}
+{"p": "http://site4.com/page-10.html", "type": "page_visit_by_month", "ts": "201601182327"}
+{"p": "http://site4.com/page-10.html", "type": "page_visit_by_day", "ts": "201601182327"}
+{"p": "http://site4.com/page-10.html", "type": "page_visit_by_hour", "ts": "201601182327"}
+{"p": "http://site4.com/page-10.html", "type": "page_visit_by_min", "ts": "201601182327"}
+{"p": "site4.com", "returning_from_ts": "0000000000", "type": "site_visit_by_year", "ts": "201601182327"}
+{"p": "site4.com", "returning_from_ts": "0000000000", "type": "site_visit_by_month", "ts": "201601182327"}
+{"p": "site4.com", "returning_from_ts": "0000000000", "type": "site_visit_by_day", "ts": "201601182327"}
+{"p": "site4.com", "returning_from_ts": "0000000000", "type": "site_visit_by_hour", "ts": "201601182327"}
+{"p": "site4.com", "returning_from_ts": "0000000000", "type": "site_visit_by_min", "ts": "201601182327"}
+{"type": "new_min", "ts": "201601182327"}
+{"p": ["http://site5.com/page-10.html"], "type": "goal", "ts": "201601182327", "name": "signup to site4"}
+{"p": ["http://site1.com/", "(obfuscated)", "(obfuscated)"], "type": "pattern_by_hour", "ts": "201601182327"}
+{"p": ["site1.com", "site4.com"], "type": "site_correlation_by_hour", "ts": "201601182327"}
+{"p": "http://site5.com/page-10.html", "type": "page_load", "ts": "201601182338"}
+{"p": "site5.com", "type": "site_load", "ts": "201601182338"}
+{"p": "http://site5.com/page-10.html", "type": "page_visit_by_min", "ts": "201601182338"}
+{"p": "site5.com", "returning_from_ts": "2016011823", "type": "site_visit_by_min", "ts": "201601182338"}
+{"type": "new_min", "ts": "201601182338"}
+{"p": ["http://site5.com/page-10.html", "(obfuscated)", "http://site5.com/page-10.html"], "type": "pattern_by_hour", "ts": "201601182338"}
+{"p": ["site5.com", "site4.com"], "type": "site_correlation_by_hour", "ts": "201601182338"}
+{"p": "http://site4.com/page-10.html", "type": "page_load", "ts": "201601182344"}
+{"p": "site4.com", "type": "site_load", "ts": "201601182344"}
+{"p": "http://site4.com/page-10.html", "type": "page_visit_by_min", "ts": "201601182344"}
+{"p": "site4.com", "returning_from_ts": "2016011823", "type": "site_visit_by_min", "ts": "201601182344"}
+{"type": "new_min", "ts": "201601182344"}
+{"p": ["http://site4.com/page-10.html", "(obfuscated)", "http://site4.com/page-10.html"], "type": "pattern_by_hour", "ts": "201601182344"}
+{"p": ["site4.com", "site5.com"], "type": "site_correlation_by_hour", "ts": "201601182344"}
+{"p": "http://site1.com/", "type": "page_load", "ts": "201601182352"}
+{"p": "site1.com", "type": "site_load", "ts": "201601182352"}
+{"p": "http://site1.com/", "type": "page_visit_by_hour", "ts": "201601182352"}
+{"p": "http://site1.com/", "type": "page_visit_by_min", "ts": "201601182352"}
+{"p": "site1.com", "returning_from_ts": "2016011822", "type": "site_visit_by_hour", "ts": "201601182352"}
+{"p": "site1.com", "returning_from_ts": "2016011822", "type": "site_visit_by_min", "ts": "201601182352"}
+{"type": "new_hour", "ts": "201601182352"}
+{"type": "new_min", "ts": "201601182352"}
+{"p": ["http://site1.com/"], "type": "pattern_by_hour", "ts": "201601182352"}
+{"p": "http://site4.com/", "type": "page_load", "ts": "201601182356"}
+{"p": "site4.com", "type": "site_load", "ts": "201601182356"}
+{"p": "http://site4.com/", "type": "page_visit_by_year", "ts": "201601182356"}
+{"p": "http://site4.com/", "type": "page_visit_by_month", "ts": "201601182356"}
+{"p": "http://site4.com/", "type": "page_visit_by_day", "ts": "201601182356"}
+{"p": "http://site4.com/", "type": "page_visit_by_hour", "ts": "201601182356"}
+{"p": "http://site4.com/", "type": "page_visit_by_min", "ts": "201601182356"}
+{"p": "site4.com", "returning_from_ts": "0000000000", "type": "site_visit_by_year", "ts": "201601182356"}
+{"p": "site4.com", "returning_from_ts": "0000000000", "type": "site_visit_by_month", "ts": "201601182356"}
+{"p": "site4.com", "returning_from_ts": "0000000000", "type": "site_visit_by_day", "ts": "201601182356"}
+{"p": "site4.com", "returning_from_ts": "0000000000", "type": "site_visit_by_hour", "ts": "201601182356"}
+{"p": "site4.com", "returning_from_ts": "0000000000", "type": "site_visit_by_min", "ts": "201601182356"}
+{"type": "new_min", "ts": "201601182356"}
+{"p": ["http://site1.com/", "(obfuscated)"], "type": "pattern_by_hour", "ts": "201601182356"}
+{"p": ["site1.com", "site4.com"], "type": "site_correlation_by_hour", "ts": "201601182356"}
+{"p": "http://site1.com/page-10.html", "type": "page_load", "ts": "201601190000"}
+{"p": "site1.com", "type": "site_load", "ts": "201601190000"}
+{"p": "http://site1.com/page-10.html", "type": "page_visit_by_year", "ts": "201601190000"}
+{"p": "http://site1.com/page-10.html", "type": "page_visit_by_month", "ts": "201601190000"}
+{"p": "http://site1.com/page-10.html", "type": "page_visit_by_day", "ts": "201601190000"}
+{"p": "http://site1.com/page-10.html", "type": "page_visit_by_hour", "ts": "201601190000"}
+{"p": "http://site1.com/page-10.html", "type": "page_visit_by_min", "ts": "201601190000"}
+{"p": "site1.com", "returning_from_ts": "2016011823", "type": "site_visit_by_day", "ts": "201601190000"}
+{"p": "site1.com", "returning_from_ts": "2016011823", "type": "site_visit_by_hour", "ts": "201601190000"}
+{"p": "site1.com", "returning_from_ts": "2016011823", "type": "site_visit_by_min", "ts": "201601190000"}
+{"type": "new_day", "ts": "201601190000"}
+{"type": "new_hour", "ts": "201601190000"}
+{"type": "new_min", "ts": "201601190000"}
+{"p": ["http://site1.com/", "(obfuscated)", "http://site1.com/page-10.html"], "type": "pattern_by_hour", "ts": "201601190000"}
+{"p": ["site1.com", "site4.com"], "type": "site_correlation_by_hour", "ts": "201601190000"}
+{"p": "http://site4.com/page-5.html", "type": "page_load", "ts": "201601190003"}
+{"p": "site4.com", "type": "site_load", "ts": "201601190003"}
+{"p": "http://site4.com/page-5.html", "type": "page_visit_by_year", "ts": "201601190003"}
+{"p": "http://site4.com/page-5.html", "type": "page_visit_by_month", "ts": "201601190003"}
+{"p": "http://site4.com/page-5.html", "type": "page_visit_by_day", "ts": "201601190003"}
+{"p": "http://site4.com/page-5.html", "type": "page_visit_by_hour", "ts": "201601190003"}
+{"p": "http://site4.com/page-5.html", "type": "page_visit_by_min", "ts": "201601190003"}
+{"p": "site4.com", "returning_from_ts": "2016011823", "type": "site_visit_by_day", "ts": "201601190003"}
+{"p": "site4.com", "returning_from_ts": "2016011823", "type": "site_visit_by_hour", "ts": "201601190003"}
+{"p": "site4.com", "returning_from_ts": "2016011823", "type": "site_visit_by_min", "ts": "201601190003"}
+{"type": "new_day", "ts": "201601190003"}
+{"type": "new_hour", "ts": "201601190003"}
+{"type": "new_min", "ts": "201601190003"}
+{"p": ["http://site5.com/page-10.html", "(obfuscated)", "(obfuscated)"], "type": "pattern_by_hour", "ts": "201601190003"}
+{"p": ["site5.com", "site4.com"], "type": "site_correlation_by_hour", "ts": "201601190003"}
+{"p": "http://site3.com/page-4.html", "type": "page_load", "ts": "201601190007"}
+{"p": "site3.com", "type": "site_load", "ts": "201601190007"}
+{"p": "http://site3.com/page-4.html", "type": "page_visit_by_year", "ts": "201601190007"}
+{"p": "http://site3.com/page-4.html", "type": "page_visit_by_month", "ts": "201601190007"}
+{"p": "http://site3.com/page-4.html", "type": "page_visit_by_day", "ts": "201601190007"}
+{"p": "http://site3.com/page-4.html", "type": "page_visit_by_hour", "ts": "201601190007"}
+{"p": "http://site3.com/page-4.html", "type": "page_visit_by_min", "ts": "201601190007"}
+{"p": "site3.com", "returning_from_ts": "2016011823", "type": "site_visit_by_day", "ts": "201601190007"}
+{"p": "site3.com", "returning_from_ts": "2016011823", "type": "site_visit_by_hour", "ts": "201601190007"}
+{"p": "site3.com", "returning_from_ts": "2016011823", "type": "site_visit_by_min", "ts": "201601190007"}
+{"type": "new_day", "ts": "201601190007"}
+{"type": "new_hour", "ts": "201601190007"}
+{"type": "new_min", "ts": "201601190007"}
+{"p": ["http://site3.com/page-4.html"], "type": "pattern_by_hour", "ts": "201601190007"}
+{"p": "http://site4.com/", "type": "page_load", "ts": "201601190016"}
+{"p": "site4.com", "type": "site_load", "ts": "201601190016"}
+{"p": "http://site4.com/", "type": "page_visit_by_year", "ts": "201601190016"}
+{"p": "http://site4.com/", "type": "page_visit_by_month", "ts": "201601190016"}
+{"p": "http://site4.com/", "type": "page_visit_by_day", "ts": "201601190016"}
+{"p": "http://site4.com/", "type": "page_visit_by_hour", "ts": "201601190016"}
+{"p": "http://site4.com/", "type": "page_visit_by_min", "ts": "201601190016"}
+{"p": "site4.com", "returning_from_ts": "2016011900", "type": "site_visit_by_min", "ts": "201601190016"}
+{"type": "new_min", "ts": "201601190016"}
+{"p": ["http://site4.com/page-10.html", "http://site4.com/page-5.html", "http://site4.com/"], "type": "pattern_by_hour", "ts": "201601190016"}
+{"p": "http://site5.com/page-10.html", "type": "page_load", "ts": "201601190025"}
+{"p": "site5.com", "type": "site_load", "ts": "201601190025"}
+{"p": "http://site5.com/page-10.html", "type": "page_visit_by_day", "ts": "201601190025"}
+{"p": "http://site5.com/page-10.html", "type": "page_visit_by_hour", "ts": "201601190025"}
+{"p": "http://site5.com/page-10.html", "type": "page_visit_by_min", "ts": "201601190025"}
+{"p": "site5.com", "returning_from_ts": "2016011823", "type": "site_visit_by_day", "ts": "201601190025"}
+{"p": "site5.com", "returning_from_ts": "2016011823", "type": "site_visit_by_hour", "ts": "201601190025"}
+{"p": "site5.com", "returning_from_ts": "2016011823", "type": "site_visit_by_min", "ts": "201601190025"}
+{"type": "new_min", "ts": "201601190025"}
+{"p": ["http://site4.com/page-5.html", "http://site4.com/", "(obfuscated)"], "type": "pattern_by_hour", "ts": "201601190025"}
+{"p": ["site4.com", "site5.com"], "type": "site_correlation_by_hour", "ts": "201601190025"}
+{"p": "http://site4.com/page-10.html", "type": "page_load", "ts": "201601190035"}
+{"p": "site4.com", "type": "site_load", "ts": "201601190035"}
+{"p": "http://site4.com/page-10.html", "type": "page_visit_by_day", "ts": "201601190035"}
+{"p": "http://site4.com/page-10.html", "type": "page_visit_by_hour", "ts": "201601190035"}
+{"p": "http://site4.com/page-10.html", "type": "page_visit_by_min", "ts": "201601190035"}
+{"p": "site4.com", "returning_from_ts": "2016011900", "type": "site_visit_by_min", "ts": "201601190035"}
+{"type": "new_min", "ts": "201601190035"}
+{"p": ["http://site4.com/", "(obfuscated)", "http://site4.com/page-10.html"], "type": "pattern_by_hour", "ts": "201601190035"}
+{"p": "http://site5.com/page-10.html", "type": "page_load", "ts": "201601190100"}
+{"p": "site5.com", "type": "site_load", "ts": "201601190100"}
+{"p": "http://site5.com/page-10.html", "type": "page_visit_by_hour", "ts": "201601190100"}
+{"p": "http://site5.com/page-10.html", "type": "page_visit_by_min", "ts": "201601190100"}
+{"p": "site5.com", "returning_from_ts": "2016011900", "type": "site_visit_by_hour", "ts": "201601190100"}
+{"p": "site5.com", "returning_from_ts": "2016011900", "type": "site_visit_by_min", "ts": "201601190100"}
+{"type": "new_hour", "ts": "201601190100"}
+{"type": "new_min", "ts": "201601190100"}
+{"p": ["http://site5.com/page-10.html", "(obfuscated)", "http://site5.com/page-10.html"], "type": "pattern_by_hour", "ts": "201601190100"}
+{"p": ["site5.com", "site4.com"], "type": "site_correlation_by_hour", "ts": "201601190100"}
+{"p": "http://site5.com/page-10.html", "type": "page_load", "ts": "201601190108"}
+{"p": "site5.com", "type": "site_load", "ts": "201601190108"}
+{"p": "http://site5.com/page-10.html", "type": "page_visit_by_min", "ts": "201601190108"}
+{"p": "site5.com", "returning_from_ts": "2016011901", "type": "site_visit_by_min", "ts": "201601190108"}
+{"type": "new_min", "ts": "201601190108"}
+{"p": ["http://site4.com/page-10.html", "(obfuscated)", "(obfuscated)"], "type": "pattern_by_hour", "ts": "201601190108"}
+{"p": ["site4.com", "site5.com"], "type": "site_correlation_by_hour", "ts": "201601190108"}
+{"p": "http://site4.com/page-10.html", "type": "page_load", "ts": "201601190112"}
+{"p": "site4.com", "type": "site_load", "ts": "201601190112"}
+{"p": "http://site4.com/page-10.html", "type": "page_visit_by_hour", "ts": "201601190112"}
+{"p": "http://site4.com/page-10.html", "type": "page_visit_by_min", "ts": "201601190112"}
+{"p": "site4.com", "returning_from_ts": "2016011900", "type": "site_visit_by_hour", "ts": "201601190112"}
+{"p": "site4.com", "returning_from_ts": "2016011900", "type": "site_visit_by_min", "ts": "201601190112"}
+{"type": "new_min", "ts": "201601190112"}
+{"p": ["http://site5.com/page-10.html", "http://site5.com/page-10.html", "(obfuscated)"], "type": "pattern_by_hour", "ts": "201601190112"}
+{"p": "http://site5.com/page-10.html", "type": "page_load", "ts": "201601190124"}
+{"p": "site5.com", "type": "site_load", "ts": "201601190124"}
+{"p": "http://site5.com/page-10.html", "type": "page_visit_by_year", "ts": "201601190124"}
+{"p": "http://site5.com/page-10.html", "type": "page_visit_by_month", "ts": "201601190124"}
+{"p": "http://site5.com/page-10.html", "type": "page_visit_by_day", "ts": "201601190124"}
+{"p": "http://site5.com/page-10.html", "type": "page_visit_by_hour", "ts": "201601190124"}
+{"p": "http://site5.com/page-10.html", "type": "page_visit_by_min", "ts": "201601190124"}
+{"p": "site5.com", "returning_from_ts": "2016011822", "type": "site_visit_by_day", "ts": "201601190124"}
+{"p": "site5.com", "returning_from_ts": "2016011822", "type": "site_visit_by_hour", "ts": "201601190124"}
+{"p": "site5.com", "returning_from_ts": "2016011822", "type": "site_visit_by_min", "ts": "201601190124"}
+{"type": "new_hour", "ts": "201601190124"}
+{"type": "new_min", "ts": "201601190124"}
+{"p": ["http://site5.com/page-10.html"], "type": "pattern_by_hour", "ts": "201601190124"}
+{"p": "http://site4.com/page-10.html", "type": "page_load", "ts": "201601190130"}
+{"p": "site4.com", "type": "site_load", "ts": "201601190130"}
+{"p": "http://site4.com/page-10.html", "type": "page_visit_by_year", "ts": "201601190130"}
+{"p": "http://site4.com/page-10.html", "type": "page_visit_by_month", "ts": "201601190130"}
+{"p": "http://site4.com/page-10.html", "type": "page_visit_by_day", "ts": "201601190130"}
+{"p": "http://site4.com/page-10.html", "type": "page_visit_by_hour", "ts": "201601190130"}
+{"p": "http://site4.com/page-10.html", "type": "page_visit_by_min", "ts": "201601190130"}
+{"p": "site4.com", "returning_from_ts": "2016011823", "type": "site_visit_by_day", "ts": "201601190130"}
+{"p": "site4.com", "returning_from_ts": "2016011823", "type": "site_visit_by_hour", "ts": "201601190130"}
+{"p": "site4.com", "returning_from_ts": "2016011823", "type": "site_visit_by_min", "ts": "201601190130"}
+{"type": "new_min", "ts": "201601190130"}
+{"p": ["http://site5.com/page-10.html"], "type": "goal", "ts": "201601190130", "name": "signup to site4"}
+{"p": ["http://site5.com/page-10.html", "(obfuscated)"], "type": "pattern_by_hour", "ts": "201601190130"}
+{"p": ["site5.com", "site4.com"], "type": "site_correlation_by_hour", "ts": "201601190130"}
+{"p": "http://site3.com/", "type": "page_load", "ts": "201601190146"}
+{"p": "site3.com", "type": "site_load", "ts": "201601190146"}
+{"p": "http://site3.com/", "type": "page_visit_by_year", "ts": "201601190146"}
+{"p": "http://site3.com/", "type": "page_visit_by_month", "ts": "201601190146"}
+{"p": "http://site3.com/", "type": "page_visit_by_day", "ts": "201601190146"}
+{"p": "http://site3.com/page-3.html", "type": "page_load", "ts": "201601190149"}
+{"p": "site3.com", "type": "site_load", "ts": "201601190149"}
+{"p": "http://site3.com/page-3.html", "type": "page_visit_by_year", "ts": "201601190149"}
+{"p": "http://site3.com/page-3.html", "type": "page_visit_by_month", "ts": "201601190149"}
+{"p": "http://site3.com/page-3.html", "type": "page_visit_by_day", "ts": "201601190149"}
+{"p": "http://site3.com/page-3.html", "type": "page_visit_by_hour", "ts": "201601190149"}
+{"p": "http://site3.com/page-3.html", "type": "page_visit_by_min", "ts": "201601190149"}
+{"p": "site3.com", "returning_from_ts": "2016011901", "type": "site_visit_by_min", "ts": "201601190149"}
+{"type": "new_min", "ts": "201601190149"}
+{"p": ["site4.com", "site3.com"], "type": "site_correlation_by_hour", "ts": "201601190149"}
+{"p": "http://site3.com/page-3.html", "type": "page_load", "ts": "201601190153"}
+{"p": "site3.com", "type": "site_load", "ts": "201601190153"}
+{"p": "http://site3.com/page-3.html", "type": "page_visit_by_min", "ts": "201601190153"}
+{"p": "http://site3.com/page-4.html", "type": "page_load", "ts": "201601190156"}
+{"p": "site3.com", "type": "site_load", "ts": "201601190156"}
+{"p": "http://site3.com/page-4.html", "type": "page_visit_by_year", "ts": "201601190156"}
+{"p": "http://site3.com/page-4.html", "type": "page_visit_by_month", "ts": "201601190156"}
+{"p": "http://site3.com/page-4.html", "type": "page_visit_by_day", "ts": "201601190156"}
+{"p": "http://site3.com/page-4.html", "type": "page_visit_by_hour", "ts": "201601190156"}
+{"p": "http://site3.com/page-4.html", "type": "page_visit_by_min", "ts": "201601190156"}
+{"p": "site3.com", "returning_from_ts": "2016011901", "type": "site_visit_by_min", "ts": "201601190156"}
+{"type": "new_min", "ts": "201601190156"}
+{"p": ["http://site3.com/page-3.html", "http://site3.com/page-3.html", "http://site3.com/page-4.html"], "type": "pattern_by_hour", "ts": "201601190156"}
+{"p": "http://site3.com/page-4.html", "type": "page_load", "ts": "201601190203"}
+{"p": "site3.com", "type": "site_load", "ts": "201601190203"}
+{"p": "http://site3.com/page-4.html", "type": "page_visit_by_hour", "ts": "201601190203"}
+{"p": "http://site3.com/page-4.html", "type": "page_visit_by_min", "ts": "201601190203"}
+{"p": "http://site3.com/page-8.html", "type": "page_load", "ts": "201601190205"}
+{"p": "site3.com", "type": "site_load", "ts": "201601190205"}
+{"p": "http://site3.com/page-8.html", "type": "page_visit_by_year", "ts": "201601190205"}
+{"p": "http://site3.com/page-8.html", "type": "page_visit_by_month", "ts": "201601190205"}
+{"p": "http://site3.com/", "type": "page_load", "ts": "201601190207"}
+{"p": "site3.com", "type": "site_load", "ts": "201601190207"}
+{"p": "http://site3.com/", "type": "page_visit_by_day", "ts": "201601190207"}
+{"p": "http://site3.com/", "type": "page_visit_by_hour", "ts": "201601190207"}
+{"p": "http://site3.com/page-10.html", "type": "page_load", "ts": "201601190210"}
+{"p": "site3.com", "type": "site_load", "ts": "201601190210"}
+{"p": "http://site3.com/page-10.html", "type": "page_visit_by_day", "ts": "201601190210"}
+{"p": "http://site3.com/page-10.html", "type": "page_visit_by_hour", "ts": "201601190210"}
+{"p": "http://site3.com/page-10.html", "type": "page_visit_by_min", "ts": "201601190210"}
+{"p": "site3.com", "returning_from_ts": "2016011902", "type": "site_visit_by_min", "ts": "201601190210"}
+{"type": "new_min", "ts": "201601190210"}
+{"p": ["http://site3.com/page-8.html", "http://site3.com/", "http://site3.com/page-10.html"], "type": "pattern_by_hour", "ts": "201601190210"}
+{"p": "http://site4.com/", "type": "page_load", "ts": "201601190218"}
+{"p": "site4.com", "type": "site_load", "ts": "201601190218"}
+{"p": "http://site4.com/", "type": "page_visit_by_year", "ts": "201601190218"}
+{"p": "http://site4.com/", "type": "page_visit_by_month", "ts": "201601190218"}
+{"p": "http://site4.com/", "type": "page_visit_by_day", "ts": "201601190218"}
+{"p": "http://site4.com/", "type": "page_visit_by_hour", "ts": "201601190218"}
+{"p": "http://site4.com/", "type": "page_visit_by_min", "ts": "201601190218"}
+{"p": "http://site4.com/page-9.html", "type": "page_load", "ts": "201601190222"}
+{"p": "site4.com", "type": "site_load", "ts": "201601190222"}
+{"p": "http://site4.com/page-9.html", "type": "page_visit_by_year", "ts": "201601190222"}
+{"p": "http://site4.com/page-9.html", "type": "page_visit_by_month", "ts": "201601190222"}
+{"p": "http://site4.com/page-9.html", "type": "page_visit_by_day", "ts": "201601190222"}
+{"p": "http://site4.com/page-9.html", "type": "page_visit_by_hour", "ts": "201601190222"}
+{"p": "http://site4.com/page-9.html", "type": "page_visit_by_min", "ts": "201601190222"}
+{"p": "site4.com", "returning_from_ts": "2016011902", "type": "site_visit_by_min", "ts": "201601190222"}
+{"type": "new_min", "ts": "201601190222"}
+{"p": ["http://site3.com/page-10.html", "(obfuscated)", "(obfuscated)"], "type": "pattern_by_hour", "ts": "201601190222"}
+{"p": "http://site4.com/page-10.html", "type": "page_load", "ts": "201601190231"}
+{"p": "site4.com", "type": "site_load", "ts": "201601190231"}
+{"p": "http://site4.com/page-10.html", "type": "page_visit_by_year", "ts": "201601190231"}
+{"p": "http://site4.com/page-10.html", "type": "page_visit_by_month", "ts": "201601190231"}
+{"p": "http://site4.com/page-10.html", "type": "page_visit_by_day", "ts": "201601190231"}
+{"p": "http://site4.com/page-10.html", "type": "page_visit_by_hour", "ts": "201601190231"}
+{"p": "http://site4.com/page-10.html", "type": "page_visit_by_min", "ts": "201601190231"}
+{"p": "site4.com", "returning_from_ts": "2016011902", "type": "site_visit_by_min", "ts": "201601190231"}
+{"type": "new_min", "ts": "201601190231"}
+{"p": ["http://site4.com/page-9.html"], "type": "goal", "ts": "201601190231", "name": "signup to site4"}
+{"p": ["http://site4.com/", "http://site4.com/page-9.html", "http://site4.com/page-10.html"], "type": "pattern_by_hour", "ts": "201601190231"}
+{"p": "http://site4.com/page-9.html", "type": "page_load", "ts": "201601190238"}
+{"p": "site4.com", "type": "site_load", "ts": "201601190238"}
+{"p": "http://site4.com/page-9.html", "type": "page_visit_by_min", "ts": "201601190238"}
+{"p": "site4.com", "returning_from_ts": "2016011902", "type": "site_visit_by_min", "ts": "201601190238"}
+{"type": "new_min", "ts": "201601190238"}
+{"p": ["http://site4.com/page-9.html", "http://site4.com/page-10.html", "http://site4.com/page-9.html"], "type": "pattern_by_hour", "ts": "201601190238"}
+{"p": "http://site4.com/page-9.html", "type": "page_load", "ts": "201601190241"}
+{"p": "site4.com", "type": "site_load", "ts": "201601190241"}
+{"p": "http://site4.com/page-9.html", "type": "page_visit_by_min", "ts": "201601190241"}
+{"p": "site4.com", "returning_from_ts": "2016011902", "type": "site_visit_by_min", "ts": "201601190241"}
+{"type": "new_min", "ts": "201601190241"}
+{"p": ["http://site4.com/page-10.html", "http://site4.com/page-9.html", "http://site4.com/page-9.html"], "type": "pattern_by_hour", "ts": "201601190241"}
+{"p": "http://site4.com/page-9.html", "type": "page_load", "ts": "201601190246"}
+{"p": "site4.com", "type": "site_load", "ts": "201601190246"}
+{"p": "http://site4.com/page-9.html", "type": "page_visit_by_min", "ts": "201601190246"}
+{"p": "site4.com", "returning_from_ts": "2016011902", "type": "site_visit_by_min", "ts": "201601190246"}
+{"type": "new_min", "ts": "201601190246"}
+{"p": ["http://site4.com/page-9.html", "http://site4.com/page-9.html", "http://site4.com/page-9.html"], "type": "pattern_by_hour", "ts": "201601190246"}
+{"p": "http://site4.com/page-7.html", "type": "page_load", "ts": "201601190250"}
+{"p": "site4.com", "type": "site_load", "ts": "201601190250"}
+{"p": "http://site4.com/page-7.html", "type": "page_visit_by_year", "ts": "201601190250"}
+{"p": "http://site4.com/page-7.html", "type": "page_visit_by_month", "ts": "201601190250"}
+{"p": "http://site4.com/page-7.html", "type": "page_visit_by_day", "ts": "201601190250"}
+{"p": "http://site4.com/page-7.html", "type": "page_visit_by_hour", "ts": "201601190250"}
+{"p": "http://site4.com/page-7.html", "type": "page_visit_by_min", "ts": "201601190250"}
+{"p": "site4.com", "returning_from_ts": "2016011902", "type": "site_visit_by_min", "ts": "201601190250"}
+{"type": "new_min", "ts": "201601190250"}
+{"p": ["http://site4.com/page-9.html", "http://site4.com/page-9.html", "http://site4.com/page-7.html"], "type": "pattern_by_hour", "ts": "201601190250"}
+{"p": "http://site4.com/page-9.html", "type": "page_load", "ts": "201601190338"}
+{"p": "site4.com", "type": "site_load", "ts": "201601190338"}
+{"p": "http://site4.com/page-9.html", "type": "page_visit_by_hour", "ts": "201601190338"}
+{"p": "http://site4.com/page-9.html", "type": "page_visit_by_min", "ts": "201601190338"}
+{"p": "site4.com", "returning_from_ts": "2016011902", "type": "site_visit_by_hour", "ts": "201601190338"}
+{"p": "site4.com", "returning_from_ts": "2016011902", "type": "site_visit_by_min", "ts": "201601190338"}
+{"type": "new_hour", "ts": "201601190338"}
+{"type": "new_min", "ts": "201601190338"}
+{"p": ["http://site4.com/page-9.html"], "type": "pattern_by_hour", "ts": "201601190338"}
+{"p": "http://site4.com/page-9.html", "type": "page_load", "ts": "201601190341"}
+{"p": "site4.com", "type": "site_load", "ts": "201601190341"}
+{"p": "http://site4.com/page-9.html", "type": "page_visit_by_min", "ts": "201601190341"}
+{"p": "site4.com", "returning_from_ts": "2016011903", "type": "site_visit_by_min", "ts": "201601190341"}
+{"type": "new_min", "ts": "201601190341"}
+{"p": ["http://site4.com/page-9.html", "http://site4.com/page-9.html"], "type": "pattern_by_hour", "ts": "201601190341"}
+{"p": "http://site4.com/page-9.html", "type": "page_load", "ts": "201601190345"}
+{"p": "site4.com", "type": "site_load", "ts": "201601190345"}
+{"p": "http://site4.com/page-9.html", "type": "page_visit_by_min", "ts": "201601190345"}
+{"p": "site4.com", "returning_from_ts": "2016011903", "type": "site_visit_by_min", "ts": "201601190345"}
+{"type": "new_min", "ts": "201601190345"}
+{"p": ["http://site4.com/page-9.html", "http://site4.com/page-9.html", "http://site4.com/page-9.html"], "type": "pattern_by_hour", "ts": "201601190345"}
+{"p": "http://site4.com/page-9.html", "type": "page_load", "ts": "201601190348"}
+{"p": "site4.com", "type": "site_load", "ts": "201601190348"}
+{"p": "http://site4.com/page-9.html", "type": "page_visit_by_min", "ts": "201601190348"}
+{"p": "site4.com", "returning_from_ts": "2016011903", "type": "site_visit_by_min", "ts": "201601190348"}
+{"type": "new_min", "ts": "201601190348"}
+{"p": "http://site1.com/", "type": "page_load", "ts": "201601190434"}
+{"p": "site1.com", "type": "site_load", "ts": "201601190434"}
+{"p": "http://site1.com/", "type": "page_visit_by_day", "ts": "201601190434"}
+{"p": "http://site1.com/", "type": "page_visit_by_hour", "ts": "201601190434"}
+{"p": "http://site1.com/", "type": "page_visit_by_min", "ts": "201601190434"}
+{"p": "site1.com", "returning_from_ts": "2016011823", "type": "site_visit_by_day", "ts": "201601190434"}
+{"p": "site1.com", "returning_from_ts": "2016011823", "type": "site_visit_by_hour", "ts": "201601190434"}
+{"p": "site1.com", "returning_from_ts": "2016011823", "type": "site_visit_by_min", "ts": "201601190434"}
+{"type": "new_hour", "ts": "201601190434"}
+{"type": "new_min", "ts": "201601190434"}
+{"p": ["http://site1.com/"], "type": "pattern_by_hour", "ts": "201601190434"}
+{"p": "http://site1.com/", "type": "page_load", "ts": "201601190502"}
+{"p": "site1.com", "type": "site_load", "ts": "201601190502"}
+{"p": "http://site1.com/", "type": "page_visit_by_hour", "ts": "201601190502"}
+{"p": "http://site1.com/", "type": "page_visit_by_min", "ts": "201601190502"}
+{"p": "site1.com", "returning_from_ts": "2016011904", "type": "site_visit_by_hour", "ts": "201601190502"}
+{"p": "site1.com", "returning_from_ts": "2016011904", "type": "site_visit_by_min", "ts": "201601190502"}
+{"p": "http://site1.com/", "type": "page_load", "ts": "201601190505"}
+{"p": "site1.com", "type": "site_load", "ts": "201601190505"}
+{"p": "http://site1.com/", "type": "page_visit_by_min", "ts": "201601190505"}
+{"p": "site1.com", "returning_from_ts": "2016011905", "type": "site_visit_by_min", "ts": "201601190505"}
+{"type": "new_min", "ts": "201601190505"}
+{"p": ["http://site1.com/", "http://site1.com/", "http://site1.com/"], "type": "pattern_by_hour", "ts": "201601190505"}
+{"p": "http://site1.com/", "type": "page_load", "ts": "201601190506"}
+{"p": "site1.com", "type": "site_load", "ts": "201601190506"}
+{"p": "http://site1.com/", "type": "page_visit_by_min", "ts": "201601190506"}
+{"p": "site1.com", "returning_from_ts": "2016011905", "type": "site_visit_by_min", "ts": "201601190506"}
+{"type": "new_min", "ts": "201601190506"}
+{"p": "http://site1.com/", "type": "page_load", "ts": "201601190508"}
+{"p": "site1.com", "type": "site_load", "ts": "201601190508"}
+{"p": "http://site1.com/", "type": "page_visit_by_min", "ts": "201601190508"}
+{"p": "site1.com", "returning_from_ts": "2016011905", "type": "site_visit_by_min", "ts": "201601190508"}
+{"type": "new_min", "ts": "201601190508"}
+{"p": "http://site1.com/", "type": "page_load", "ts": "201601190509"}
+{"p": "site1.com", "type": "site_load", "ts": "201601190509"}
+{"p": "http://site1.com/", "type": "page_visit_by_min", "ts": "201601190509"}
+{"p": "site1.com", "returning_from_ts": "2016011905", "type": "site_visit_by_min", "ts": "201601190509"}
+{"type": "new_min", "ts": "201601190509"}
+{"p": "http://site1.com/", "type": "page_load", "ts": "201601190511"}
+{"p": "site1.com", "type": "site_load", "ts": "201601190511"}
+{"p": "http://site1.com/", "type": "page_visit_by_min", "ts": "201601190511"}
+{"p": "site1.com", "returning_from_ts": "2016011905", "type": "site_visit_by_min", "ts": "201601190511"}
+{"type": "new_min", "ts": "201601190511"}
+{"p": "http://site1.com/", "type": "page_load", "ts": "201601190512"}
+{"p": "site1.com", "type": "site_load", "ts": "201601190512"}
+{"p": "http://site1.com/", "type": "page_visit_by_min", "ts": "201601190512"}
+{"p": "site1.com", "returning_from_ts": "2016011905", "type": "site_visit_by_min", "ts": "201601190512"}
+{"type": "new_min", "ts": "201601190512"}
+{"p": "http://site1.com/", "type": "page_load", "ts": "201601190513"}
+{"p": "site1.com", "type": "site_load", "ts": "201601190513"}
+{"p": "http://site1.com/", "type": "page_visit_by_min", "ts": "201601190513"}
+{"p": "site1.com", "returning_from_ts": "2016011905", "type": "site_visit_by_min", "ts": "201601190513"}
+{"type": "new_min", "ts": "201601190513"}
+{"p": "http://site1.com/", "type": "page_load", "ts": "201601190514"}
+{"p": "site1.com", "type": "site_load", "ts": "201601190514"}
+{"p": "http://site1.com/", "type": "page_visit_by_min", "ts": "201601190514"}
+{"p": "site1.com", "returning_from_ts": "2016011905", "type": "site_visit_by_min", "ts": "201601190514"}
+{"type": "new_min", "ts": "201601190514"}
+{"p": "http://site4.com/page-10.html", "type": "page_load", "ts": "201601190516"}
+{"p": "site4.com", "type": "site_load", "ts": "201601190516"}
+{"p": "http://site4.com/page-10.html", "type": "page_visit_by_hour", "ts": "201601190516"}
+{"p": "http://site4.com/page-10.html", "type": "page_visit_by_min", "ts": "201601190516"}
+{"p": "site4.com", "returning_from_ts": "2016011901", "type": "site_visit_by_hour", "ts": "201601190516"}
+{"p": "site4.com", "returning_from_ts": "2016011901", "type": "site_visit_by_min", "ts": "201601190516"}
+{"type": "new_min", "ts": "201601190516"}
+{"p": ["http://site1.com/", "http://site1.com/", "(obfuscated)"], "type": "pattern_by_hour", "ts": "201601190516"}
+{"p": ["site1.com", "site4.com"], "type": "site_correlation_by_hour", "ts": "201601190516"}
+{"p": "http://site1.com/", "type": "page_load", "ts": "201601190531"}
+{"p": "site1.com", "type": "site_load", "ts": "201601190531"}
+{"p": "http://site1.com/", "type": "page_visit_by_min", "ts": "201601190531"}
+{"p": "site1.com", "returning_from_ts": "2016011905", "type": "site_visit_by_min", "ts": "201601190531"}
+{"type": "new_min", "ts": "201601190531"}
+{"p": ["http://site1.com/", "(obfuscated)", "http://site1.com/"], "type": "pattern_by_hour", "ts": "201601190531"}
+{"p": "http://site5.com/page-10.html", "type": "page_load", "ts": "201601190559"}
+{"p": "site5.com", "type": "site_load", "ts": "201601190559"}
+{"p": "http://site5.com/page-10.html", "type": "page_visit_by_hour", "ts": "201601190559"}
+{"p": "http://site5.com/page-10.html", "type": "page_visit_by_min", "ts": "201601190559"}
+{"p": "site5.com", "returning_from_ts": "2016011901", "type": "site_visit_by_hour", "ts": "201601190559"}
+{"p": "site5.com", "returning_from_ts": "2016011901", "type": "site_visit_by_min", "ts": "201601190559"}
+{"type": "new_min", "ts": "201601190559"}
+{"p": ["http://site1.com/", "(obfuscated)"], "type": "pattern_by_hour", "ts": "201601190559"}
+{"p": ["site1.com", "site5.com"], "type": "site_correlation_by_hour", "ts": "201601190559"}
+{"p": "http://site4.com/page-10.html", "type": "page_load", "ts": "201601190603"}
+{"p": "site4.com", "type": "site_load", "ts": "201601190603"}
+{"p": "http://site4.com/page-10.html", "type": "page_visit_by_hour", "ts": "201601190603"}
+{"p": "http://site4.com/page-10.html", "type": "page_visit_by_min", "ts": "201601190603"}
+{"p": "site4.com", "returning_from_ts": "2016011905", "type": "site_visit_by_hour", "ts": "201601190603"}
+{"p": "site4.com", "returning_from_ts": "2016011905", "type": "site_visit_by_min", "ts": "201601190603"}
+{"type": "new_hour", "ts": "201601190603"}
+{"type": "new_min", "ts": "201601190603"}
+{"p": ["http://site1.com/", "(obfuscated)", "(obfuscated)"], "type": "pattern_by_hour", "ts": "201601190603"}
+{"p": ["site1.com", "site4.com"], "type": "site_correlation_by_hour", "ts": "201601190603"}
+{"p": "http://site5.com/page-10.html", "type": "page_load", "ts": "201601190639"}
+{"p": "site5.com", "type": "site_load", "ts": "201601190639"}
+{"p": "http://site5.com/page-10.html", "type": "page_visit_by_hour", "ts": "201601190639"}
+{"p": "http://site5.com/page-10.html", "type": "page_visit_by_min", "ts": "201601190639"}
+{"p": "site5.com", "returning_from_ts": "2016011905", "type": "site_visit_by_hour", "ts": "201601190639"}
+{"p": "site5.com", "returning_from_ts": "2016011905", "type": "site_visit_by_min", "ts": "201601190639"}
+{"type": "new_min", "ts": "201601190639"}
+{"p": ["http://site4.com/page-10.html", "(obfuscated)"], "type": "pattern_by_hour", "ts": "201601190639"}
+{"p": ["site4.com", "site5.com"], "type": "site_correlation_by_hour", "ts": "201601190639"}
+{"p": "http://site4.com/page-10.html", "type": "page_load", "ts": "201601190642"}
+{"p": "site4.com", "type": "site_load", "ts": "201601190642"}
+{"p": "http://site4.com/page-10.html", "type": "page_visit_by_min", "ts": "201601190642"}
+{"p": "site4.com", "returning_from_ts": "2016011906", "type": "site_visit_by_min", "ts": "201601190642"}
+{"type": "new_min", "ts": "201601190642"}
+{"p": ["http://site4.com/page-10.html", "(obfuscated)", "http://site4.com/page-10.html"], "type": "pattern_by_hour", "ts": "201601190642"}
+{"p": "http://site3.com/", "type": "page_load", "ts": "201601190700"}
+{"p": "site3.com", "type": "site_load", "ts": "201601190700"}
+{"p": "http://site3.com/", "type": "page_visit_by_hour", "ts": "201601190700"}
+{"p": "http://site3.com/", "type": "page_visit_by_min", "ts": "201601190700"}
+{"p": "site3.com", "returning_from_ts": "2016011901", "type": "site_visit_by_hour", "ts": "201601190700"}
+{"p": "site3.com", "returning_from_ts": "2016011901", "type": "site_visit_by_min", "ts": "201601190700"}
+{"type": "new_hour", "ts": "201601190700"}
+{"type": "new_min", "ts": "201601190700"}
+{"p": ["http://site5.com/page-10.html", "(obfuscated)", "(obfuscated)"], "type": "pattern_by_hour", "ts": "201601190700"}
+{"p": ["site5.com", "site3.com"], "type": "site_correlation_by_hour", "ts": "201601190700"}
+{"p": "http://site4.com/", "type": "page_load", "ts": "201601190706"}
+{"p": "site4.com", "type": "site_load", "ts": "201601190706"}
+{"p": "http://site4.com/", "type": "page_visit_by_hour", "ts": "201601190706"}
+{"p": "http://site4.com/", "type": "page_visit_by_min", "ts": "201601190706"}
+{"p": "site4.com", "returning_from_ts": "2016011906", "type": "site_visit_by_hour", "ts": "201601190706"}
+{"p": "site4.com", "returning_from_ts": "2016011906", "type": "site_visit_by_min", "ts": "201601190706"}
+{"type": "new_min", "ts": "201601190706"}
+{"p": ["http://site4.com/page-10.html", "(obfuscated)", "http://site4.com/"], "type": "pattern_by_hour", "ts": "201601190706"}
+{"p": ["site4.com", "site3.com"], "type": "site_correlation_by_hour", "ts": "201601190706"}
+{"p": "http://site4.com/page-9.html", "type": "page_load", "ts": "201601190713"}
+{"p": "site4.com", "type": "site_load", "ts": "201601190713"}
+{"p": "http://site4.com/page-9.html", "type": "page_visit_by_year", "ts": "201601190713"}
+{"p": "http://site4.com/page-9.html", "type": "page_visit_by_month", "ts": "201601190713"}
+{"p": "http://site4.com/page-9.html", "type": "page_visit_by_day", "ts": "201601190713"}
+{"p": "http://site4.com/page-9.html", "type": "page_visit_by_hour", "ts": "201601190713"}
+{"p": "http://site4.com/page-9.html", "type": "page_visit_by_min", "ts": "201601190713"}
+{"p": "site4.com", "returning_from_ts": "2016011907", "type": "site_visit_by_min", "ts": "201601190713"}
+{"p": "http://site4.com/page-10.html", "type": "page_load", "ts": "201601190717"}
+{"p": "site4.com", "type": "site_load", "ts": "201601190717"}
+{"p": "http://site4.com/page-10.html", "type": "page_visit_by_hour", "ts": "201601190717"}
+{"p": "http://site4.com/page-10.html", "type": "page_visit_by_min", "ts": "201601190717"}
+{"p": "site4.com", "returning_from_ts": "2016011907", "type": "site_visit_by_min", "ts": "201601190717"}
+{"type": "new_min", "ts": "201601190717"}
+{"p": ["http://site4.com/", "http://site4.com/page-9.html", "http://site4.com/page-10.html"], "type": "pattern_by_hour", "ts": "201601190717"}
+{"p": "http://site5.com/page-10.html", "type": "page_load", "ts": "201601190742"}
+{"p": "site5.com", "type": "site_load", "ts": "201601190742"}
+{"p": "http://site5.com/page-10.html", "type": "page_visit_by_hour", "ts": "201601190742"}
+{"p": "http://site4.com/page-10.html", "type": "page_load", "ts": "201601190745"}
+{"p": "site4.com", "type": "site_load", "ts": "201601190745"}
+{"p": "http://site4.com/page-10.html", "type": "page_visit_by_min", "ts": "201601190745"}
+{"p": "site4.com", "returning_from_ts": "2016011907", "type": "site_visit_by_min", "ts": "201601190745"}
+{"type": "new_min", "ts": "201601190745"}
+{"p": ["http://site4.com/page-10.html", "(obfuscated)", "http://site4.com/page-10.html"], "type": "pattern_by_hour", "ts": "201601190745"}
+{"p": "http://site4.com/page-9.html", "type": "page_load", "ts": "201601190812"}
+{"p": "site4.com", "type": "site_load", "ts": "201601190812"}
+{"p": "http://site4.com/page-9.html", "type": "page_visit_by_hour", "ts": "201601190812"}
+{"p": "http://site4.com/page-9.html", "type": "page_visit_by_min", "ts": "201601190812"}
+{"p": "site4.com", "returning_from_ts": "2016011907", "type": "site_visit_by_hour", "ts": "201601190812"}
+{"p": "site4.com", "returning_from_ts": "2016011907", "type": "site_visit_by_min", "ts": "201601190812"}
+{"type": "new_hour", "ts": "201601190812"}
+{"type": "new_min", "ts": "201601190812"}
+{"p": ["http://site5.com/page-10.html", "(obfuscated)", "(obfuscated)"], "type": "pattern_by_hour", "ts": "201601190812"}
+{"p": ["site5.com", "site4.com"], "type": "site_correlation_by_hour", "ts": "201601190812"}
+{"p": "http://site4.com/page-9.html", "type": "page_load", "ts": "201601190815"}
+{"p": "site4.com", "type": "site_load", "ts": "201601190815"}
+{"p": "http://site4.com/page-9.html", "type": "page_visit_by_min", "ts": "201601190815"}
+{"p": "site4.com", "returning_from_ts": "2016011908", "type": "site_visit_by_min", "ts": "201601190815"}
+{"type": "new_min", "ts": "201601190815"}
+{"p": ["http://site4.com/page-10.html", "http://site4.com/page-9.html", "http://site4.com/page-9.html"], "type": "pattern_by_hour", "ts": "201601190815"}
+{"p": "http://site4.com/page-9.html", "type": "page_load", "ts": "201601190817"}
+{"p": "site4.com", "type": "site_load", "ts": "201601190817"}
+{"p": "http://site4.com/page-9.html", "type": "page_visit_by_min", "ts": "201601190817"}
+{"p": "site4.com", "returning_from_ts": "2016011908", "type": "site_visit_by_min", "ts": "201601190817"}
+{"p": "http://site4.com/page-9.html", "type": "page_load", "ts": "201601190818"}
+{"p": "site4.com", "type": "site_load", "ts": "201601190818"}
+{"p": "http://site4.com/page-9.html", "type": "page_visit_by_min", "ts": "201601190818"}
+{"p": "site4.com", "returning_from_ts": "2016011908", "type": "site_visit_by_min", "ts": "201601190818"}
+{"p": "http://site4.com/page-9.html", "type": "page_load", "ts": "201601190819"}
+{"p": "site4.com", "type": "site_load", "ts": "201601190819"}
+{"p": "http://site4.com/page-9.html", "type": "page_visit_by_min", "ts": "201601190819"}
+{"p": "site4.com", "returning_from_ts": "2016011908", "type": "site_visit_by_min", "ts": "201601190819"}
+{"type": "new_min", "ts": "201601190819"}
+{"p": "http://site5.com/page-10.html", "type": "page_load", "ts": "201601190825"}
+{"p": "site5.com", "type": "site_load", "ts": "201601190825"}
+{"p": "http://site5.com/page-10.html", "type": "page_visit_by_hour", "ts": "201601190825"}
+{"p": "http://site5.com/page-10.html", "type": "page_visit_by_min", "ts": "201601190825"}
+{"p": "site5.com", "returning_from_ts": "2016011907", "type": "site_visit_by_hour", "ts": "201601190825"}
+{"p": "site5.com", "returning_from_ts": "2016011907", "type": "site_visit_by_min", "ts": "201601190825"}
+{"type": "new_min", "ts": "201601190825"}
+{"p": "http://site5.com/page-10.html", "type": "page_load", "ts": "201601190827"}
+{"p": "site5.com", "type": "site_load", "ts": "201601190827"}
+{"p": "http://site5.com/page-10.html", "type": "page_visit_by_min", "ts": "201601190827"}
+{"p": "site5.com", "returning_from_ts": "2016011908", "type": "site_visit_by_min", "ts": "201601190827"}
+{"type": "new_min", "ts": "201601190827"}
+{"p": ["http://site4.com/page-9.html", "(obfuscated)", "(obfuscated)"], "type": "pattern_by_hour", "ts": "201601190827"}
+{"p": "http://site5.com/page-10.html", "type": "page_load", "ts": "201601190828"}
+{"p": "site5.com", "type": "site_load", "ts": "201601190828"}
+{"p": "http://site5.com/page-10.html", "type": "page_visit_by_min", "ts": "201601190828"}
+{"p": "http://site5.com/page-10.html", "type": "page_load", "ts": "201601190829"}
+{"p": "site5.com", "type": "site_load", "ts": "201601190829"}
+{"p": "http://site5.com/page-10.html", "type": "page_visit_by_min", "ts": "201601190829"}
+{"p": "site5.com", "returning_from_ts": "2016011908", "type": "site_visit_by_min", "ts": "201601190829"}
+{"type": "new_min", "ts": "201601190829"}
+{"p": "http://site3.com/", "type": "page_load", "ts": "201601191157"}
+{"p": "site3.com", "type": "site_load", "ts": "201601191157"}
+{"p": "http://site3.com/", "type": "page_visit_by_year", "ts": "201601191157"}
+{"p": "http://site3.com/", "type": "page_visit_by_month", "ts": "201601191157"}
+{"p": "http://site3.com/", "type": "page_visit_by_day", "ts": "201601191157"}
+{"p": "http://site3.com/", "type": "page_visit_by_hour", "ts": "201601191157"}
+{"p": "http://site3.com/", "type": "page_visit_by_min", "ts": "201601191157"}
+{"p": "site3.com", "returning_from_ts": "0000000000", "type": "site_visit_by_year", "ts": "201601191157"}
+{"p": "site3.com", "returning_from_ts": "0000000000", "type": "site_visit_by_month", "ts": "201601191157"}
+{"p": "site3.com", "returning_from_ts": "0000000000", "type": "site_visit_by_day", "ts": "201601191157"}
+{"p": "site3.com", "returning_from_ts": "0000000000", "type": "site_visit_by_hour", "ts": "201601191157"}
+{"p": "site3.com", "returning_from_ts": "0000000000", "type": "site_visit_by_min", "ts": "201601191157"}
+{"type": "new_all", "ts": "201601191157"}
+{"type": "new_year", "ts": "201601191157"}
+{"type": "new_month", "ts": "201601191157"}
+{"type": "new_day", "ts": "201601191157"}
+{"type": "new_hour", "ts": "201601191157"}
+{"type": "new_min", "ts": "201601191157"}
+{"p": ["http://site3.com/"], "type": "pattern_by_hour", "ts": "201601191157"}
+{"p": "http://site3.com/page-4.html", "type": "page_load", "ts": "201601191209"}
+{"p": "site3.com", "type": "site_load", "ts": "201601191209"}
+{"p": "http://site3.com/page-4.html", "type": "page_visit_by_year", "ts": "201601191209"}
+{"p": "http://site3.com/page-4.html", "type": "page_visit_by_month", "ts": "201601191209"}
+{"p": "http://site3.com/page-4.html", "type": "page_visit_by_day", "ts": "201601191209"}
+{"p": "http://site3.com/page-4.html", "type": "page_visit_by_hour", "ts": "201601191209"}
+{"p": "http://site3.com/page-4.html", "type": "page_visit_by_min", "ts": "201601191209"}
+{"p": "site3.com", "returning_from_ts": "2016011911", "type": "site_visit_by_hour", "ts": "201601191209"}
+{"p": "site3.com", "returning_from_ts": "2016011911", "type": "site_visit_by_min", "ts": "201601191209"}
+{"type": "new_hour", "ts": "201601191209"}
+{"type": "new_min", "ts": "201601191209"}
+{"p": ["http://site3.com/page-4.html"], "type": "pattern_by_hour", "ts": "201601191209"}
+{"p": "http://site4.com/page-10.html", "type": "page_load", "ts": "201601191225"}
+{"p": "site4.com", "type": "site_load", "ts": "201601191225"}
+{"p": "http://site4.com/page-10.html", "type": "page_visit_by_year", "ts": "201601191225"}
+{"p": "http://site4.com/page-10.html", "type": "page_visit_by_month", "ts": "201601191225"}
+{"p": "http://site4.com/page-10.html", "type": "page_visit_by_day", "ts": "201601191225"}
+{"p": "http://site4.com/page-10.html", "type": "page_visit_by_hour", "ts": "201601191225"}
+{"p": "http://site4.com/page-10.html", "type": "page_visit_by_min", "ts": "201601191225"}
+{"p": "site4.com", "returning_from_ts": "0000000000", "type": "site_visit_by_year", "ts": "201601191225"}
+{"p": "site4.com", "returning_from_ts": "0000000000", "type": "site_visit_by_month", "ts": "201601191225"}
+{"p": "site4.com", "returning_from_ts": "0000000000", "type": "site_visit_by_day", "ts": "201601191225"}
+{"p": "site4.com", "returning_from_ts": "0000000000", "type": "site_visit_by_hour", "ts": "201601191225"}
+{"p": "site4.com", "returning_from_ts": "0000000000", "type": "site_visit_by_min", "ts": "201601191225"}
+{"type": "new_min", "ts": "201601191225"}
+{"p": ["http://site3.com/", "http://site3.com/page-4.html", "(obfuscated)"], "type": "pattern_by_hour", "ts": "201601191225"}
+{"p": ["site3.com", "site4.com"], "type": "site_correlation_by_hour", "ts": "201601191225"}
+{"p": "http://site4.com/page-10.html", "type": "page_load", "ts": "201601191235"}
+{"p": "site4.com", "type": "site_load", "ts": "201601191235"}
+{"p": "http://site4.com/page-10.html", "type": "page_visit_by_min", "ts": "201601191235"}
+{"p": "http://site4.com/page-10.html", "type": "page_load", "ts": "201601191237"}
+{"p": "site4.com", "type": "site_load", "ts": "201601191237"}
+{"p": "http://site4.com/page-10.html", "type": "page_visit_by_min", "ts": "201601191237"}
+{"p": "site4.com", "returning_from_ts": "2016011912", "type": "site_visit_by_min", "ts": "201601191237"}
+{"type": "new_min", "ts": "201601191237"}
+{"p": ["http://site4.com/page-10.html", "http://site4.com/page-10.html", "http://site4.com/page-10.html"], "type": "pattern_by_hour", "ts": "201601191237"}
+{"p": "http://site4.com/page-10.html", "type": "page_load", "ts": "201601191248"}
+{"p": "site4.com", "type": "site_load", "ts": "201601191248"}
+{"p": "http://site4.com/page-10.html", "type": "page_visit_by_min", "ts": "201601191248"}
+{"p": "site4.com", "returning_from_ts": "2016011912", "type": "site_visit_by_min", "ts": "201601191248"}
+{"type": "new_min", "ts": "201601191248"}
+{"p": "http://site5.com/page-10.html", "type": "page_load", "ts": "201601191303"}
+{"p": "site5.com", "type": "site_load", "ts": "201601191303"}
+{"p": "http://site5.com/page-10.html", "type": "page_visit_by_year", "ts": "201601191303"}
+{"p": "http://site4.com/page-10.html", "type": "page_load", "ts": "201601191305"}
+{"p": "site4.com", "type": "site_load", "ts": "201601191305"}
+{"p": "http://site4.com/page-10.html", "type": "page_visit_by_hour", "ts": "201601191305"}
+{"p": "http://site4.com/page-10.html", "type": "page_visit_by_min", "ts": "201601191305"}
+{"p": "site4.com", "returning_from_ts": "2016011912", "type": "site_visit_by_hour", "ts": "201601191305"}
+{"p": "site4.com", "returning_from_ts": "2016011912", "type": "site_visit_by_min", "ts": "201601191305"}
+{"type": "new_hour", "ts": "201601191305"}
+{"type": "new_min", "ts": "201601191305"}
+{"p": ["http://site4.com/page-10.html", "http://site4.com/page-10.html", "http://site4.com/page-10.html"], "type": "pattern_by_hour", "ts": "201601191305"}
+{"p": "http://site4.com/page-9.html", "type": "page_load", "ts": "201601191315"}
+{"p": "site4.com", "type": "site_load", "ts": "201601191315"}
+{"p": "http://site4.com/page-9.html", "type": "page_visit_by_year", "ts": "201601191315"}
+{"p": "http://site4.com/page-9.html", "type": "page_visit_by_month", "ts": "201601191315"}
+{"p": "http://site4.com/page-9.html", "type": "page_visit_by_day", "ts": "201601191315"}
+{"p": "http://site4.com/page-9.html", "type": "page_visit_by_hour", "ts": "201601191315"}
+{"p": "http://site4.com/page-9.html", "type": "page_visit_by_min", "ts": "201601191315"}
+{"p": "site4.com", "returning_from_ts": "2016011913", "type": "site_visit_by_min", "ts": "201601191315"}
+{"type": "new_min", "ts": "201601191315"}
+{"p": ["http://site4.com/page-10.html", "http://site4.com/page-10.html", "http://site4.com/page-9.html"], "type": "pattern_by_hour", "ts": "201601191315"}
+{"p": "http://site4.com/page-10.html", "type": "page_load", "ts": "201601191318"}
+{"p": "site4.com", "type": "site_load", "ts": "201601191318"}
+{"p": "http://site4.com/page-10.html", "type": "page_visit_by_min", "ts": "201601191318"}
+{"p": "site4.com", "returning_from_ts": "2016011913", "type": "site_visit_by_min", "ts": "201601191318"}
+{"type": "new_min", "ts": "201601191318"}
+{"p": ["http://site4.com/page-9.html"], "type": "goal", "ts": "201601191318", "name": "signup to site4"}
+{"p": ["http://site4.com/page-10.html", "http://site4.com/page-9.html", "http://site4.com/page-10.html"], "type": "pattern_by_hour", "ts": "201601191318"}
+{"p": "http://site3.com/", "type": "page_load", "ts": "201601191649"}
+{"p": "site3.com", "type": "site_load", "ts": "201601191649"}
+{"p": "http://site3.com/", "type": "page_visit_by_year", "ts": "201601191649"}
+{"p": "http://site3.com/", "type": "page_visit_by_month", "ts": "201601191649"}
+{"p": "http://site3.com/", "type": "page_visit_by_day", "ts": "201601191649"}
+{"p": "http://site3.com/", "type": "page_visit_by_hour", "ts": "201601191649"}
+{"p": "http://site3.com/", "type": "page_visit_by_min", "ts": "201601191649"}
+{"p": "site3.com", "returning_from_ts": "0000000000", "type": "site_visit_by_year", "ts": "201601191649"}
+{"p": "site3.com", "returning_from_ts": "0000000000", "type": "site_visit_by_month", "ts": "201601191649"}
+{"p": "site3.com", "returning_from_ts": "0000000000", "type": "site_visit_by_day", "ts": "201601191649"}
+{"p": "site3.com", "returning_from_ts": "0000000000", "type": "site_visit_by_hour", "ts": "201601191649"}
+{"p": "site3.com", "returning_from_ts": "0000000000", "type": "site_visit_by_min", "ts": "201601191649"}
+{"type": "new_all", "ts": "201601191649"}
+{"type": "new_year", "ts": "201601191649"}
+{"type": "new_month", "ts": "201601191649"}
+{"type": "new_day", "ts": "201601191649"}
+{"type": "new_hour", "ts": "201601191649"}
+{"type": "new_min", "ts": "201601191649"}
+{"p": ["http://site3.com/"], "type": "pattern_by_hour", "ts": "201601191649"}
+{"p": "http://site5.com/page-10.html", "type": "page_load", "ts": "201601191657"}
+{"p": "site5.com", "type": "site_load", "ts": "201601191657"}
+{"p": "http://site5.com/page-10.html", "type": "page_visit_by_year", "ts": "201601191657"}
+{"p": "http://site5.com/page-10.html", "type": "page_visit_by_month", "ts": "201601191657"}
+{"p": "http://site5.com/page-10.html", "type": "page_visit_by_day", "ts": "201601191657"}
+{"p": "http://site5.com/page-10.html", "type": "page_visit_by_hour", "ts": "201601191657"}
+{"p": "http://site5.com/page-10.html", "type": "page_visit_by_min", "ts": "201601191657"}
+{"p": "site5.com", "returning_from_ts": "0000000000", "type": "site_visit_by_year", "ts": "201601191657"}
+{"p": "site5.com", "returning_from_ts": "0000000000", "type": "site_visit_by_month", "ts": "201601191657"}
+{"p": "site5.com", "returning_from_ts": "0000000000", "type": "site_visit_by_day", "ts": "201601191657"}
+{"p": "site5.com", "returning_from_ts": "0000000000", "type": "site_visit_by_hour", "ts": "201601191657"}
+{"p": "site5.com", "returning_from_ts": "0000000000", "type": "site_visit_by_min", "ts": "201601191657"}
+{"type": "new_min", "ts": "201601191657"}
+{"p": ["http://site5.com/page-10.html"], "type": "pattern_by_hour", "ts": "201601191657"}
+{"p": "http://site4.com/page-10.html", "type": "page_load", "ts": "201601191706"}
+{"p": "site4.com", "type": "site_load", "ts": "201601191706"}
+{"p": "http://site4.com/page-10.html", "type": "page_visit_by_year", "ts": "201601191706"}
+{"p": "http://site4.com/page-10.html", "type": "page_visit_by_month", "ts": "201601191706"}
+{"p": "http://site4.com/page-10.html", "type": "page_visit_by_day", "ts": "201601191706"}
+{"p": "http://site4.com/page-10.html", "type": "page_visit_by_hour", "ts": "201601191706"}
+{"p": "http://site4.com/page-10.html", "type": "page_visit_by_min", "ts": "201601191706"}
+{"p": "site4.com", "returning_from_ts": "0000000000", "type": "site_visit_by_year", "ts": "201601191706"}
+{"p": "site4.com", "returning_from_ts": "0000000000", "type": "site_visit_by_month", "ts": "201601191706"}
+{"p": "site4.com", "returning_from_ts": "0000000000", "type": "site_visit_by_day", "ts": "201601191706"}
+{"p": "site4.com", "returning_from_ts": "0000000000", "type": "site_visit_by_hour", "ts": "201601191706"}
+{"p": "site4.com", "returning_from_ts": "0000000000", "type": "site_visit_by_min", "ts": "201601191706"}
+{"type": "new_hour", "ts": "201601191706"}
+{"type": "new_min", "ts": "201601191706"}
+{"p": ["http://site5.com/page-10.html"], "type": "goal", "ts": "201601191706", "name": "signup to site4"}
+{"p": ["http://site3.com/", "(obfuscated)", "(obfuscated)"], "type": "pattern_by_hour", "ts": "201601191706"}
+{"p": ["site3.com", "site4.com"], "type": "site_correlation_by_hour", "ts": "201601191706"}
+{"p": "http://site5.com/page-10.html", "type": "page_load", "ts": "201601191719"}
+{"p": "site5.com", "type": "site_load", "ts": "201601191719"}
+{"p": "http://site5.com/page-10.html", "type": "page_visit_by_hour", "ts": "201601191719"}
+{"p": "http://site5.com/page-10.html", "type": "page_visit_by_min", "ts": "201601191719"}
+{"p": "site5.com", "returning_from_ts": "2016011916", "type": "site_visit_by_hour", "ts": "201601191719"}
+{"p": "site5.com", "returning_from_ts": "2016011916", "type": "site_visit_by_min", "ts": "201601191719"}
+{"type": "new_min", "ts": "201601191719"}
+{"p": ["http://site5.com/page-10.html", "(obfuscated)", "http://site5.com/page-10.html"], "type": "pattern_by_hour", "ts": "201601191719"}
+{"p": "http://site2.com/page-10.html", "type": "page_load", "ts": "201601191722"}
+{"p": "site2.com", "type": "site_load", "ts": "201601191722"}
+{"p": "http://site2.com/page-10.html", "type": "page_visit_by_year", "ts": "201601191722"}
+{"p": "http://site2.com/page-10.html", "type": "page_visit_by_month", "ts": "201601191722"}
+{"p": "http://site2.com/page-10.html", "type": "page_visit_by_day", "ts": "201601191722"}
+{"p": "http://site2.com/page-10.html", "type": "page_visit_by_hour", "ts": "201601191722"}
+{"p": "http://site4.com/page-10.html", "type": "page_load", "ts": "201601191724"}
+{"p": "site4.com", "type": "site_load", "ts": "201601191724"}
+{"p": "http://site4.com/page-10.html", "type": "page_visit_by_min", "ts": "201601191724"}
+{"p": "site4.com", "returning_from_ts": "2016011917", "type": "site_visit_by_min", "ts": "201601191724"}
+{"type": "new_min", "ts": "201601191724"}
+{"p": ["http://site5.com/page-10.html", "(obfuscated)", "(obfuscated)"], "type": "pattern_by_hour", "ts": "201601191724"}

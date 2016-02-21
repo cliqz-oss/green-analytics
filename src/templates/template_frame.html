@@ -1,0 +1,433 @@
+<!-- <script src="/green_tracker.js"/>-->
+
+<script>
+
+var getDate = function() {
+    {% if 'accelerate' not in context %}
+        return new Date();
+    {% else %}
+        var timeMilis = (new Date()).getTime();
+        var extraMilis = (timeMilis-{{ context['accelerate']['start_time'] }})*{{ context['accelerate']['speed'] }};
+        return new Date(timeMilis+extraMilis);
+    {% endif %}
+}
+
+console.log('date',getDate);
+
+var sendAll = function(arr) {
+    (function(arrint) {
+        if (arrint.length>0) {
+            var xhr = new XMLHttpRequest();
+            xhr.open('POST','http://green-tracker.com/collect');
+            xhr.setRequestHeader('Content-Type', 'application/json');
+            xhr.onreadystatechange = function () {
+                if (xhr.readyState == 4 && xhr.status == 200) {
+                    if (arrint.length > 0) sendAll(arrint.slice(1,arrint.length));
+                }
+            }
+            //console.log('sending',arrint.length, JSON.stringify(arr[0]),JSON.stringify(arrint));
+            xhr.send(JSON.stringify(arr[0]));
+        }
+    })(arr);
+};
+
+
+var twoDigits = function(num) {
+    num = ''+parseInt(num);
+    if (num.length<2) num = '0'+num;
+    return num;
+};
+
+var timeDiffPeriods = function(ts1, ts2) {
+    var labs = ['year','month','day','hour','min'];
+    var offset = [4, 2, 2, 2, 2];
+
+    var res = [];
+    var curr = 0;
+    var match = -1;
+    for(var i=0;i<labs.length;i++) {
+        var x1 = ts1.slice(curr,curr+offset[i]), x2 = ts2.slice(curr,curr+offset[i]);
+        if (x1!=x2) {
+            match = i;
+            break;
+        }
+        curr+=offset[i];
+    }
+
+    if (match==-1) return [];
+    return labs.slice(match,labs.length);
+};
+
+var timeDiffMinutes = function(ts1, ts2) {
+    var millis = timestampToUTCDate(ts1).getTime() - timestampToUTCDate(ts2).getTime();
+    return millis/(1000*60);
+}
+
+
+var timestampToUTCDate = function(ts) {
+    return new Date(
+        parseInt(ts.slice(0,4)) || 0,
+        parseInt(ts.slice(4,6)) || 0,
+        parseInt(ts.slice(6,8)) || 0,
+        parseInt(ts.slice(8,10)) || 0,
+        parseInt(ts.slice(10,12)) || 0
+    );
+};
+
+var campaignGoals = [
+    {'name': 'signup to site4', 'dest': 'http://site4.com/page-10.html', 'sources': ['http://site5.com/page-10.html', 'http://site4.com/page-9.html']}
+];
+
+var main = function(url) {
+
+    LockStorage.lock('green-tracker', function() {
+
+    var now = getDate(); // instead of 'new Date()' because of the stub for accelerated time
+
+    var utcYear=now.getUTCFullYear(), utcMonth=now.getUTCMonth(), utcDate=now.getUTCDate(), utcHour=now.getUTCHours(), utcMinutes=now.getUTCMinutes();
+
+    var tmp = url.replace('http://','').split('/');
+    var site = tmp[0], page = '/'+tmp.splice(1,tmp.length).join('/');
+
+    var timestamp = utcYear + twoDigits(utcMonth) + twoDigits(utcDate) + twoDigits(utcHour) + twoDigits(utcMinutes);
+    var timestamp_by_hour = timestamp.slice(0,10);
+    var timestamp_by_day = timestamp.slice(0,8);
+
+    console.log(timestampToUTCDate(timestamp));
+
+    var dataToSend = [];
+
+    // these two messages, we always send,
+    dataToSend.push({ts: timestamp, type: 'page_load', p: url})
+    dataToSend.push({ts: timestamp, type: 'site_load', p: site})
+
+    // site mem have all the data related to the site,
+    var siteMem = JSON.parse(localStorage.getItem('site:'+site) || "{\"site\": {}, \"urls\": {}}");
+
+    // let's see if we have been in the page before,
+    if (!siteMem['urls'][url]) siteMem['urls'][url] = '000000000000';
+
+    var diffs = timeDiffPeriods(siteMem['urls'][url], timestamp);
+    // diffs will contain if it was a new visit for different time resolutions, from year to minute
+    for(var i=0;i<diffs.length;i++) {
+        dataToSend.push({ts: timestamp, type: 'page_visit_by_'+diffs[i], p: url});
+    }
+    siteMem['urls'][url] = timestamp;
+
+    if (!siteMem['site']['last_visit']) siteMem['site']['last_visit'] = '000000000000';
+    var diffs = timeDiffPeriods(siteMem['site']['last_visit'], timestamp);
+    console.log(siteMem['site']['last_visit'], timestamp, diffs);
+    // diffs will contain if it was a new visit for different time resolutions, from year to minute
+    // this time, by the domain of the url, the site
+    for(var i=0;i<diffs.length;i++) {
+        dataToSend.push({ts: timestamp, type: 'site_visit_by_'+diffs[i], p: site, returning_from_ts: siteMem['site']['last_visit'].slice(0,10)});
+    }
+    siteMem['site']['last_visit'] = timestamp;
+
+    // To this point, we already send the data to count pageloads (not unique) , and visits (uniques)
+    // by different time resolutions, let's save the object to localStorage
+
+    localStorage.setItem('site:'+site,JSON.stringify(siteMem));
+
+    var last_visit_in_any_site = localStorage.getItem('last_visit_in_any_site') || '000000000000';
+    localStorage.setItem('last_visit_in_any_site', timestamp);
+
+    if (last_visit_in_any_site=='000000000000') {
+        // the user was totally new, never seem him/her before across any site,
+        // so we send the message of new_user
+        dataToSend.push({ts: timestamp, type: 'new_all'});
+    }
+    var diffs = timeDiffPeriods(last_visit_in_any_site, timestamp);
+    for(var i=0;i<diffs.length;i++) {
+        dataToSend.push({ts: timestamp, type: 'new_'+diffs[i]});
+    }
+
+
+    // let's see patterns
+    var history = JSON.parse(localStorage.getItem('history') || "[]");
+    history.push([url, timestamp]);
+    // cap tot the last 10 pages visited
+    history = history.slice(history.length-10, history.length);
+    localStorage.setItem('history', JSON.stringify(history));
+
+    // check for campaign goals
+    for(var i=0; i<campaignGoals.length; i++) {
+        var goal = campaignGoals[i];
+
+        if (goal['dest']==history[history.length-1][0]) {
+            // the user is at the destination of the goal,
+            // check if he comes from the sources
+            var goal_success = [];
+
+            for(var j=0;j<4;j++) {
+                // check maximum of 4 hops
+                if (history.length-2-j<0) break;
+                var prev = history[history.length-2-j];
+                if (timeDiffMinutes(timestamp, prev[1]) < 30) {
+                    // still within 30 minutes
+                    var ind = goal['sources'].indexOf(prev[0]);
+                    if (ind!=-1) {
+                        // we found it
+                        goal_success.push(goal['sources'][ind]);
+                    }
+                }
+                else break;
+            }
+
+            if (goal_success.length>0) {
+                // we must check to report only once
+                var cache = JSON.parse(localStorage.getItem('cache_goals') || "{}");
+                if (!cache[goal['name']]) {
+                    cache[goal['name']] = timestamp;
+                    localStorage.setItem('cache_goals', JSON.stringify(cache));
+                    dataToSend.push({ts: timestamp, type: 'goal', 'name': goal['name'], 'p': goal_success});
+                }
+            }
+        }
+    }
+
+
+    // now let's see if the last 3 are a patterns that is unique by the hour, if so send
+    var tmp_pattern = history.slice(history.length-3, history.length);
+
+    var patterns = [];
+    for(var i=0;i<tmp_pattern.length;i++) {
+        if (timeDiffMinutes(timestamp, tmp_pattern[i][1]) < 40) {
+            // do not consider pages that were visited more than 40 minutes ago
+            patterns.push(tmp_pattern[i][0]);
+        }
+    }
+
+    var correlations = [];
+    if (patterns.length > 0) {
+        var pivot_site = patterns[0].replace('http://','').split('/')[0];
+        for(var i=1;i<patterns.length;i++) {
+            var tmp_site = patterns[i].replace('http://','').split('/')[0];
+            if (tmp_site!=pivot_site) {
+                // the patterns goes across sites, obfuscate for privacy
+                patterns[i] = '(obfuscated)';
+                // but we want to learn correlations across sites, only site,
+                // we can keep that
+                correlations.push([pivot_site, tmp_site]);
+            }
+        }
+
+        var cache = JSON.parse(localStorage.getItem('cache_by_hour') || "{}");
+
+        var key_pattern = 'patterns: '+ patterns.join(' >> ');
+        // has the key been seen in the last hour by the user? If not, then send. Another
+        // way to do uniques
+
+        if (!cache[timestamp_by_hour]) {
+            // the hour is new, we must clean up old timestamps because no longer apply
+            cache = {}
+            cache[timestamp_by_hour] = {}
+        }
+
+        if (!cache[timestamp_by_hour][key_pattern]) {
+            // the key is new for the hour
+            cache[timestamp_by_hour][key_pattern] = true;
+            dataToSend.push({ts: timestamp, type: 'pattern_by_hour', p: patterns});
+        }
+
+        // we must repeat the same by the correlations, also bounded by hour
+        if (correlations.length>0) {
+            // you only want the last one
+            var corr = correlations[correlations.length-1];
+            var key_correlation = 'correlation: '+ corr.join(' >> ');
+            if (!cache[timestamp_by_hour][key_correlation]) {
+                // the key is new for the hour
+                cache[timestamp_by_hour][key_correlation] = true;
+                dataToSend.push({ts: timestamp, type: 'site_correlation_by_hour', p: corr});
+            }
+        }
+        localStorage.setItem('cache_by_hour', JSON.stringify(cache));
+    }
+
+    // we can also keep aggregated statistics by user, the user will collect and aggregate on the
+    // given time frame and when it has elapsed it will send to the collector,
+
+
+    var monitoringSites = ['site1.com'];
+    if (monitoringSites.indexOf(site)!=-1) {
+        // the user is at site1, the only site for which we want aggregated statistics per user,
+        var cache = JSON.parse(localStorage.getItem('cache_time_daily:'+site) || "{}");
+
+        if (!cache[timestamp_by_day]) {
+            // it does not exist, either new user or it's a new day,
+
+            // we must check if we have old days to be send and then removed
+            var otherDays = Object.keys(cache);
+            for(var i=0;i<otherDays.length;i++) {
+                var x = otherDays[i];
+                dataToSend.push({ty: 'agg_'+site, ts: x, o: cache[x]});
+                delete cache[x];
+            }
+            // create the entry for today,
+            cache[timestamp_by_day] = {agg_page_loads: 0, agg_engagement: 0};
+        }
+        cache[timestamp_by_day]['agg_page_loads'] += 1;
+        localStorage.setItem('cache_time_daily:'+site, JSON.stringify(cache));
+    }
+
+
+    console.log(dataToSend)
+    sendAll(dataToSend);
+
+    });
+
+};
+
+
+var incomingMsg = function(evt) {
+    main(evt.data);
+
+    setInterval(function() { return function(url) {
+        var tmp = url.replace('http://','').split('/');
+        var site = tmp[0];
+        if (['site1.com'].indexOf(site)!=-1) {
+            var now = getDate(); // instead of 'new Date()' because of the stub for accelerated time
+            var utcYear=now.getUTCFullYear(), utcMonth=now.getUTCMonth(), utcDate=now.getUTCDate(), utcHour=now.getUTCHours(), utcMinutes=now.getUTCMinutes();
+            var timestamp = utcYear + twoDigits(utcMonth) + twoDigits(utcDate) + twoDigits(utcHour) + twoDigits(utcMinutes);
+            var timestamp_by_day = timestamp.slice(0,8);
+
+            var cache = JSON.parse(localStorage.getItem('cache_time_daily:'+site) || "{}");
+            var o = cache[timestamp_by_day];
+
+            if (o && o.hasOwnProperty('agg_engagement')) {
+                o['agg_engagement'] += 1;
+                localStorage.setItem('cache_time_daily:'+site, JSON.stringify(cache));
+            }
+        }
+    }(evt.data)},2000);
+
+}
+
+
+//
+// Taken from https://bitbucket.org/balpha/lockablestorage/raw/96b7ddb1962334cde9c647663d0053ab640ec5a1/lockablestorage.js
+//
+var LockStorage = (function () {
+
+    function now() {
+        return new Date().getTime();
+    }
+
+    function someNumber() {
+        return Math.random() * 1000000000 | 0;
+    }
+
+    var myId = now() + ":" + someNumber();
+
+    function getter(lskey) {
+        return function () {
+            var value = localStorage[lskey];
+            if (!value)
+                return null;
+
+            var splitted = value.split(/\|/);
+            if (parseInt(splitted[1]) < now()) {
+                return null;
+            }
+            return splitted[0];
+        }
+    }
+
+    function _mutexTransaction(key, callback, synchronous) {
+        var xKey = key + "__MUTEX_x",
+            yKey = key + "__MUTEX_y",
+            getY = getter(yKey);
+
+        function criticalSection() {
+            try {
+                callback();
+            } finally {
+                localStorage.removeItem(yKey);
+            }
+        }
+
+        localStorage[xKey] = myId;
+        if (getY()) {
+            if (!synchronous)
+                setTimeout(function () { _mutexTransaction(key, callback); }, 0);
+            return false;
+        }
+        localStorage[yKey] = myId + "|" + (now() + 40);
+
+        if (localStorage[xKey] !== myId) {
+            if (!synchronous) {
+                setTimeout(function () {
+                    if (getY() !== myId) {
+                        setTimeout(function () { _mutexTransaction(key, callback); }, 0);
+                    } else {
+                        criticalSection();
+                    }
+                }, 50)
+            }
+            return false;
+        } else {
+            criticalSection();
+            return true;
+        }
+    }
+
+    function lockImpl(key, callback, maxDuration, synchronous) {
+
+        maxDuration = maxDuration || 5000;
+
+        var mutexKey = key + "__MUTEX",
+            getMutex = getter(mutexKey),
+            mutexValue = myId + ":" + someNumber() + "|" + (now() + maxDuration);
+
+        function restart () {
+            setTimeout(function () { lockImpl(key, callback, maxDuration); }, 10);
+        }
+
+        if (getMutex()) {
+            if (!synchronous)
+                restart();
+            return false;
+        }
+
+        var aquiredSynchronously = _mutexTransaction(key, function () {
+            if (getMutex()) {
+                if (!synchronous)
+                    restart();
+                return false;
+            }
+            localStorage[mutexKey] = mutexValue;
+            if (!synchronous)
+                setTimeout(mutexAquired, 0)
+        }, synchronous);
+
+        if (synchronous && aquiredSynchronously) {
+            mutexAquired();
+            return true;
+        }
+        return false;
+        function mutexAquired() {
+            try {
+                callback();
+            } finally {
+                _mutexTransaction(key, function () {
+                    if (localStorage[mutexKey] !== mutexValue)
+                        throw key + " was locked by a different process while I held the lock"
+
+                    localStorage.removeItem(mutexKey);
+                });
+            }
+        }
+
+    }
+
+    return  {
+        lock: function (key, callback, maxDuration) { lockImpl(key, callback, maxDuration, false) },
+        trySyncLock: function (key, callback, maxDuration) { return lockImpl(key, callback, maxDuration, true) }
+    };
+})();
+
+
+window.addEventListener("message",incomingMsg, false);
+
+
+</script>

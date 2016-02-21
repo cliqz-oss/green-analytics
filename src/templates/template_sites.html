@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <link rel="icon" type="image/png" href="/static/favicon.png">
+
+    <title> {{ context.title }} </title>
+
+    <!-- Bootstrap core CSS -->
+    <!-- <link href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.6/css/bootstrap.min.css" rel="stylesheet"> -->
+    <link href="/static/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Custom styles for this template -->
+    <link href="/static/style.css" rel="stylesheet">
+  </head>
+
+  <script>
+    function reset() {
+        document.getElementById('gt').src = "http://green-tracker.com/reset";
+        alert('All cleared! You are a new user for any of the sites');
+    }
+
+    var getDate = function() {
+    {% if 'accelerate' not in context %}
+        return new Date();
+    {% else %}
+        var timeMilis = (new Date()).getTime();
+        var extraMilis = (timeMilis-{{ context['accelerate']['start_time'] }})*{{ context['accelerate']['speed'] }};
+        return new Date(timeMilis+extraMilis);
+    {% endif %}
+    }
+
+    {% if 'accelerate' in context %}
+    setInterval(function(){
+        try{
+            window.document.getElementById('curr-time').innerHTML="Accelerated time: (x{{ context.get('accelerate',{}).get('speed',1) }}): " + getDate().toJSON().slice(0,19);
+        } catch(ee) {};
+    }, 2000);
+    {% endif %}
+
+    window.onload = function() {
+        var s = ''+document.location.href;
+        document.getElementById("gt").contentWindow.postMessage(s,"*");
+        {% if 'accelerate' in context %}
+        window.document.getElementById('curr-time').innerHTML="Accelerated time: (x{{ context.get('accelerate',{}).get('speed',1) }}): " + getDate().toJSON().slice(0,19);
+        {% endif %}
+    };
+
+    {% if 'accelerate' in context %}
+    try {
+        window.document.getElementById('curr-time').innerHTML="Accelerated time: (x{{ context.get('accelerate',{}).get('speed',1) }}): " + getDate().toJSON().slice(0,19);
+    } catch(ee) {};
+    {% endif %}
+
+
+
+  </script>
+
+  <body class="{{ context.bg }}">
+    <div class="row container-fluid">
+        <h1>Welcome to {{ context.title }}</h1>
+        <div id="desc">
+            <p>Please navigate across the multiple pages and even across different domains.
+            <p>As you browse, the data the data collected by <em>green-tracker</em> is available a the <a href="http://green-tracker.com/log">here</a>.</p>
+            <p>To simulate different users you must use different browsers or press <a href="javascript:reset()">reset</a> to start as a new user.</p>
+            <p>&nbsp;<span id="curr-time"></span></p>
+        </div>
+    </div>
+    <div class="row container-fluid">
+        <div class="row">
+          <div class="col-md-2"></div>
+
+          <div class="col-md-4">
+            <ul class="list-unstyled">
+            {% for item in context.other_pages %}
+               <li><a href="{{ item[0] }}">{{ item[1] }}</a></li>
+            {% endfor %}
+            </ul>
+          </div>
+
+           <div class="col-md-4">
+            <ul class="list-unstyled">
+            {% for item in context.other_sites %}
+                <li><a href="{{ item[0] }}">{{ item[1] }}</a></li>
+            {% endfor %}
+            </ul>
+          </div>
+          <div class="col-md-2"></div>
+
+        </div>
+
+    </div>
+
+    <iframe id="gt" src="http://green-tracker.com/frame" style="display: none;"/>
+    <iframe id="gt-reset" src="" style="display: none;"/>
+    <!-- <script src="http://green-tracker.com/static/green_tracker.js"></script> -->
+    <!-- Bootstrap core JavaScript -->
+    <!--
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.6/js/bootstrap.min.js"></script>
+	-->
+    <script src="/static/jquery.min.js"></script>
+	<script src="/static/bootstrap.min.js"></script>
+  </body>
+</html>
