@@ -1,0 +1,76 @@
+<script>
+    window.onload = function() {
+
+        var table = document.getElementById('key-table');
+        var num = localStorage.length;
+
+        for(var i=0;i<num;i++) {
+
+            var key = localStorage.key(i);
+            if (key.startsWith('gt:') && key!='gt:message-sent-demo-only') {
+
+                var row = table.insertRow(0);
+                var cell1 = row.insertCell(0);
+                var cell2 = row.insertCell(1);
+
+                var val = '';
+                try {
+                    val = JSON.stringify(JSON.parse(localStorage.getItem(key)), null, 4);
+
+                } catch(ee) {
+                    val = localStorage.getItem(key);
+                }
+
+                cell1.innerHTML = key;
+                cell2.innerHTML = '<pre>'+ val +'</pre>';
+            }
+        }
+    }
+</script>
+
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <link rel="icon" type="image/png" href="/static/favicon.png">
+
+    <title> Green-tracker Introspection </title>
+
+    <!-- Bootstrap core CSS -->
+    <link href="/static/extern/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Custom styles for this template -->
+    <link href="/static/style-log.css" rel="stylesheet">
+  </head>
+
+  <body>
+    <div class="row container-fluid">
+        <h2>Your local footprint due to Green-tracker</h2>
+
+        <p>This is a print out of the data stored in your browser's localStorage, this data is never sent to green-tracker or
+            to anyone else. No one has access to this information other than people with physical access to your browser.
+
+        <p>To see the data sent to the tracker check <a href="/introspect/messages">here</a> (which is key in your localStorage for demo purposes only).
+
+        <p>&nbsp;</p>
+        <table class="table table-striped ">
+            <thead>
+                <tr>
+                     <th>Key</th>
+                     <th>Value</th>
+                </tr>
+            </thead>
+            <tbody id="key-table">
+
+            </tbody>
+        </table>
+    </div>
+
+  </body>
+</html>
+

@@ -1,11 +1,27 @@
 import json
 import sys
+import datetime
+from datetime import timedelta
+
 
 def format_ts(ts):
     a = []
     for item in ts:
         a.append('[{}]'.format('\t'.join([str(x) for x in item])))
     return '\n'.join(a)
+
+
+def two_digits(num):
+    num = str(num)
+    if (len(num)<2):
+        num = '0'+num;
+    return num
+
+def format_time(t):
+    return "{}/{}/{} {}h".format(t.year,two_digits(t.month),two_digits(t.day),two_digits(t.hour))
+
+def str_to_time(ts):
+    return datetime.datetime(int(ts[0:4]),int(ts[4:6]),int(ts[6:8]),int(ts[8:10]))
 
 
 def analyze_log(filename, debug=False):
@@ -20,17 +36,17 @@ def analyze_log(filename, debug=False):
     transitions = {}
     goals = {}
     returning = {}
-    
+
+    f = open(filename,'r')
+    records = f.readlines()
+    f.close()
+
     labs1 = ['page_load', 'site_load', 'page_visit_by_hour', 'site_visit_by_hour']
     labs1_objs = [pageloads, siteloads, pagevisits, sitevisits]
     
     l1 = dict(zip(labs1, labs1_objs))
     
-    f = open(filename,'r')
-    lines = f.readlines()
-    f.close()
-    
-    for line in lines:
+    for line in records:
         try:
             obj = json.loads(line)
         except Exception as e:
@@ -39,10 +55,12 @@ def analyze_log(filename, debug=False):
 
         ts = obj['ts']
 
-        if ts < stats.get('min_ts','99999999999999999999'):
-            stats['min_ts'] = ts
-        if ts > stats.get('max_ts','0'):
-            stats['max_ts'] = ts
+        if len(ts)==12:
+
+            if ts < stats.get('min_ts','99999999999999999999'):
+                stats['min_ts'] = ts
+            if ts > stats.get('max_ts','0'):
+                stats['max_ts'] = ts
 
         ts_by_hour = "{}/{}/{} {}h".format(ts[0:4],ts[4:6],ts[6:8],ts[8:10])
         ts_by_day = "{}/{}/{}".format(ts[0:4],ts[4:6],ts[6:8])
@@ -95,10 +113,20 @@ def analyze_log(filename, debug=False):
 
     ts = stats['min_ts']
     stats['min_ts'] = "{}/{}/{} {}:{}h".format(ts[0:4],ts[4:6],ts[6:8],ts[8:10],ts[10:12])
+    print ts
+    min_time = datetime.datetime(int(ts[0:4]),int(ts[4:6]),int(ts[6:8]),int(ts[8:10]),int(ts[10:12]))
+
+
     ts = stats['max_ts']
     stats['max_ts'] = "{}/{}/{} {}:{}h".format(ts[0:4],ts[4:6],ts[6:8],ts[8:10],ts[10:12])
     context = {'stats': stats}
+    max_time = datetime.datetime(int(ts[0:4]),int(ts[4:6]),int(ts[6:8]),int(ts[8:10]),int(ts[10:12]))
 
+    stats['time_labels'] = []
+    tt = min_time
+    while tt < max_time:
+        stats['time_labels'].append(format_time(tt))
+        tt = tt + timedelta(hours=1)
 
     
     sv = sorted([(u, sum(v.values())) for u, v in sitevisits.items()], key=lambda x: x[1], reverse=True)
@@ -120,7 +148,7 @@ def analyze_log(filename, debug=False):
 
         timeseries = sorted([(k, v[0], v[1]) for k, v in timeseries.items()], key=lambda x: x[0])
         
-        context['sites'].append({'s': s, 'num_visits': num_vis, 'num_loads': num_loads, 'timeseries': format_ts(timeseries)})
+        context['sites'].append({'s': s, 'num_visits': num_vis, 'num_loads': num_loads, 'timeseries': timeseries})
 
 
     
@@ -198,12 +226,8 @@ def analyze_log(filename, debug=False):
 
                 num_succ += num
 
-
-
         timeseries = sorted([(k, v[0], v[0]/float(v[1])) for k, v in timeseries.items()], key=lambda x: x[0])
-
         context['goals'].append({'s': s, 'num_succ': num_succ, 'timeseries': format_ts(timeseries)})
-
 
     if debug:
         import pdb

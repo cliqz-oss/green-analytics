@@ -1,18 +1,17 @@
 <!-- <script src="/green_tracker.js"/>-->
 
+<script src="/static/extern/hmac-sha1.js"></script>
 <script>
 
 var getDate = function() {
     {% if 'accelerate' not in context %}
-        return new Date();
+    return new Date();
     {% else %}
-        var timeMilis = (new Date()).getTime();
-        var extraMilis = (timeMilis-{{ context['accelerate']['start_time'] }})*{{ context['accelerate']['speed'] }};
-        return new Date(timeMilis+extraMilis);
+    var timeMilis = (new Date()).getTime();
+    var extraMilis = (timeMilis-{{ context['accelerate']['start_time'] }})*{{ context['accelerate']['speed'] }};
+    return new Date(timeMilis+extraMilis);
     {% endif %}
-}
-
-console.log('date',getDate);
+};
 
 var sendAll = function(arr) {
     (function(arrint) {
@@ -31,12 +30,18 @@ var sendAll = function(arr) {
     })(arr);
 };
 
-
 var twoDigits = function(num) {
     num = ''+parseInt(num);
     if (num.length<2) num = '0'+num;
     return num;
 };
+
+var hashSHA1 = function(s, truncate) {
+    var s2 = CryptoJS.SHA1(s).toString();
+    if (truncate) s2 = s2.slice(0, truncate);
+    return s2;
+}
+
 
 var timeDiffPeriods = function(ts1, ts2) {
     var labs = ['year','month','day','hour','min'];
@@ -56,6 +61,7 @@ var timeDiffPeriods = function(ts1, ts2) {
 
     if (match==-1) return [];
     return labs.slice(match,labs.length);
+
 };
 
 var timeDiffMinutes = function(ts1, ts2) {
@@ -78,59 +84,117 @@ var campaignGoals = [
     {'name': 'signup to site4', 'dest': 'http://site4.com/page-10.html', 'sources': ['http://site5.com/page-10.html', 'http://site4.com/page-9.html']}
 ];
 
+var dateToTimestamp = function(d) {
+    var utcYear=d.getUTCFullYear(), utcMonth=d.getUTCMonth(), utcDate=d.getUTCDate(), utcHour=d.getUTCHours(), utcMinutes=d.getUTCMinutes();
+    return utcYear + twoDigits(utcMonth) + twoDigits(utcDate) + twoDigits(utcHour) + twoDigits(utcMinutes);
+}
+
 var main = function(url) {
 
-    LockStorage.lock('green-tracker', function() {
+    //
+    // Disclaimer: I'm a strong believer in documenting the code :-) Code here is not particularly
+    // clean and on the right level of abstraction. Furthermore, it is extremely verbose.
+    // Believe it or not, this is intentional, at least to a certain degree. Take the code as an
+    // step-by-step example of the green-tracker approach to build a privacy-preserving analytics,
+    // rather than as a example of javascript programming. Please bear with it; it's very short
+    // and I hope is worthy of your time.
+    //
 
     var now = getDate(); // instead of 'new Date()' because of the stub for accelerated time
 
-    var utcYear=now.getUTCFullYear(), utcMonth=now.getUTCMonth(), utcDate=now.getUTCDate(), utcHour=now.getUTCHours(), utcMinutes=now.getUTCMinutes();
+    var timestamp = dateToTimestamp(now);
+    var timestamp_by_hour = timestamp.slice(0,10);
+    var timestamp_by_day = timestamp.slice(0,8);
 
     var tmp = url.replace('http://','').split('/');
     var site = tmp[0], page = '/'+tmp.splice(1,tmp.length).join('/');
 
-    var timestamp = utcYear + twoDigits(utcMonth) + twoDigits(utcDate) + twoDigits(utcHour) + twoDigits(utcMinutes);
-    var timestamp_by_hour = timestamp.slice(0,10);
-    var timestamp_by_day = timestamp.slice(0,8);
-
-    console.log(timestampToUTCDate(timestamp));
-
     var dataToSend = [];
 
-    // these two messages, we always send,
+    //
+    // these two messages, will always be sent: a page and a site load
+    //
     dataToSend.push({ts: timestamp, type: 'page_load', p: url})
     dataToSend.push({ts: timestamp, type: 'site_load', p: site})
 
-    // site mem have all the data related to the site,
-    var siteMem = JSON.parse(localStorage.getItem('site:'+site) || "{\"site\": {}, \"urls\": {}}");
+    //
+    // siteMem will have data related to the site being visited, this site must be using
+    // green-tracker. Should be obvious but better to be clear:sites that do not include
+    // green-tracker do not trigger this script.
+    //
+
+    var hSite = hashSHA1(site,20);
+
+    //
+    // the id of the site is hashed with SHA1 and we only kept the first half. This
+    // is meant to protect the privacy of the user of someone with physical access to their
+    // computer. Accessing the localStorage on green-tracker.com would reveal the sites
+    // that the person has visited. We increase the probability of collision by keeping only
+    // the first half, but still neglible, and we gained plausible deniability. Everybody
+    // knows that privacy starts at home :-)
+    //
+
+    var siteMem = JSON.parse(localStorage.getItem('gt:site:'+hSite) || "{\"site\": {}, \"urls\": {}}");
 
     // let's see if we have been in the page before,
-    if (!siteMem['urls'][url]) siteMem['urls'][url] = '000000000000';
+    var hUrl = hashSHA1(url,20);
+    if (!siteMem['urls'][hrl]) siteMem['urls'][hrl] = '000000000000';
 
     var diffs = timeDiffPeriods(siteMem['urls'][url], timestamp);
-    // diffs will contain if it was a new visit for different time resolutions, from year to minute
+    //
+    // 'diffs' will tell us if it's  new visit for different time resolutions, from year to minute.
+    // To achieve this we only need to compare the current timestamp with the timestamp of the last
+    // visit to the site/page.
+    //
+    // Basically, if you have already visited the site in this month, day, hour, the message will
+    // not be added to dataToSent. Consequently green-tracker can be certain that all
+    // 'page_visit_by_*' messages come from different user, without having to know any UID
+    // about the user. That is the most important concept of green-tracker. The state is not
+    // on the server-side, therefore, there is not need to the server to identify the user, because
+    // everything that needs to be aggregated, will be safely aggregated on the client.
+    //
     for(var i=0;i<diffs.length;i++) {
-        dataToSend.push({ts: timestamp, type: 'page_visit_by_'+diffs[i], p: url});
+        if (diffs[i]!='min') {
+            // we exclude the minute because it is not relevant for our analytics use-case,
+            // we just wanted to show that is possible to have fine-grain time-resolution.
+            dataToSend.push({ts: timestamp, type: 'page_visit_by_'+diffs[i], p: url});
+        }
     }
-    siteMem['urls'][url] = timestamp;
+    //
+    // note the 'trick', we add to dataToSend (to be sent to green-tracker) the real site, urls, etc.
+    // However, to maintain the state in the localStorage it suffices to work with the truncated
+    // hashes
+    //
+    siteMem['urls'][hUrl] = timestamp;
 
     if (!siteMem['site']['last_visit']) siteMem['site']['last_visit'] = '000000000000';
     var diffs = timeDiffPeriods(siteMem['site']['last_visit'], timestamp);
-    console.log(siteMem['site']['last_visit'], timestamp, diffs);
-    // diffs will contain if it was a new visit for different time resolutions, from year to minute
-    // this time, by the domain of the url, the site
     for(var i=0;i<diffs.length;i++) {
-        dataToSend.push({ts: timestamp, type: 'site_visit_by_'+diffs[i], p: site, returning_from_ts: siteMem['site']['last_visit'].slice(0,10)});
+        if (diffs[i]!='min') {
+            var msg = {ts: timestamp, type: 'site_visit_by_'+diffs[i], p: site};
+            if (siteMem['site']['last_visit']!='000000000000') msg['returning_from_ts'] = siteMem['site']['last_visit'].slice(0,10);
+            //
+            // note that this time, in the message to be sent to green tracker we added
+            // the last time the user visited the site, this way, green-tracker can calculate
+            // useful analytics like returning rates. This is a case of aggregating data on the client
+            // side. The message, however, is still safe with regards to privacy.
+            //
+            dataToSend.push(msg);
+        }
     }
     siteMem['site']['last_visit'] = timestamp;
 
-    // To this point, we already send the data to count pageloads (not unique) , and visits (uniques)
-    // by different time resolutions, let's save the object to localStorage
+    //
+    // To this point, we already send the data to count pageloads (not unique), and visits (uniques)
+    // by different time resolutions. We must save the object to localStorage. At this point, you
+    // will probably realize that update is not thread-safe, you are correct, it's on the TODO
+    // list (any takers?). The link below looks quite promising:
+    // https://bitbucket.org/balpha/lockablestorage/raw/96b7ddb1962334cde9c647663d0053ab640ec5a1/
+    //
+    localStorage.setItem('gt:site:'+hSite,JSON.stringify(siteMem));
 
-    localStorage.setItem('site:'+site,JSON.stringify(siteMem));
-
-    var last_visit_in_any_site = localStorage.getItem('last_visit_in_any_site') || '000000000000';
-    localStorage.setItem('last_visit_in_any_site', timestamp);
+    var last_visit_in_any_site = localStorage.getItem('gt:last_visit_in_any_site') || '000000000000';
+    localStorage.setItem('gt:last_visit_in_any_site', timestamp);
 
     if (last_visit_in_any_site=='000000000000') {
         // the user was totally new, never seem him/her before across any site,
@@ -142,19 +206,117 @@ var main = function(url) {
         dataToSend.push({ts: timestamp, type: 'new_'+diffs[i]});
     }
 
+    //
+    // Let's build some more complex use-cases. We might be interested to receive click-through
+    // pattern. Kind of, people went here, and then there.
+    // This patterns can be dangerous with regards to privacy, so please, be careful on the
+    // the length and on not sending patterns that span across different sites. In general,
+    // cross-site data should never be sent raw, because even if not UID is send, the urls
+    // on their own can identify the user implicity.
+    //
+    // For instance, I'm on my Facebook account (url1) and click on a link, so I go to url2
+    // outside Facebook. Let's supposed that both sites use green-tracker.
+    // If the patterns url1->url2 is sent, it can be the case that an attacker (in this case
+    // the green-tracker) could learn the identify of the user that visited url2. How?
+    // If url1 contains a ID of the user I might know his identity, as a matter of fact, if
+    // the page is only accessible after a signup, or if the url2 does not exists in the
+    // public version of url1 we can conclude that whoever clicked was the real owner of
+    // the account. Big privacy leak. Just to be clear that's what happens today in
+    // virtually any tracker, be it for ads ot for analytics, including GA (as per the example in
+    // the README.md).
+    //
+    // What if url1->url2 are both in Facebook, doesn't the same attack apply? Yes, but the risk
+    // is much smaller, and what is more important, the owner of the site has all the control
+    // to prevent this situation by not using a 3rd party system to track sensitive page his site.
+    // In case of cross-site, the site owner cannot prevent it in any way, because the destination
+    // is beyond his control. So, no blanket cross-site patterns when full URLS are involved.
+    //
 
-    // let's see patterns
-    var history = JSON.parse(localStorage.getItem('history') || "[]");
-    history.push([url, timestamp]);
-    // cap tot the last 10 pages visited
-    history = history.slice(history.length-10, history.length);
-    localStorage.setItem('history', JSON.stringify(history));
+    //
+    // In this segment of the code we keep a history of the last 5 pages visited,
+    // a history of 10 should be plenty to satisfy a wide variety of complex use-cases.
+    //
+    var history = JSON.parse(localStorage.getItem('gt:history') || "[]");
+    history.push([hUrl, timestamp]);
+    // cap tot the last 5 pages visited
+    history = history.slice(history.length-5, history.length);
+    localStorage.setItem('gt:history', JSON.stringify(history));
 
-    // check for campaign goals
+
+    //
+    // Once we have the history, we can check for fairly complex patterns. Let's
+    // start with checking if a campaign goal has been achieved.
+    //
+    // All campaign goals tracker by green-tracker must be in the client,
+    // in this case we only have one. We are tracking visits on page-10 of site4
+    // (assume is the thank you page after a sign-up) after visiting either
+    // page-10 in site5 or page-9 on site4 (which could hold ads suggesting you
+    // to signup).
+    //
+    // Thanks to the history is evident that we can validate if the goal
+    // has been achieved. In fact, we can add additional conditions such as
+    // time between start and end to be less than 30 minutes and less than
+    // 4 hops away. Naturally, more sophisticated conditions could apply.
+    //
+    // There are a some considerations when tracking goals.
+    // All goals observed by the tracker must be explicitly defined in the
+    // client. Otherwise they could not be reported. Consequently,
+    //
+    // New goals need to be propagated to all client, this is really a problem
+    // because they can be served via CDN and loaded as an external resource, a
+    // applying caching, etc.
+    //
+    // However once every so often users will have to download them all, a quick
+    // back on the envelope calculation yields ~200KB per thousand goals (once on a
+    // proper structure). That's not that much, but a typical tracker can have
+    // hundreds of thousands. So goal calculation will become a bit more expensive
+    // in terms of network transfer but at least you will not be broadcasting
+    // everywhere you go. It is important to mention too, that nothing prevent
+    // us too load goals as we visit sites, for instance, after a visit to site1.com
+    // we could load only goals that apply to that site rather than loading all
+    // goals.
+    //
+    // From the customer of the tracker, having the goals on the client side also
+    // raise few concerns. Mostly, a) their inability to do retrospective analysis,
+    // no way around it. And, b) they might not like to have their campaign goals
+    // exposed to everyone to see. As a matter of fact, an end-user I would welcome
+    // this; transparency is always good. However, the companies whose are the customers
+    // of tracker are also competing among themselves, so too much transparency can
+    // affect them negatively.
+    //
+    // For the sake of not adding more complexity in this walk-through we will keep
+    // 'campainGoals' as plain text. However it should be evident that both 'target'
+    // and 'sources' are candidates to be truncated hashes, so that the urls are
+    // obfuscated to all but the owner of the goal. Furthermore, the 'labels'
+    // that contain customer specific information can be replaced by ids to be
+    // resolved at collection time in the server-side.
+    //
+    //
+    //
+    // Let us stress that campaignGoals should be loaded as an external resource, where
+    // both urls and labels are obfuscated, instead of declared here in plain text.
+    //
+    var campaignGoals = [
+        {'name': 'signup to site4',
+            'dest': {
+                    'url': 'http://site4.com/page-10.html',
+            }
+            'sources': [
+                {'url': 'http://site5.com/page-10.html', 'label': 'external ad #1'},
+                {'url': 'http://site4.com/page-9.html', 'label': 'internal ad #1'}
+            ]
+        }
+    ];
+
+    //
+    // Since it is just a demo let us traverse all goals, naturally, this would
+    // not be efficient enough in a real case scenario where you can have a fair amount
+    // of goals.
+    //
+    //
     for(var i=0; i<campaignGoals.length; i++) {
         var goal = campaignGoals[i];
-
-        if (goal['dest']==history[history.length-1][0]) {
+        if (goal['dest']['url']==history[history.length-1][0]) {
             // the user is at the destination of the goal,
             // check if he comes from the sources
             var goal_success = [];
@@ -176,10 +338,10 @@ var main = function(url) {
 
             if (goal_success.length>0) {
                 // we must check to report only once
-                var cache = JSON.parse(localStorage.getItem('cache_goals') || "{}");
+                var cache = JSON.parse(localStorage.getItem('gt:cache_goals') || "{}");
                 if (!cache[goal['name']]) {
                     cache[goal['name']] = timestamp;
-                    localStorage.setItem('cache_goals', JSON.stringify(cache));
+                    localStorage.setItem('gt:cache_goals', JSON.stringify(cache));
                     dataToSend.push({ts: timestamp, type: 'goal', 'name': goal['name'], 'p': goal_success});
                 }
             }
@@ -212,7 +374,7 @@ var main = function(url) {
             }
         }
 
-        var cache = JSON.parse(localStorage.getItem('cache_by_hour') || "{}");
+        var cache = JSON.parse(localStorage.getItem('gt:cache_by_hour') || "{}");
 
         var key_pattern = 'patterns: '+ patterns.join(' >> ');
         // has the key been seen in the last hour by the user? If not, then send. Another
@@ -241,7 +403,7 @@ var main = function(url) {
                 dataToSend.push({ts: timestamp, type: 'site_correlation_by_hour', p: corr});
             }
         }
-        localStorage.setItem('cache_by_hour', JSON.stringify(cache));
+        localStorage.setItem('gt:cache_by_hour', JSON.stringify(cache));
     }
 
     // we can also keep aggregated statistics by user, the user will collect and aggregate on the
@@ -251,7 +413,7 @@ var main = function(url) {
     var monitoringSites = ['site1.com'];
     if (monitoringSites.indexOf(site)!=-1) {
         // the user is at site1, the only site for which we want aggregated statistics per user,
-        var cache = JSON.parse(localStorage.getItem('cache_time_daily:'+site) || "{}");
+        var cache = JSON.parse(localStorage.getItem('gt:cache_time_daily:'+site) || "{}");
 
         if (!cache[timestamp_by_day]) {
             // it does not exist, either new user or it's a new day,
@@ -267,167 +429,57 @@ var main = function(url) {
             cache[timestamp_by_day] = {agg_page_loads: 0, agg_engagement: 0};
         }
         cache[timestamp_by_day]['agg_page_loads'] += 1;
-        localStorage.setItem('cache_time_daily:'+site, JSON.stringify(cache));
+        localStorage.setItem('gt:cache_time_daily:'+site, JSON.stringify(cache));
     }
 
+    // this is only for demo purposes
+    var messagesCap = 200;
+    var messages = JSON.parse(localStorage.getItem('gt:message-sent-demo-only') || '[]');
+    var messages_to_store_for_demo = dataToSend.reverse().concat(messages).slice(0, messagesCap);
+    localStorage.setItem('gt:message-sent-demo-only', JSON.stringify(messages_to_store_for_demo));
 
-    console.log(dataToSend)
+    //console.log(dataToSend)
     sendAll(dataToSend);
 
-    });
 
 };
 
 
 var incomingMsg = function(evt) {
-    main(evt.data);
+    if (false) {
+        console.log('incoming message: ' + evt.data);
+        console.log('incoming message: ' + evt.origin);
+    }
 
-    setInterval(function() { return function(url) {
-        var tmp = url.replace('http://','').split('/');
-        var site = tmp[0];
-        if (['site1.com'].indexOf(site)!=-1) {
-            var now = getDate(); // instead of 'new Date()' because of the stub for accelerated time
-            var utcYear=now.getUTCFullYear(), utcMonth=now.getUTCMonth(), utcDate=now.getUTCDate(), utcHour=now.getUTCHours(), utcMinutes=now.getUTCMinutes();
-            var timestamp = utcYear + twoDigits(utcMonth) + twoDigits(utcDate) + twoDigits(utcHour) + twoDigits(utcMinutes);
-            var timestamp_by_day = timestamp.slice(0,8);
-
-            var cache = JSON.parse(localStorage.getItem('cache_time_daily:'+site) || "{}");
-            var o = cache[timestamp_by_day];
-
-            if (o && o.hasOwnProperty('agg_engagement')) {
-                o['agg_engagement'] += 1;
-                localStorage.setItem('cache_time_daily:'+site, JSON.stringify(cache));
-            }
+    if (evt.data.startsWith('cmd:')) {
+        if (evt.data == 'cmd:resetLocalStorage') {
+            localStorage.clear();
+            alert('All cleared! You are a new user for any of the sites');
         }
-    }(evt.data)},2000);
+    }
+    else {
+        main(evt.data);
+        setInterval(function() { return function(url) {
+            var tmp = url.replace('http://','').split('/');
+            var site = tmp[0];
+            if (['site1.com'].indexOf(site)!=-1) {
+                var now = getDate(); // instead of 'new Date()' because of the stub for accelerated time
+                var utcYear=now.getUTCFullYear(), utcMonth=now.getUTCMonth(), utcDate=now.getUTCDate(), utcHour=now.getUTCHours(), utcMinutes=now.getUTCMinutes();
+                var timestamp = utcYear + twoDigits(utcMonth) + twoDigits(utcDate) + twoDigits(utcHour) + twoDigits(utcMinutes);
+                var timestamp_by_day = timestamp.slice(0,8);
 
+                var cache = JSON.parse(localStorage.getItem('cache_time_daily:'+site) || "{}");
+                var o = cache[timestamp_by_day];
+
+                if (o && o.hasOwnProperty('agg_engagement')) {
+                    o['agg_engagement'] += 1;
+                    localStorage.setItem('cache_time_daily:'+site, JSON.stringify(cache));
+                }
+            }
+        }(evt.data)},2000);
+    }
 }
 
 
-//
-// Taken from https://bitbucket.org/balpha/lockablestorage/raw/96b7ddb1962334cde9c647663d0053ab640ec5a1/lockablestorage.js
-//
-var LockStorage = (function () {
-
-    function now() {
-        return new Date().getTime();
-    }
-
-    function someNumber() {
-        return Math.random() * 1000000000 | 0;
-    }
-
-    var myId = now() + ":" + someNumber();
-
-    function getter(lskey) {
-        return function () {
-            var value = localStorage[lskey];
-            if (!value)
-                return null;
-
-            var splitted = value.split(/\|/);
-            if (parseInt(splitted[1]) < now()) {
-                return null;
-            }
-            return splitted[0];
-        }
-    }
-
-    function _mutexTransaction(key, callback, synchronous) {
-        var xKey = key + "__MUTEX_x",
-            yKey = key + "__MUTEX_y",
-            getY = getter(yKey);
-
-        function criticalSection() {
-            try {
-                callback();
-            } finally {
-                localStorage.removeItem(yKey);
-            }
-        }
-
-        localStorage[xKey] = myId;
-        if (getY()) {
-            if (!synchronous)
-                setTimeout(function () { _mutexTransaction(key, callback); }, 0);
-            return false;
-        }
-        localStorage[yKey] = myId + "|" + (now() + 40);
-
-        if (localStorage[xKey] !== myId) {
-            if (!synchronous) {
-                setTimeout(function () {
-                    if (getY() !== myId) {
-                        setTimeout(function () { _mutexTransaction(key, callback); }, 0);
-                    } else {
-                        criticalSection();
-                    }
-                }, 50)
-            }
-            return false;
-        } else {
-            criticalSection();
-            return true;
-        }
-    }
-
-    function lockImpl(key, callback, maxDuration, synchronous) {
-
-        maxDuration = maxDuration || 5000;
-
-        var mutexKey = key + "__MUTEX",
-            getMutex = getter(mutexKey),
-            mutexValue = myId + ":" + someNumber() + "|" + (now() + maxDuration);
-
-        function restart () {
-            setTimeout(function () { lockImpl(key, callback, maxDuration); }, 10);
-        }
-
-        if (getMutex()) {
-            if (!synchronous)
-                restart();
-            return false;
-        }
-
-        var aquiredSynchronously = _mutexTransaction(key, function () {
-            if (getMutex()) {
-                if (!synchronous)
-                    restart();
-                return false;
-            }
-            localStorage[mutexKey] = mutexValue;
-            if (!synchronous)
-                setTimeout(mutexAquired, 0)
-        }, synchronous);
-
-        if (synchronous && aquiredSynchronously) {
-            mutexAquired();
-            return true;
-        }
-        return false;
-        function mutexAquired() {
-            try {
-                callback();
-            } finally {
-                _mutexTransaction(key, function () {
-                    if (localStorage[mutexKey] !== mutexValue)
-                        throw key + " was locked by a different process while I held the lock"
-
-                    localStorage.removeItem(mutexKey);
-                });
-            }
-        }
-
-    }
-
-    return  {
-        lock: function (key, callback, maxDuration) { lockImpl(key, callback, maxDuration, false) },
-        trySyncLock: function (key, callback, maxDuration) { return lockImpl(key, callback, maxDuration, true) }
-    };
-})();
-
-
-window.addEventListener("message",incomingMsg, false);
-
-
+window.addEventListener("message", incomingMsg, false);
 </script>

@@ -10,9 +10,6 @@ from flask import Flask, jsonify, request, render_template
 import os, time
 from report import analyze_log
 
-
-import StringIO
-
 PATH = os.path.dirname(os.path.realpath(__file__))
 
 app = Flask(__name__, static_folder='static')
@@ -42,6 +39,9 @@ def any(path):
         ## serve the tracker.js
     #    a=1
 
+    elif pretty_host == 'subdomain.'+TRACKER_HOST:
+        return render_template('/template_introspect_localstorage.html')
+
     elif pretty_host == TRACKER_HOST:
         if path == 'collect':
             try:
@@ -51,21 +51,26 @@ def any(path):
             except:
                 print "Error on collect! {}".format(request.json)
             return jsonify({'ok': True})
-
         if path == 'frame':
             context = {}
             if ACCELERATE > 1:
                 context['accelerate'] = {'speed': ACCELERATE, 'start_time': start_time}
-
             return render_template('/template_frame.html', context=context)
-
-        elif path == 'reset':
-            return render_template('/template_frame_reset.html')
-
-        elif path == 'log2':
-
-            context = analyze_log('{}/{}'.format(PATH,'logs/collect.jl.bkp1'))
+        elif path == 'introspect/messages':
+            return render_template('/template_introspect_messages.html')
+        elif path == 'introspect/localstorage':
+            return render_template('/template_introspect_localstorage.html')
+        elif path == 'logfile':
+            ## 'http://green-tracker.com/logfile?name=logs/collect.jl.bkp1'
+            qs = dict([request.query_string.split('=')])
+            context = analyze_log('{}/{}'.format(PATH,qs.get('name', None)))
             return render_template('/template_log.html', context=context)
+        elif path == 'context.json':
+            context = analyze_log(LOGFILE)
+            return jsonify(context)
+        elif path == 'log2':
+            context = analyze_log(LOGFILE)
+            return render_template('/template_log2.html', context=context)
         else:
             context = analyze_log(LOGFILE)
             return render_template('/template_log.html', context=context)
@@ -96,10 +101,9 @@ def any(path):
                                     for i in range(1,11)]
 
 
-
         return render_template('/template_sites.html', context=context)
 
 
 if __name__ == '__main__':
-    ##app.run(host='0.0.0.0', port=80, processes=4, debug=False)
-    app.run(host='0.0.0.0', port=80, processes=12, debug=False)
+    ##app.run(host='0.0.0.0', port=80, processes=1, debug=True)
+    app.run(host='0.0.0.0', port=80, processes=8, debug=False)

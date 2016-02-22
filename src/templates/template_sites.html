@@ -13,50 +13,51 @@
 
     <!-- Bootstrap core CSS -->
     <!-- <link href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.6/css/bootstrap.min.css" rel="stylesheet"> -->
-    <link href="/static/bootstrap.min.css" rel="stylesheet">
-
+    <link href="/static/extern/bootstrap.min.css" rel="stylesheet">
     <!-- Custom styles for this template -->
     <link href="/static/style.css" rel="stylesheet">
   </head>
 
   <script>
     function reset() {
-        document.getElementById('gt').src = "http://green-tracker.com/reset";
-        alert('All cleared! You are a new user for any of the sites');
-    }
+        //document.getElementById('gt').src = "http://green-tracker.com/reset";
+        console.log('hello',document.getElementById("gt") );
+        document.getElementById("gt").contentWindow.postMessage('cmd:resetLocalStorage',"http://green-tracker.com");
 
-    var getDate = function() {
-    {% if 'accelerate' not in context %}
-        return new Date();
-    {% else %}
-        var timeMilis = (new Date()).getTime();
-        var extraMilis = (timeMilis-{{ context['accelerate']['start_time'] }})*{{ context['accelerate']['speed'] }};
-        return new Date(timeMilis+extraMilis);
-    {% endif %}
+        //alert('All cleared! You are a new user for any of the sites');
     }
 
     {% if 'accelerate' in context %}
-    setInterval(function(){
-        try{
-            window.document.getElementById('curr-time').innerHTML="Accelerated time: (x{{ context.get('accelerate',{}).get('speed',1) }}): " + getDate().toJSON().slice(0,19);
-        } catch(ee) {};
-    }, 2000);
+        setInterval(function(){
+            try{
+                window.document.getElementById('curr-time').innerHTML="Accelerated time: (x{{ context.get('accelerate',{}).get('speed',1) }}): " + getDate().toJSON().slice(0,19);
+            } catch(ee) {};
+        }, 2000);
+
+        var getDate = function() {
+            var timeMilis = (new Date()).getTime();
+            var extraMilis = (timeMilis-{{ context['accelerate']['start_time'] }})*{{ context['accelerate']['speed'] }};
+            return new Date(timeMilis+extraMilis);
+        }
+    {% else %}
+        var getDate = function() { return new Date() };
     {% endif %}
 
     window.onload = function() {
         var s = ''+document.location.href;
-        document.getElementById("gt").contentWindow.postMessage(s,"*");
+        document.getElementById("gt").contentWindow.postMessage(s,"http://green-tracker.com");
         {% if 'accelerate' in context %}
-        window.document.getElementById('curr-time').innerHTML="Accelerated time: (x{{ context.get('accelerate',{}).get('speed',1) }}): " + getDate().toJSON().slice(0,19);
+            window.document.getElementById('curr-time').innerHTML="Accelerated time: (x{{ context.get('accelerate',{}).get('speed',1) }}): " + getDate().toJSON().slice(0,19);
         {% endif %}
     };
 
+    /*
     {% if 'accelerate' in context %}
     try {
         window.document.getElementById('curr-time').innerHTML="Accelerated time: (x{{ context.get('accelerate',{}).get('speed',1) }}): " + getDate().toJSON().slice(0,19);
     } catch(ee) {};
     {% endif %}
-
+    */
 
 
   </script>
@@ -96,15 +97,15 @@
 
     </div>
 
+    <>
     <iframe id="gt" src="http://green-tracker.com/frame" style="display: none;"/>
-    <iframe id="gt-reset" src="" style="display: none;"/>
     <!-- <script src="http://green-tracker.com/static/green_tracker.js"></script> -->
     <!-- Bootstrap core JavaScript -->
     <!--
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.6/js/bootstrap.min.js"></script>
 	-->
-    <script src="/static/jquery.min.js"></script>
-	<script src="/static/bootstrap.min.js"></script>
+    <script src="/static/extern/jquery.min.js"></script>
+	<script src="/static/extern/bootstrap.min.js"></script>
   </body>
 </html>

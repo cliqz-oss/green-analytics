@@ -1,0 +1,61 @@
+<script>
+    window.onload = function() {
+        var table = document.getElementById('key-table');
+
+        var messages = JSON.parse((localStorage.getItem('gt:message-sent-demo-only') || '[]'))
+
+        for(var i=0;i<messages.length;i++) {
+            var row = table.insertRow(0);
+            var cell1 = row.insertCell(0);
+            var val = JSON.stringify(messages[i], null, 4);
+            cell1.innerHTML = '<pre><code>'+ val +'</code></pre>';
+        }
+    }
+</script>
+
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <link rel="icon" type="image/png" href="/static/favicon.png">
+
+    <title> Green-tracker Introspection </title>
+
+    <!-- Bootstrap core CSS -->
+    <link href="/static/extern/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Custom styles for this template -->
+    <link href="/static/style-log.css" rel="stylesheet">
+  </head>
+
+  <body>
+    <div class="row container-fluid">
+        <h2>Your messages sent to Green-tracker</h2>
+
+        <p>This is a list of all messages sent to Green-Tracker by this browser. For demo purposes only we stored them on
+            your localStorage. Note that this information should NOT contain any information that could identify you, that is the
+            only data about you, that Green-Tracker will ever receive.</p>
+
+        <p>To see the data stored in your local storage you can check here <a href="/introspect/localstorage">here</a>.</p>
+
+        <p>&nbsp;</p>
+        <table class="table table-striped ">
+            <thead>
+                <tr>
+                     <th>Messages (capped to most recent 200)</th>
+                </tr>
+            </thead>
+            <tbody id="key-table">
+
+            </tbody>
+        </table>
+    </div>
+
+  </body>
+</html>
+
