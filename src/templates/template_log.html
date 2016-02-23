@@ -162,9 +162,9 @@
         <table class="table table-striped ">
                 <thead>
                 <tr>
-                     <th>Goal</th>
+                     <th>Target Goal</th>
                      <th>Total Successes</th>
-                     <th>Sources Breakdown (time, number of conversions, conversion rate)</th>
+                     <th>Sources Breakdown (time, source, number of conversions, conversion rate)</th>
                 </tr>
                 </thead>
                 <tbody>
@@ -177,6 +177,32 @@
                 {% endfor %}
                 </tbody>
             </table>
+
+        <h3>6) Aggregate Data by User</h3>
+
+        <p>We can also obtain aggregated such as number of page loaded and average time spend on the page by user. Every hour, we will collect for all
+            users that have been in site1.com, how many pages and for how long they stayed in the page, all without relying on any tracking. The label
+            'annon user' is added to stress that this is the per-user aggregated data on the given hour.
+
+        <table class="table table-striped ">
+                <thead>
+                <tr>
+                     <th>Site</th>
+                     <th>Hour</th>
+                     <th>Breakdown by user (number of page loads, average time spend in the page))</th>
+                </tr>
+                </thead>
+                <tbody>
+                {% for item in context.agg %}
+                <tr>
+                   <td>{{ item['s'] }}</td>
+                   <td>{{ item['ts'] }}</td>
+                   <td><pre>{{item['timeseries'] }}</pre></td>
+                </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+
 
     </div>
 

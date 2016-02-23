@@ -23,10 +23,15 @@ def format_time(t):
 def str_to_time(ts):
     return datetime.datetime(int(ts[0:4]),int(ts[4:6]),int(ts[6:8]),int(ts[8:10]))
 
+def time_delta(ts, hours):
+    tt = datetime.datetime(int(ts[0:4]),int(ts[5:7]),int(ts[8:10]),int(ts[11:13]))
+    tt = tt - timedelta(hours=hours)
+    return format_time(tt)
+
 
 def analyze_log(filename, debug=False):
 
-    pageload_day = {}
+    pageload_hour = {}
     pageloads = {}
     siteloads = {}
     pagevisits = {}
@@ -36,6 +41,7 @@ def analyze_log(filename, debug=False):
     transitions = {}
     goals = {}
     returning = {}
+    agg = {}
 
     f = open(filename,'r')
     records = f.readlines()
@@ -76,44 +82,58 @@ def analyze_log(filename, debug=False):
         ## we need the page_loads per day to evaluate 
         ## the success ratio of the goals
         if ty == 'page_load':
-            if obj['p'] not in pageload_day:
-                pageload_day[obj['p']] = {}
-            pageload_day[obj['p']][ts_by_day] = pageload_day[obj['p']].get(ts_by_day,0)+1
+            if obj['p'] not in pageload_hour:
+                pageload_hour[obj['p']] = {}
+            pageload_hour[obj['p']][ts_by_hour] = pageload_hour[obj['p']].get(ts_by_hour,0)+1
 
         if ty == 'site_visit_by_hour':
             if obj['p'] not in returning:
                 returning[obj['p']] = {}
             if ts_by_hour not in returning[obj['p']]:
                 returning[obj['p']][ts_by_hour] = []
-            returning[obj['p']][ts_by_hour].append(obj['returning_from_ts'])
+
+            if 'returning_from_ts' in obj:
+                returning[obj['p']][ts_by_hour].append(obj['returning_from_ts'])
 
         if ty in ['new_all', 'new_month', 'new_day']:
             stats[ty] = stats.get(ty,0) + 1
 
-        if ty in 'pattern_by_hour':
+        if ty == 'pattern_by_hour':
             key = ' >> '.join(obj['p'])
             if key not in patterns:
                 patterns[key] = {}
             patterns[key][ts_by_hour] = patterns[key].get(ts_by_hour,0)+1
             
-        if ty in 'site_correlation_by_hour':
+        if ty == 'site_correlation_by_hour':
             key = ' <> '.join(obj['p'])
             if key not in transitions:
                 transitions[key] = {}
-            transitions[key][ts_by_day] = transitions[key].get(ts_by_day,0)+1
+            transitions[key][ts_by_hour] = transitions[key].get(ts_by_hour,0)+1
             
-        if ty in 'goal':
+        if ty == 'goal':
             key = obj['name']
             if key not in goals:
                 goals[key] = {}
-            if ts_by_day not in goals[key]:
-                goals[key][ts_by_day] = {}
-            goals[key][ts_by_day][obj['p'][0]] = goals[key][ts_by_day].get(obj['p'][0], 0) + 1
+            if ts_by_hour not in goals[key]:
+                goals[key][ts_by_hour] = {}
+
+            goals[key][ts_by_hour][obj['p']] = goals[key][ts_by_hour].get(obj['p'], 0) + 1
+
+        if ty == 'agg_site1.com':
+            ts_by_hour = obj['ts']
+            site = ty.replace('agg_','')
+            o = obj['o']
+
+            if site not in agg:
+                agg[site] = {}
+            if ts_by_hour not in agg[site]:
+                agg[site][ts_by_hour] = []
+
+            agg[site][ts_by_hour].append(['annon user', o['agg_page_loads'], o['agg_page_loads']/float(o['agg_page_time'])])
 
 
     ts = stats['min_ts']
     stats['min_ts'] = "{}/{}/{} {}:{}h".format(ts[0:4],ts[4:6],ts[6:8],ts[8:10],ts[10:12])
-    print ts
     min_time = datetime.datetime(int(ts[0:4]),int(ts[4:6]),int(ts[6:8]),int(ts[8:10]),int(ts[10:12]))
 
 
@@ -148,7 +168,7 @@ def analyze_log(filename, debug=False):
 
         timeseries = sorted([(k, v[0], v[1]) for k, v in timeseries.items()], key=lambda x: x[0])
         
-        context['sites'].append({'s': s, 'num_visits': num_vis, 'num_loads': num_loads, 'timeseries': timeseries})
+        context['sites'].append({'s': s, 'num_visits': num_vis, 'num_loads': num_loads, 'timeseries': format_ts(timeseries)})
 
 
     
@@ -220,14 +240,29 @@ def analyze_log(filename, debug=False):
 
                 if '{} : {}'.format(k, k2) not in timeseries:
                     timeseries['{} : {}'.format(k, k2)] = [0, 0]
-                timeseries['{} : {}'.format(k, k2)][0] += num
-                timeseries['{} : {}'.format(k, k2)][1] = pageload_day[k2][k]
+                    timeseries['{} : {}'.format(k, k2)][0] += num
 
+                    last_two_hours = (pageload_hour[k2.split(' ')[0]].get(k,0) + pageload_hour[k2.split(' ')[0]].get(time_delta(k,1),0))
+
+                    if last_two_hours == 0.0:
+                        import pdb
+                        pdb.set_trace()
+                        a=1
+
+                    timeseries['{} : {}'.format(k, k2)][1] = float(last_two_hours)
 
                 num_succ += num
 
         timeseries = sorted([(k, v[0], v[0]/float(v[1])) for k, v in timeseries.items()], key=lambda x: x[0])
         context['goals'].append({'s': s, 'num_succ': num_succ, 'timeseries': format_ts(timeseries)})
+
+    context['agg'] = []
+    for s in agg:
+        ## ['annon user', o['agg_page_loads'], o['agg_page_loads']/float(o['agg_page_time'])])
+        tssort = sorted(agg[s].keys(), reverse=True)
+        for ts in tssort:
+            pretty_ts =  "{}/{}/{} {}h".format(ts[0:4],ts[4:6],ts[6:8],ts[8:10])
+            context['agg'].append({'s': s, 'ts': pretty_ts ,'timeseries': format_ts(agg[s][ts])})
 
     if debug:
         import pdb

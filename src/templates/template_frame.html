@@ -6,15 +6,12 @@
 var main = function(url) {
 
     //
-    // Disclaimer: I'm a strong believer in documenting the code :-) Code here is not particularly
-    // clean and on the right level of abstraction. Furthermore, it is extremely verbose.
-    // Believe it or not, this is intentional, at least to a certain degree. Take the code as an
-    // step-by-step example of the green-tracker approach to build a privacy-preserving analytics,
-    // rather than as a example of javascript programming. Please bear with it; it's very short
-    // and I hope is worthy of your time.
+    // Disclaimer: Code here is not particularly clean or at the right level of abstraction.
+    // Furthermore, it is extremely verbose. Believe it or not this is intentional.
+    // Take this code snippet as an example to illustrate the gist of green-tracker's approach to build
+    // privacy preserving analytics, rather than as a example of javascript programming.
+    // Please bear with it; it's very short and I hope is worthy of your time.
     //
-
-    var gtUtils = greenTrackerUtils();
 
     var now = gtUtils.getDate(); // instead of 'new Date()' because of the stub for accelerated time
 
@@ -53,10 +50,11 @@ var main = function(url) {
     var siteMem = JSON.parse(localStorage.getItem('gt:site:'+hSite) || "{\"site\": {}, \"urls\": {}}");
 
     // let's see if we have been in the page before,
+    var firstTimestamp = '000000000000';
     var hUrl = gtUtils.hashSHA1(url,20);
-    if (!siteMem['urls'][hrl]) siteMem['urls'][hrl] = '000000000000';
+    if (!siteMem['urls'][hUrl]) siteMem['urls'][hUrl] = firstTimestamp;
 
-    var diffs = gtUtils.timeDiffPeriods(siteMem['urls'][url], timestamp);
+    var diffs = gtUtils.timeDiffPeriods(siteMem['urls'][hUrl], timestamp);
     //
     // 'diffs' will tell us if it's  new visit for different time resolutions, from year to minute.
     // To achieve this we only need to compare the current timestamp with the timestamp of the last
@@ -83,12 +81,12 @@ var main = function(url) {
     //
     siteMem['urls'][hUrl] = timestamp;
 
-    if (!siteMem['site']['last_visit']) siteMem['site']['last_visit'] = '000000000000';
+    if (!siteMem['site']['last_visit']) siteMem['site']['last_visit'] = firstTimestamp;
     var diffs = gtUtils.timeDiffPeriods(siteMem['site']['last_visit'], timestamp);
     for(var i=0;i<diffs.length;i++) {
         if (diffs[i]!='min') {
             var msg = {ts: timestamp, type: 'site_visit_by_'+diffs[i], p: site};
-            if (siteMem['site']['last_visit']!='000000000000') msg['returning_from_ts'] = siteMem['site']['last_visit'].slice(0,10);
+            if (siteMem['site']['last_visit']!=firstTimestamp) msg['returning_from_ts'] = siteMem['site']['last_visit'].slice(0,10);
             //
             // note that this time, in the message to be sent to green tracker we added
             // the last time the user visited the site, this way, green-tracker can calculate
@@ -109,15 +107,15 @@ var main = function(url) {
     //
     localStorage.setItem('gt:site:'+hSite,JSON.stringify(siteMem));
 
-    var last_visit_in_any_site = localStorage.getItem('gt:last_visit_in_any_site') || '000000000000';
+    var last_visit_in_any_site = localStorage.getItem('gt:last_visit_in_any_site') || firstTimestamp;
     localStorage.setItem('gt:last_visit_in_any_site', timestamp);
 
-    if (last_visit_in_any_site=='000000000000') {
+    if (last_visit_in_any_site==firstTimestamp) {
         // the user was totally new, never seem him/her before across any site,
         // so we send the message of new_user
         dataToSend.push({ts: timestamp, type: 'new_all'});
     }
-    var diffs = timeDiffPeriods(last_visit_in_any_site, timestamp);
+    var diffs = gtUtils.timeDiffPeriods(last_visit_in_any_site, timestamp);
     for(var i=0;i<diffs.length;i++) {
         dataToSend.push({ts: timestamp, type: 'new_'+diffs[i]});
     }
@@ -155,7 +153,8 @@ var main = function(url) {
     // physical access to the computer could see.
     //
     var history = JSON.parse(localStorage.getItem('gt:history') || "[]");
-    history = history.unshift([url, timestamp]).slice(0, 10);
+    history.unshift([url, timestamp]);
+    history = history.slice(0, 10);
     var tooOld = -1;
     for(var i=1;i<history.length;i++) {
         if (gtUtils.timeDiffMinutes(timestamp, history[i][1]) > 60) {
@@ -224,7 +223,7 @@ var main = function(url) {
         {'name': 'signup to site4',
             'target': {
                     'url': 'http://site4.com/page-10.html',
-            }
+            },
             'sources': [
                 {'url': 'http://site5.com/page-10.html', 'label': 'external ad #1'},
                 {'url': 'http://site4.com/page-9.html', 'label': 'internal ad #1'}
@@ -258,8 +257,7 @@ var main = function(url) {
                                 // to prevent of reporting it ever again.
                                 cache[gtUtils.hashSHA1(goal['name'])] = true;
                                 localStorage.setItem('gt:cache_goals', JSON.stringify(cache));
-                                var lab = goal['sources'][z]['label'];
-                                lab = lab + '(for demo only: ' + goal['sources'][z]['url'] + ')';
+                                var lab = goal['sources'][z]['url'] + ' ' + goal['sources'][z]['label'];
                                 dataToSend.push({ts: timestamp, type: 'goal', 'name': goal['name'], 'p': lab});
                                 break;
                                 j = 4; // force the break of the outer loop.
@@ -305,7 +303,7 @@ var main = function(url) {
             if (tmp_site!=pivot_site) {
                 // The click-through pattern goes across different sites, obfuscate for privacy
                 patterns[i] = '(obfuscated)';
-                obfuscated++;
+                num_obfuscated++;
                 // but we want to learn correlations across sites, only site,
                 // we can keep that
                 correlations.push([pivot_site, tmp_site]);
@@ -316,8 +314,8 @@ var main = function(url) {
 
         // add the pattern only if it has at least two items that are not obfuscated
         //
-        if ((patterns.length - obfuscated) >= 2) {
-            var key_pattern_hash = hashSHA1('patterns: '+ patterns.join(' >> '));
+        if ((patterns.length - num_obfuscated) >= 2) {
+            var key_pattern_hash = gtUtils.hashSHA1('patterns: '+ patterns.join(' >> '));
             //
             // Has the key been seen in the last hour by the user? If not, then send. This is an
             // alternative way to check for uniqueness as the one we presented before when
@@ -503,17 +501,17 @@ var incomingMsg = function(evt) {
             var tmp = url.replace('http://','').split('/');
             var site = tmp[0];
             if (['site1.com'].indexOf(site)!=-1) {
-                var now = getDate();
-                var timestamp = dateToTimestamp(now);
+                var now = gtUtils.getDate();
+                var timestamp = gtUtils.dateToTimestamp(now);
                 var timestamp_by_hour = timestamp.slice(0,10);
-                var hSite = hashSHA1(site, 20);
+                var hSite = gtUtils.hashSHA1(site, 20);
 
-                var cache = JSON.parse(localStorage.getItem('cache_time_daily:'+hSite) || "{}");
-                var o = cache[timestamp_by_day];
+                var cache = JSON.parse(localStorage.getItem('gt:agg_cache_time_by_hour:'+hSite) || "{}");
+                var o = cache[timestamp_by_hour];
 
                 if (o && o.hasOwnProperty('agg_page_time')) {
                     o['agg_page_time'] += 2;
-                    localStorage.setItem('cache_time_daily:'+hSite, JSON.stringify(cache));
+                    localStorage.setItem('gt:agg_cache_time_by_hour:'+hSite, JSON.stringify(cache));
                 }
             }
         }(evt.data)},2000);
@@ -523,7 +521,15 @@ var incomingMsg = function(evt) {
 window.addEventListener("message", incomingMsg, false);
 
 
-var greenTrackerUtils = (function() {
+//
+// From here on we have helpers that do not provide insight into the approach proposed
+// by green-tracker. To learn about the possibilities and on examples on how to map
+// your use-case to the client-side aggregation proposed here is found above. Feel free to
+// add further examples, we would be happy to include them in the documentation.
+//
+
+
+var gtUtils = (function() {
     var m = {};
 
     m.getDate = function() {
@@ -544,7 +550,7 @@ var greenTrackerUtils = (function() {
                 xhr.setRequestHeader('Content-Type', 'application/json');
                 xhr.onreadystatechange = function () {
                     if (xhr.readyState == 4 && xhr.status == 200) {
-                        if (arrint.length > 0) sendAll(arrint.slice(1,arrint.length));
+                        if (arrint.length > 0) m.sendAll(arrint.slice(1,arrint.length));
                     }
                 }
                 //console.log('sending',arrint.length, JSON.stringify(arr[0]),JSON.stringify(arrint));
@@ -588,7 +594,7 @@ var greenTrackerUtils = (function() {
     };
 
     m.timeDiffMinutes = function(ts1, ts2) {
-        var millis = timestampToUTCDate(ts1).getTime() - timestampToUTCDate(ts2).getTime();
+        var millis = m.timestampToUTCDate(ts1).getTime() - m.timestampToUTCDate(ts2).getTime();
         return millis/(1000*60);
     }
 

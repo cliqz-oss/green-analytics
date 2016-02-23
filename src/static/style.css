@@ -41,6 +41,21 @@ div#desc {
     text-shadow: none;
 }
 
+.danger {
+    background-color: rgba(100,10,0,1.0);
+    text-align: left;
+    padding: 10px 10px;
+}
+
+#suser {
+    color: rgba(10,200,0,1.0);
+}
+
+#scred {
+    color: rgba(10,200,0,1.0);
+    font-weight: bold;
+}
+
 #desc a:active, a:focus, a:hover, a:visited, a:link {
     color: rgba(55,120,210,1.0);
 }

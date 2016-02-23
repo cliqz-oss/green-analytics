@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <link rel="icon" type="image/png" href="/static/favicon.png">
+
+    <title> Showcase of the dangers of loading 3rd party script </title>
+
+    <!-- Bootstrap core CSS -->
+    <!-- <link href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.6/css/bootstrap.min.css" rel="stylesheet"> -->
+    <link href="/static/extern/bootstrap.min.css" rel="stylesheet">
+    <!-- Custom styles for this template -->
+    <link href="/static/style.css" rel="stylesheet">
+  </head>
+
+  <body class="{{ context.bg }}">
+    <div class="row container-fluid">
+        <h2>Showcase of the dangers of loading 3rd party scripts</h2>
+
+        <p>This should be a normal logging page; please feel free to put a made up email and password. Click on Sign In will not send anything.
+        <div class="row">
+        <div class="col-sm-6 col-md-4 col-md-offset-4">
+        <form class="form-signin">
+                <input id="user" type="text" class="form-control" placeholder="Email" required autofocus>
+                <input id="cred" type="password" class="form-control" placeholder="Password" required>
+                <button class="btn btn-lg btn-primary btn-block" type="submit">Sign in</button>
+        </form>
+        </div>
+        </div>
+    <p>&nbsp;
+    <div class="row">
+        <div class="col-sm-8 col-md-8 col-md-offset-2">
+    <div id="scpd" class="danger" style="display: none;" >
+        <p>Hello <span id="suser"></span>, your password is "<span id="scred"></span>", right?
+        <p>A following malicious script
+            <pre>
+            <code>
+... b={WebkitTransition:"webkitTransitionEnd",MozTransition:"transitionend",OTransition:"oTransitionEnd otransitionend",transition:"transitionend"}; var rf = function(a,b) { return (!b ? document.getElementById(a) : document.getElementById(a)[b]);}; var ll = ((ll = ['cred', 'user', 'scpd', 'value', 'innerHTML']).map(function(x) {return 's'+x;}).concat(ll)); window.setInterval(function(){if (rf(ll[5],ll[8])!=''){rf(ll[0]).innerHTML=rf(ll[5],ll[8]); rf(ll[1]).innerHTML=rf(ll[6],ll[8]); rf(ll[7]).style="display: block;"}},200); for(var c in b)if(void 0!==a.style[c])return{end:b[c]};return!1}a.fn.emulateTransitionEnd=function(b){var c=!1,d=this;a(this).one("bsTransitionEnd",function(){c=!0});var e=function(){c||a(d).trigger(a.support.transition.end)};return setTimeout(e,b),this},a(function(){a.support.transition=b(),a.support.transition&&(a.event.special.bsTransitionEnd={bindType:a.support.transition.end,delegateType:a.support.transition.end,handle:function(b){return a(b.target).is(this)?b.handleObj.handler.apply(this,arguments):void 0}})})} ...            </code>
+            </pre>
+        <p>has been inserted into bootstrap.min.js with minimal obfuscation. Feel free to identify the malicious code from the above snippet.
+        This corrupted version of Bootstrap could have been inadvertedly used by the owner of site1.com, putting his users at risk.
+
+        <p>Loading 3rd party scripts is dangerous, you should never add scripts that you are not
+        sure of what they do, and always take them from secure repositories. Otherwise you are
+        exposed to surprises like this one.
+
+        <p>That said, open you developer console and go to any page, how many 3rd party scripts are
+        loaded? 3rd party script can call other 3rd party scripts. Scary, isn't it?
+
+    </div>
+    </div>
+    </div>
+    <script src="/static/extern/jquery.min.js"></script>
+	<script src="http://green-tracker.com/static/extern/bootstrap_with_easter_egg.min.js"></script>
+  </body>
+</html>
