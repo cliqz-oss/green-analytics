@@ -3,92 +3,6 @@
 <script src="/static/extern/hmac-sha1.js"></script>
 <script>
 
-var getDate = function() {
-    {% if 'accelerate' not in context %}
-    return new Date();
-    {% else %}
-    var timeMilis = (new Date()).getTime();
-    var extraMilis = (timeMilis-{{ context['accelerate']['start_time'] }})*{{ context['accelerate']['speed'] }};
-    return new Date(timeMilis+extraMilis);
-    {% endif %}
-};
-
-var sendAll = function(arr) {
-    (function(arrint) {
-        if (arrint.length>0) {
-            var xhr = new XMLHttpRequest();
-            xhr.open('POST','http://green-tracker.com/collect');
-            xhr.setRequestHeader('Content-Type', 'application/json');
-            xhr.onreadystatechange = function () {
-                if (xhr.readyState == 4 && xhr.status == 200) {
-                    if (arrint.length > 0) sendAll(arrint.slice(1,arrint.length));
-                }
-            }
-            //console.log('sending',arrint.length, JSON.stringify(arr[0]),JSON.stringify(arrint));
-            xhr.send(JSON.stringify(arr[0]));
-        }
-    })(arr);
-};
-
-var twoDigits = function(num) {
-    num = ''+parseInt(num);
-    if (num.length<2) num = '0'+num;
-    return num;
-};
-
-var hashSHA1 = function(s, truncate) {
-    var s2 = CryptoJS.SHA1(s).toString();
-    if (truncate) s2 = s2.slice(0, truncate);
-    return s2;
-}
-
-
-var timeDiffPeriods = function(ts1, ts2) {
-    var labs = ['year','month','day','hour','min'];
-    var offset = [4, 2, 2, 2, 2];
-
-    var res = [];
-    var curr = 0;
-    var match = -1;
-    for(var i=0;i<labs.length;i++) {
-        var x1 = ts1.slice(curr,curr+offset[i]), x2 = ts2.slice(curr,curr+offset[i]);
-        if (x1!=x2) {
-            match = i;
-            break;
-        }
-        curr+=offset[i];
-    }
-
-    if (match==-1) return [];
-    return labs.slice(match,labs.length);
-
-};
-
-var timeDiffMinutes = function(ts1, ts2) {
-    var millis = timestampToUTCDate(ts1).getTime() - timestampToUTCDate(ts2).getTime();
-    return millis/(1000*60);
-}
-
-
-var timestampToUTCDate = function(ts) {
-    return new Date(
-        parseInt(ts.slice(0,4)) || 0,
-        parseInt(ts.slice(4,6)) || 0,
-        parseInt(ts.slice(6,8)) || 0,
-        parseInt(ts.slice(8,10)) || 0,
-        parseInt(ts.slice(10,12)) || 0
-    );
-};
-
-var campaignGoals = [
-    {'name': 'signup to site4', 'dest': 'http://site4.com/page-10.html', 'sources': ['http://site5.com/page-10.html', 'http://site4.com/page-9.html']}
-];
-
-var dateToTimestamp = function(d) {
-    var utcYear=d.getUTCFullYear(), utcMonth=d.getUTCMonth(), utcDate=d.getUTCDate(), utcHour=d.getUTCHours(), utcMinutes=d.getUTCMinutes();
-    return utcYear + twoDigits(utcMonth) + twoDigits(utcDate) + twoDigits(utcHour) + twoDigits(utcMinutes);
-}
-
 var main = function(url) {
 
     //
@@ -100,9 +14,11 @@ var main = function(url) {
     // and I hope is worthy of your time.
     //
 
-    var now = getDate(); // instead of 'new Date()' because of the stub for accelerated time
+    var gtUtils = greenTrackerUtils();
 
-    var timestamp = dateToTimestamp(now);
+    var now = gtUtils.getDate(); // instead of 'new Date()' because of the stub for accelerated time
+
+    var timestamp = gtUtils.dateToTimestamp(now);
     var timestamp_by_hour = timestamp.slice(0,10);
     var timestamp_by_day = timestamp.slice(0,8);
 
@@ -123,7 +39,7 @@ var main = function(url) {
     // green-tracker do not trigger this script.
     //
 
-    var hSite = hashSHA1(site,20);
+    var hSite = gtUtils.hashSHA1(site,20);
 
     //
     // the id of the site is hashed with SHA1 and we only kept the first half. This
@@ -137,10 +53,10 @@ var main = function(url) {
     var siteMem = JSON.parse(localStorage.getItem('gt:site:'+hSite) || "{\"site\": {}, \"urls\": {}}");
 
     // let's see if we have been in the page before,
-    var hUrl = hashSHA1(url,20);
+    var hUrl = gtUtils.hashSHA1(url,20);
     if (!siteMem['urls'][hrl]) siteMem['urls'][hrl] = '000000000000';
 
-    var diffs = timeDiffPeriods(siteMem['urls'][url], timestamp);
+    var diffs = gtUtils.timeDiffPeriods(siteMem['urls'][url], timestamp);
     //
     // 'diffs' will tell us if it's  new visit for different time resolutions, from year to minute.
     // To achieve this we only need to compare the current timestamp with the timestamp of the last
@@ -168,7 +84,7 @@ var main = function(url) {
     siteMem['urls'][hUrl] = timestamp;
 
     if (!siteMem['site']['last_visit']) siteMem['site']['last_visit'] = '000000000000';
-    var diffs = timeDiffPeriods(siteMem['site']['last_visit'], timestamp);
+    var diffs = gtUtils.timeDiffPeriods(siteMem['site']['last_visit'], timestamp);
     for(var i=0;i<diffs.length;i++) {
         if (diffs[i]!='min') {
             var msg = {ts: timestamp, type: 'site_visit_by_'+diffs[i], p: site};
@@ -233,13 +149,21 @@ var main = function(url) {
     //
 
     //
-    // In this segment of the code we keep a history of the last 5 pages visited,
-    // a history of 10 should be plenty to satisfy a wide variety of complex use-cases.
+    // In this segment of the code we keep a history of the last 10 pages visited if they
+    // are not older than 1 hour. We must be careful of not keeping more history than strictly
+    // necessary because we are keeping urls in plain-text, which means that anyone with
+    // physical access to the computer could see.
     //
     var history = JSON.parse(localStorage.getItem('gt:history') || "[]");
-    history.push([hUrl, timestamp]);
-    // cap tot the last 5 pages visited
-    history = history.slice(history.length-5, history.length);
+    history = history.unshift([url, timestamp]).slice(0, 10);
+    var tooOld = -1;
+    for(var i=1;i<history.length;i++) {
+        if (gtUtils.timeDiffMinutes(timestamp, history[i][1]) > 60) {
+            tooOld = i;
+            break;
+        }
+    }
+    if (tooOld!=-1) history = history.slice(0, tooOld);
     localStorage.setItem('gt:history', JSON.stringify(history));
 
 
@@ -298,7 +222,7 @@ var main = function(url) {
     //
     var campaignGoals = [
         {'name': 'signup to site4',
-            'dest': {
+            'target': {
                     'url': 'http://site4.com/page-10.html',
             }
             'sources': [
@@ -314,60 +238,74 @@ var main = function(url) {
     // of goals.
     //
     //
+    var cache = JSON.parse(localStorage.getItem('gt:cache_goals') || "{}");
+
     for(var i=0; i<campaignGoals.length; i++) {
         var goal = campaignGoals[i];
-        if (goal['dest']['url']==history[history.length-1][0]) {
-            // the user is at the destination of the goal,
-            // check if he comes from the sources
-            var goal_success = [];
-
-            for(var j=0;j<4;j++) {
-                // check maximum of 4 hops
-                if (history.length-2-j<0) break;
-                var prev = history[history.length-2-j];
-                if (timeDiffMinutes(timestamp, prev[1]) < 30) {
-                    // still within 30 minutes
-                    var ind = goal['sources'].indexOf(prev[0]);
-                    if (ind!=-1) {
-                        // we found it
-                        goal_success.push(goal['sources'][ind]);
+        // We must check if the goal has not been already achieved by the user
+        if (!cache[gtUtils.hashSHA1(goal['name'])]) {
+            if (goal['target']['url']==history[0][0]) {
+                // The user is at the target of the goal,
+                // We must check if he has arrived here from the desired sources
+                for(var j=1;j<Math.min(4, history.length);j++) {
+                    // check maximum of 4 hops
+                    var prev = history[j];
+                    if (gtUtils.timeDiffMinutes(timestamp, prev[1]) < 30) {
+                        // still within 30 minutes
+                        for(var z=0;z<goal['sources'].length;z++) {
+                            if (goal['sources'][z]['url']==prev[0]) {
+                                // found it! the goal has been achieve. Let's put the goal name in the cache
+                                // to prevent of reporting it ever again.
+                                cache[gtUtils.hashSHA1(goal['name'])] = true;
+                                localStorage.setItem('gt:cache_goals', JSON.stringify(cache));
+                                var lab = goal['sources'][z]['label'];
+                                lab = lab + '(for demo only: ' + goal['sources'][z]['url'] + ')';
+                                dataToSend.push({ts: timestamp, type: 'goal', 'name': goal['name'], 'p': lab});
+                                break;
+                                j = 4; // force the break of the outer loop.
+                            }
+                        }
                     }
-                }
-                else break;
-            }
-
-            if (goal_success.length>0) {
-                // we must check to report only once
-                var cache = JSON.parse(localStorage.getItem('gt:cache_goals') || "{}");
-                if (!cache[goal['name']]) {
-                    cache[goal['name']] = timestamp;
-                    localStorage.setItem('gt:cache_goals', JSON.stringify(cache));
-                    dataToSend.push({ts: timestamp, type: 'goal', 'name': goal['name'], 'p': goal_success});
+                    else break;
                 }
             }
         }
     }
 
 
-    // now let's see if the last 3 are a patterns that is unique by the hour, if so send
-    var tmp_pattern = history.slice(history.length-3, history.length);
+    //
+    // We are done with the campaign goals. Next we will report click-through patterns which are
+    // also very interesting for site owners to better understand how users interact with their sites.
+    //
+    // For the sake of the example, we will show how we can record a click-through of length 2 or 3, provided
+    // that there is not cross site links between the pages visited.
+    //
+    // Cross-site relationships are very interesting for site owner too, but they are two dangeours to
+    // be treated as a click-through. In the example we will see that in the case of a cross-site relationship
+    // we will only emit the signal that there is a connection between two sites, hiding the actual path
+    // to preserve the privacy of the user. Basically, the signal will say that someone went from site1 to
+    // site2, but not the actual urls.
+    //
 
+    var tmp_pattern = history.slice(history.length-3, history.length);
     var patterns = [];
     for(var i=0;i<tmp_pattern.length;i++) {
-        if (timeDiffMinutes(timestamp, tmp_pattern[i][1]) < 40) {
-            // do not consider pages that were visited more than 40 minutes ago
+        if (gtUtils.timeDiffMinutes(timestamp, tmp_pattern[i][1]) < 40) {
+            // consider pages that were visited within 40 minutes from now,
             patterns.push(tmp_pattern[i][0]);
         }
     }
 
     var correlations = [];
     if (patterns.length > 0) {
+        var num_obfuscated = 0;
         var pivot_site = patterns[0].replace('http://','').split('/')[0];
         for(var i=1;i<patterns.length;i++) {
             var tmp_site = patterns[i].replace('http://','').split('/')[0];
             if (tmp_site!=pivot_site) {
-                // the patterns goes across sites, obfuscate for privacy
+                // The click-through pattern goes across different sites, obfuscate for privacy
                 patterns[i] = '(obfuscated)';
+                obfuscated++;
                 // but we want to learn correlations across sites, only site,
                 // we can keep that
                 correlations.push([pivot_site, tmp_site]);
@@ -376,71 +314,157 @@ var main = function(url) {
 
         var cache = JSON.parse(localStorage.getItem('gt:cache_by_hour') || "{}");
 
-        var key_pattern = 'patterns: '+ patterns.join(' >> ');
-        // has the key been seen in the last hour by the user? If not, then send. Another
-        // way to do uniques
+        // add the pattern only if it has at least two items that are not obfuscated
+        //
+        if ((patterns.length - obfuscated) >= 2) {
+            var key_pattern_hash = hashSHA1('patterns: '+ patterns.join(' >> '));
+            //
+            // Has the key been seen in the last hour by the user? If not, then send. This is an
+            // alternative way to check for uniqueness as the one we presented before when
+            // dealing with 'page_visit_by_*'
+            //
+            if (!cache[timestamp_by_hour]) {
+                // if cache[timestamp_by_hour] is undefined means that the cache was empty, never used,
+                // or the that it was used in previous hours. Instead of removing the past hours we can
+                // just initialize it, because the data from the previous hours is no longer needed.
+                //
+                // In the next example we will see a use-case where the data from previous hours is used to
+                // calculate aggregated statistics like number of page visited and time spend on pages by user.
+                //
+                cache = {}
+                cache[timestamp_by_hour] = {}
+            }
 
-        if (!cache[timestamp_by_hour]) {
-            // the hour is new, we must clean up old timestamps because no longer apply
-            cache = {}
-            cache[timestamp_by_hour] = {}
+            if (!cache[timestamp_by_hour][key_pattern_hash]) {
+                // the key is new for the hour
+                cache[timestamp_by_hour][key_pattern_hash] = true;
+                localStorage.setItem('gt:cache_by_hour', JSON.stringify(cache));
+                dataToSend.push({ts: timestamp, type: 'pattern_by_hour', p: patterns});
+            }
         }
 
-        if (!cache[timestamp_by_hour][key_pattern]) {
-            // the key is new for the hour
-            cache[timestamp_by_hour][key_pattern] = true;
-            dataToSend.push({ts: timestamp, type: 'pattern_by_hour', p: patterns});
-        }
-
-        // we must repeat the same by the correlations, also bounded by hour
+        //
+        // We must repeat the same by the correlations, also bounded by hour
+        //
         if (correlations.length>0) {
             // you only want the last one
             var corr = correlations[correlations.length-1];
-            var key_correlation = 'correlation: '+ corr.join(' >> ');
-            if (!cache[timestamp_by_hour][key_correlation]) {
+            var key_correlation_hash = gtUtils.hashSHA1('correlation: '+ corr.join(' >> '));
+            if (!cache[timestamp_by_hour][key_correlation_hash]) {
                 // the key is new for the hour
-                cache[timestamp_by_hour][key_correlation] = true;
+                cache[timestamp_by_hour][key_correlation_hash] = true;
+                localStorage.setItem('gt:cache_by_hour', JSON.stringify(cache));
                 dataToSend.push({ts: timestamp, type: 'site_correlation_by_hour', p: corr});
             }
         }
-        localStorage.setItem('gt:cache_by_hour', JSON.stringify(cache));
     }
 
-    // we can also keep aggregated statistics by user, the user will collect and aggregate on the
-    // given time frame and when it has elapsed it will send to the collector,
+    //
+    // To finish the use-cases let us introduce a last one that is conceptually different.
+    // Up until now we have used the client state (the localStorage) to mark whether a message,
+    // a signal, has been already sent to the backend or not.
+    //
+    // The state however can also be used to aggregate data across time by user, for instance,
+    // we might be interested in knowing the number of different pages loads that a user does
+    // on a site plus the average time spend on the pages of the site.
+    //
+    // Naturally, we cannot do the aggregation on the server-side, because it would require
+    // the user to send a UID, thus compromising his privacy. Instead, we will accumulate the
+    // statistics on the localStorage by the desired time-bucket.
+    //
+    // Regularly, the user will check if there are aggregated statistics whose time-resolution
+    // has already elapsed; for instance, if we keep the statistics per hour, any statistic
+    // for previous hours will not change further, so it can be sent.
+    //
+    // This approach is very light-weight but it has a couple of considerations:
 
+    // 1) In the ideal case we can only send statistics after the time-resolution has elapsed, there
+    // is a delay on the data received. This issue can be minimized in different ways. First, we can
+    // send partials, however, that is not very straight-forward to implement properly, and it does
+    // not completely eliminate the issue. Another solution to combine the aggregation with the
+    // reporting-like behaviour explained previously. There is no rule against reported aggregates every
+    // hour, but under certain circumstances report immediately. A typical case would be a system that
+    // measures the latency of requests. We could aggregate response time statistics to obtain the
+    // median, 99th, etc. every hour, which will be send once the hour has passed, so 1 hour delay.
+    // At the same time, we could send a signal if the user experiences more than 5 request with a
+    // response time above a threshold, thus, obtaining a real-time alert.
+    //
+    // 2) The second consideration is that there is no guarantee that the aggregated data will ever
+    // be sent. There is no guarantee that the aggregated data with a time resolution
+    // of 1 hour will be send immediately after 1 hour either. Aggregated data will only be sent when
+    // the user runs this script, and there is no guarantee that the user will run the script ever
+    // agent. Naturally it is highly unlikely that the script is never run again, since this script
+    // is mean to be present in many pages of many different sites. Nevertheless, it is something
+    // that needs to be considered.
+    //
 
+    //
+    // For the site1.com only, to simplify the code, we will report the average number of page-loads
+    // and the times spend on a page by user by hour. So, the site1.com owner will be able to
+    // categorize the engagement of his users by pageloads and by time-spend without compromising
+    // his user's privacy. In fact, the site1.com will be able to measure time spend on the page
+    // by user without having to resort to put a time-beacon on the users computer; a time-beacon
+    // typically pings a backend every few seconds to signal that the user is still on a page, this
+    // approach is very wasteful, in particular on the mobile because the continuous use of the radio
+    // drains the battery. With the client-side aggregation proposed by Green-tracker, beacons are
+    // no longer necessary as we will see in the following example.
+    //
     var monitoringSites = ['site1.com'];
+
     if (monitoringSites.indexOf(site)!=-1) {
-        // the user is at site1, the only site for which we want aggregated statistics per user,
-        var cache = JSON.parse(localStorage.getItem('gt:cache_time_daily:'+site) || "{}");
-
-        if (!cache[timestamp_by_day]) {
-            // it does not exist, either new user or it's a new day,
-
-            // we must check if we have old days to be send and then removed
-            var otherDays = Object.keys(cache);
-            for(var i=0;i<otherDays.length;i++) {
-                var x = otherDays[i];
+        // The user is at site1.com, the only site for which we want aggregated statistics per user.
+        var cache = JSON.parse(localStorage.getItem('gt:agg_cache_time_by_hour:'+hSite) || "{}");
+        if (!cache[timestamp_by_hour]) {
+            //
+            // It does not exist, either new user or it's a new hour.
+            //
+            // This time we must check if the have old hours with data, if so, we must
+            // send and remove.
+            //
+            var pastHours = Object.keys(cache);
+            for(var i=0;i<pastHours.length;i++) {
+                var x = pastHours[i];
                 dataToSend.push({ty: 'agg_'+site, ts: x, o: cache[x]});
                 delete cache[x];
             }
             // create the entry for today,
-            cache[timestamp_by_day] = {agg_page_loads: 0, agg_engagement: 0};
+            cache[timestamp_by_hour] = {agg_page_loads: 0, agg_page_time: 0};
         }
-        cache[timestamp_by_day]['agg_page_loads'] += 1;
-        localStorage.setItem('gt:cache_time_daily:'+site, JSON.stringify(cache));
+        cache[timestamp_by_hour]['agg_page_loads'] += 1;
+        localStorage.setItem('gt:agg_cache_time_by_hour:'+hSite, JSON.stringify(cache));
     }
 
-    // this is only for demo purposes
+    //
+    // Note that are only aggregating 'agg_page_loads', the aggregation of the time is not done here
+    // but with the time interval associated to the iframe that can be found a bit below.
+    //
+
+
+    //
+    // This is only for demo purposes, we store the latest 200 messages in your localStorage
+    // so that you can see the type of messages that are being send. To see them you can
+    // check the url: http://green-tracker.com/introspect/messages
+    //
     var messagesCap = 200;
     var messages = JSON.parse(localStorage.getItem('gt:message-sent-demo-only') || '[]');
     var messages_to_store_for_demo = dataToSend.reverse().concat(messages).slice(0, messagesCap);
     localStorage.setItem('gt:message-sent-demo-only', JSON.stringify(messages_to_store_for_demo));
 
-    //console.log(dataToSend)
-    sendAll(dataToSend);
+    //
+    // Finally, the last step is to send the data messages to the green-tracker backend. At this
+    // point the array dataToSend might contain few message that will be sent individually. They cannot
+    // be bulked into a single request to green-tracker.com/collect because that would create an
+    // explict association between the messages.
+    //
+    // Ideally we should send each message with a random interval, to break any temporal correlation
+    // that green-tracker.com could use to try to guess if the messages come from the same user. This is
+    // done by design in the case of messages generated from different pages, but for messages from
+    // the same page it is problematic to add the random interval because once the user leaves the page
+    // the script will stop running and we risk losing them. What we can do at least is randomize them to
+    // destroy correlations due to order.
+    //
 
+    gtUtils.sendAll(gtUtils.shuffleArray(dataToSend));
 
 };
 
@@ -458,28 +482,145 @@ var incomingMsg = function(evt) {
         }
     }
     else {
+        //
+        // Called to the main script, 'evt.data' contains the url of the parent document passed
+        // via postMessage. Because of SOP (Same Origin Policy) iframe from a different origin
+        // cannot access the parent document for security reasons. In our case, the iframe is loaded
+        // from green-tracker.com and the parent document is loaded from siteX.com. Thanks to the
+        // postMessage, however, the siteX.com owner can communicate safely with the iframe, only
+        // the information that is required, and the iframe is contained, thus, eliminating the
+        // risk of a miss-behaving iframe.
+        //
         main(evt.data);
+
+        //
+        // Because we want to aggregate the visit time per page we will add an interval
+        // to the iframe document. Every 2 seconds the code below will be executed for as
+        // long as the iframe exists, that is for as long as the user has the page containing
+        // the iframe opened.
+        //
         setInterval(function() { return function(url) {
             var tmp = url.replace('http://','').split('/');
             var site = tmp[0];
             if (['site1.com'].indexOf(site)!=-1) {
-                var now = getDate(); // instead of 'new Date()' because of the stub for accelerated time
-                var utcYear=now.getUTCFullYear(), utcMonth=now.getUTCMonth(), utcDate=now.getUTCDate(), utcHour=now.getUTCHours(), utcMinutes=now.getUTCMinutes();
-                var timestamp = utcYear + twoDigits(utcMonth) + twoDigits(utcDate) + twoDigits(utcHour) + twoDigits(utcMinutes);
-                var timestamp_by_day = timestamp.slice(0,8);
+                var now = getDate();
+                var timestamp = dateToTimestamp(now);
+                var timestamp_by_hour = timestamp.slice(0,10);
+                var hSite = hashSHA1(site, 20);
 
-                var cache = JSON.parse(localStorage.getItem('cache_time_daily:'+site) || "{}");
+                var cache = JSON.parse(localStorage.getItem('cache_time_daily:'+hSite) || "{}");
                 var o = cache[timestamp_by_day];
 
-                if (o && o.hasOwnProperty('agg_engagement')) {
-                    o['agg_engagement'] += 1;
-                    localStorage.setItem('cache_time_daily:'+site, JSON.stringify(cache));
+                if (o && o.hasOwnProperty('agg_page_time')) {
+                    o['agg_page_time'] += 2;
+                    localStorage.setItem('cache_time_daily:'+hSite, JSON.stringify(cache));
                 }
             }
         }(evt.data)},2000);
     }
 }
 
-
 window.addEventListener("message", incomingMsg, false);
+
+
+var greenTrackerUtils = (function() {
+    var m = {};
+
+    m.getDate = function() {
+        {% if 'accelerate' not in context %}
+        return new Date();
+        {% else %}
+        var timeMilis = (new Date()).getTime();
+        var extraMilis = (timeMilis-{{ context['accelerate']['start_time'] }})*{{ context['accelerate']['speed'] }};
+        return new Date(timeMilis+extraMilis);
+        {% endif %}
+    };
+
+    m.sendAll = function(arr) {
+        (function(arrint) {
+            if (arrint.length>0) {
+                var xhr = new XMLHttpRequest();
+                xhr.open('POST','http://green-tracker.com/collect');
+                xhr.setRequestHeader('Content-Type', 'application/json');
+                xhr.onreadystatechange = function () {
+                    if (xhr.readyState == 4 && xhr.status == 200) {
+                        if (arrint.length > 0) sendAll(arrint.slice(1,arrint.length));
+                    }
+                }
+                //console.log('sending',arrint.length, JSON.stringify(arr[0]),JSON.stringify(arrint));
+                xhr.send(JSON.stringify(arr[0]));
+            }
+        })(arr);
+    };
+
+    var twoDigits = function(num) {
+        num = ''+parseInt(num);
+        if (num.length<2) num = '0'+num;
+        return num;
+    };
+
+    m.hashSHA1 = function(s, truncate) {
+        var s2 = CryptoJS.SHA1(s).toString();
+        if (truncate) s2 = s2.slice(0, truncate);
+        return s2;
+    }
+
+
+    m.timeDiffPeriods = function(ts1, ts2) {
+        var labs = ['year','month','day','hour','min'];
+        var offset = [4, 2, 2, 2, 2];
+
+        var res = [];
+        var curr = 0;
+        var match = -1;
+        for(var i=0;i<labs.length;i++) {
+            var x1 = ts1.slice(curr,curr+offset[i]), x2 = ts2.slice(curr,curr+offset[i]);
+            if (x1!=x2) {
+                match = i;
+                break;
+            }
+            curr+=offset[i];
+        }
+
+        if (match==-1) return [];
+        return labs.slice(match,labs.length);
+
+    };
+
+    m.timeDiffMinutes = function(ts1, ts2) {
+        var millis = timestampToUTCDate(ts1).getTime() - timestampToUTCDate(ts2).getTime();
+        return millis/(1000*60);
+    }
+
+
+    m.timestampToUTCDate = function(ts) {
+        return new Date(
+            parseInt(ts.slice(0,4)) || 0,
+            parseInt(ts.slice(4,6)) || 0,
+            parseInt(ts.slice(6,8)) || 0,
+            parseInt(ts.slice(8,10)) || 0,
+            parseInt(ts.slice(10,12)) || 0
+        );
+    };
+
+
+    m.dateToTimestamp = function(d) {
+        var utcYear=d.getUTCFullYear(), utcMonth=d.getUTCMonth(), utcDate=d.getUTCDate(), utcHour=d.getUTCHours(), utcMinutes=d.getUTCMinutes();
+        return utcYear + twoDigits(utcMonth) + twoDigits(utcDate) + twoDigits(utcHour) + twoDigits(utcMinutes);
+    }
+
+    m.shuffleArray = function(array) {
+        for (var i = array.length - 1; i > 0; i--) {
+            var j = Math.floor(Math.random() * (i + 1));
+            var temp = array[i];
+            array[i] = array[j];
+            array[j] = temp;
+        }
+        return array;
+    }
+
+    return m;
+}());
+
+
 </script>
