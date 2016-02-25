@@ -13,7 +13,7 @@ app = Flask(__name__, static_folder='static')
 
 NUM_HOSTS = 5
 
-if False:
+if True:
     VALID_HOSTS = ["site{}.com".format(i) for i in range(1,NUM_HOSTS+1)]
     TRACKER_HOST = "green-tracker.com"
     ACCELERATE = 1

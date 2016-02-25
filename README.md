@@ -10,3 +10,5 @@ Edit `/etc/hosts` to add the domains of the example to be resolved locally,
     127.0.0.1 green-tracker.com
 
 
+https://groups.google.com/forum/#!topic/jsmentors/Jby_5Tt47SI
+https://github.com/bemson/subetha-bridge/issues/2
