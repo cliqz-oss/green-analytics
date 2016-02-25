@@ -1,9 +1,6 @@
-
 ## http://jinja.pocoo.org/docs/dev/templates/
 ## http://flask.pocoo.org/docs/0.10/templating/
-
 ## https://developer.mozilla.org/en-US/docs/Web/API/Web_Storage_API/Using_the_Web_Storage_API
-
 
 import json
 from flask import Flask, jsonify, request, render_template
@@ -15,12 +12,19 @@ PATH = os.path.dirname(os.path.realpath(__file__))
 app = Flask(__name__, static_folder='static')
 
 NUM_HOSTS = 5
-VALID_HOSTS = ["site{}.com".format(i) for i in range(1,NUM_HOSTS+1)]
-TRACKER_HOST = "green-tracker.com"
 
-ACCELERATE = 60
+if False:
+    VALID_HOSTS = ["site{}.com".format(i) for i in range(1,NUM_HOSTS+1)]
+    TRACKER_HOST = "green-tracker.com"
+    ACCELERATE = 1
+    LOGFILE = '{}/{}'.format(PATH,'logs/collect.jl')
 
-LOGFILE = '{}/{}'.format(PATH,'logs/collect.jl')
+else:
+    VALID_HOSTS = ["site{}.test.cliqz.com".format(i) for i in range(1,NUM_HOSTS+1)]
+    TRACKER_HOST = "green-tracker.fbt.co"
+    ACCELERATE = 1
+    LOGFILE = '/mnt/logs/collect.jl'
+
 logf = open(LOGFILE,'a')
 
 start_time = int(round(time.time() * 1000))
@@ -53,26 +57,29 @@ def any(path):
             return jsonify({'ok': True})
         if path == 'frame':
             context = {}
+            context['tracker_host'] = TRACKER_HOST
+            context['site4'] = VALID_HOSTS[3]
+            context['site5'] = VALID_HOSTS[4]
             if ACCELERATE > 1:
                 context['accelerate'] = {'speed': ACCELERATE, 'start_time': start_time}
             return render_template('/template_frame.html', context=context)
         elif path == 'introspect/messages':
-            return render_template('/template_introspect_messages.html')
+            context = {'tracker_host': TRACKER_HOST}
+            return render_template('/template_introspect_messages.html', context=context)
         elif path == 'introspect/localstorage':
-            return render_template('/template_introspect_localstorage.html')
+            context = {'tracker_host': TRACKER_HOST}
+            context['site1'] = VALID_HOSTS[0]
+            return render_template('/template_introspect_localstorage.html', context=context)
         elif path == 'logfile':
             ## 'http://green-tracker.com/logfile?name=logs/collect.jl.bkp1'
             qs = dict([request.query_string.split('=')])
             context = analyze_log('{}/{}'.format(PATH,qs.get('name', None)))
+            context['site1'] = VALID_HOSTS[0]
+            context['canned_report'] = True
             return render_template('/template_log.html', context=context)
-        elif path == 'context.json':
-            context = analyze_log(LOGFILE)
-            return jsonify(context)
-        elif path == 'log2':
-            context = analyze_log(LOGFILE)
-            return render_template('/template_log2.html', context=context)
         else:
             context = analyze_log(LOGFILE)
+            context['site1'] = VALID_HOSTS[0]
             return render_template('/template_log.html', context=context)
 
     elif pretty_host in VALID_HOSTS:
@@ -82,7 +89,7 @@ def any(path):
         if ACCELERATE > 1:
             context['accelerate'] = {'speed': ACCELERATE, 'start_time': start_time}
 
-
+        context['tracker_host'] = TRACKER_HOST
         context['bg'] = 'bg-color-site-{}'.format(VALID_HOSTS.index(pretty_host)+1)
         context['path'] = request.path
         context['host'] = pretty_host

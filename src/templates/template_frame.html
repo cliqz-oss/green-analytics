@@ -222,11 +222,11 @@ var main = function(url) {
     var campaignGoals = [
         {'name': 'signup to site4',
             'target': {
-                    'url': 'http://site4.com/page-10.html',
+                    'url': 'http://{{ context.site4 }}/page-10.html',
             },
             'sources': [
-                {'url': 'http://site5.com/page-10.html', 'label': 'external ad #1'},
-                {'url': 'http://site4.com/page-9.html', 'label': 'internal ad #1'}
+                {'url': 'http://{{ context.site5 }}/page-10.html', 'label': 'external ad #1'},
+                {'url': 'http://{{ context.site4 }}/page-9.html', 'label': 'internal ad #1'}
             ]
         }
     ];
@@ -323,8 +323,8 @@ var main = function(url) {
             //
             if (!cache[timestamp_by_hour]) {
                 // if cache[timestamp_by_hour] is undefined means that the cache was empty, never used,
-                // or the that it was used in previous hours. Instead of removing the past hours we can
-                // just initialize it, because the data from the previous hours is no longer needed.
+                // or the that it contains only old hours. In either case we only want to keep the current
+                // hour, so we can force init it, and the will remove old hours if existed.
                 //
                 // In the next example we will see a use-case where the data from previous hours is used to
                 // calculate aggregated statistics like number of page visited and time spend on pages by user.
@@ -348,6 +348,10 @@ var main = function(url) {
             // you only want the last one
             var corr = correlations[correlations.length-1];
             var key_correlation_hash = gtUtils.hashSHA1('correlation: '+ corr.join(' >> '));
+            if (!cache[timestamp_by_hour]) {
+                cache = {}
+                cache[timestamp_by_hour] = {}
+            }
             if (!cache[timestamp_by_hour][key_correlation_hash]) {
                 // the key is new for the hour
                 cache[timestamp_by_hour][key_correlation_hash] = true;
@@ -462,7 +466,7 @@ var main = function(url) {
     // destroy correlations due to order.
     //
 
-    gtUtils.sendAll(gtUtils.shuffleArray(dataToSend));
+    gtUtils.sendAllPar(gtUtils.shuffleArray(dataToSend));
 
 };
 
@@ -546,7 +550,7 @@ var gtUtils = (function() {
         (function(arrint) {
             if (arrint.length>0) {
                 var xhr = new XMLHttpRequest();
-                xhr.open('POST','http://green-tracker.com/collect');
+                xhr.open('POST','http://{{context.tracker_host}}/collect');
                 xhr.setRequestHeader('Content-Type', 'application/json');
                 xhr.onreadystatechange = function () {
                     if (xhr.readyState == 4 && xhr.status == 200) {
@@ -558,6 +562,19 @@ var gtUtils = (function() {
             }
         })(arr);
     };
+
+    m.sendAllPar = function(arr) {
+        (function(arrint) {
+            for(var i=0;i<arrint.length;i++) {
+                var xhr = new XMLHttpRequest();
+                xhr.open('POST','http://{{context.tracker_host}}/collect');
+                xhr.setRequestHeader('Content-Type', 'application/json');
+                xhr.onreadystatechange = function () {}
+                xhr.send(JSON.stringify(arrint[i]));
+            }
+        })(arr);
+    };
+
 
     var twoDigits = function(num) {
         num = ''+parseInt(num);

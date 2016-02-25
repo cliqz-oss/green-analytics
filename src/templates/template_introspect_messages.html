@@ -35,13 +35,17 @@
 
   <body>
     <div class="row container-fluid">
-        <h2>Your messages sent to Green-tracker</h2>
+        <h2>Your messages sent to green-tracker</h2>
 
-        <p>This is a list of all messages sent to Green-Tracker by this browser. For demo purposes only we stored them on
-            your localStorage. Note that this information should NOT contain any information that could identify you, that is the
-            only data about you, that Green-Tracker will ever receive.</p>
+        <p>This is a list of all the messages (signals) that <b>green-tracker</b> backend has received from you.
+            We keep this list for demo purposes on your localStorage.
+        <p>If you inspect the message you will see that they do not contain any information that could be used to build
+        a user-identifier of any kind. It is not possible to do server-side aggregation with the information you sent.
+        <p>Nevertheless, we are still able to build analytics -- check out the <a href="/logs">report</a> -- that cover a wide
+        range of the features offered by Google Analytics. Remember that all analytics services rely on server-side aggregation, therefore,
+        they must send data that allows them to build a user identifier to be able to do so.
 
-        <p>To see the data stored in your local storage you can check here <a href="/introspect/localstorage">here</a>.</p>
+        <p>To see the data stored in your local storage you can check <a href="/introspect/localstorage">here</a>.</p>
 
         <p>&nbsp;</p>
         <table class="table table-striped ">

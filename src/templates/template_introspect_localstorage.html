@@ -47,17 +47,22 @@
     <!-- Custom styles for this template -->
     <link href="/static/style-log.css" rel="stylesheet">
   </head>
+  <script>
+    function reset() {
+        localStorage.clear();
+        alert('All cleared! You are a new user for any of the sites');
+        window.location.reload();
 
+    }
+  </script>
   <body>
     <div class="row container-fluid">
-        <h2>Your local footprint due to Green-tracker</h2>
+        <h2>Your local storage footprint due to green-tracker</h2>
+        <p>Dump of your <b>localStorage</b> on the origin <b>{{ context.tracker_host }}</b>. This data is stored locally in your browser. It is never
+            sent, and only people with access to your computer has access to it.
+        <p>To view the messages that you sent to green-tracker click <a href="/introspect/messages">here</a>.
+        You can <a href="javascript:reset()">reset</a> your localStorage anytime, it is like starting as a new user.
 
-        <p>This is a print out of the data stored in your browser's localStorage, this data is never sent to green-tracker or
-            to anyone else. No one has access to this information other than people with physical access to your browser.
-
-        <p>To see the data sent to the tracker check <a href="/introspect/messages">here</a> (which is key in your localStorage for demo purposes only).
-
-        <p>&nbsp;</p>
         <table class="table table-striped ">
             <thead>
                 <tr>

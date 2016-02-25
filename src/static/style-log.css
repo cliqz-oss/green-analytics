@@ -36,6 +36,11 @@ body {
   padding: 50px 50px;
 }
 
+.danger-text {
+  color: #E11;
+  font-weight: bold;
+}
+
 #desc a:active, a:focus, a:hover, a:visited, a:link {
     color: rgba(55,120,210,1.0);
 }

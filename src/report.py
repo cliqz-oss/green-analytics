@@ -124,6 +124,9 @@ def analyze_log(filename, debug=False):
             site = ty.replace('agg_','')
             o = obj['o']
 
+            if o['agg_page_time'] < 0.1:
+                o['agg_page_time'] = 0.1
+
             if site not in agg:
                 agg[site] = {}
             if ts_by_hour not in agg[site]:

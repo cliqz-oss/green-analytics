@@ -20,31 +20,37 @@
 
   <body>
     <div class="row container-fluid">
-        <h1>Welcome to the Greentracker Reports</h1>
+        <h1>Green-tracker Privacy Preserving Analytics Report</h1>
 
-        <p>This report is built using the data collected by you on the in-vitro experiment. The raw data is available at <code>logs/collect.jl</code>. If you want to
-        restart from scratch just deleted the log file, restart <code>server.py</code>, and spend some time clicking around.
+        {% if context.canned_report %}
+        <p><em>This is a <span class="danger-text">frozen report</span>. The real-time report that updates as you interact with the demo pages is available <a href="/log">here</a>, however, it might contain less data</em>.
+        {% endif %}
+        <p>This report is built using the data collected by all users visiting sites and pages that contain the green-tracker agent. At the
+            moment only the sites of the <a href="http://{{ context.site1 }}">demo</a>.
 
-        <p>The current tracking depicts page impressions, unique visitors, correlation across sites, patterns within site, goal achievements, returning customers, an even per-user aggregated statistics.
+        <p>Since you have simulated one or multiple users (by switching browsers) you should be able to see you contribution on the report.
+        For instance, visit a new page, the number of unique visitors should increase by 1. Reload the page many times, the
+        uniques should stay the same but the page loads should increase. Achieve a campaign goal by visiting page 10 from site 4 after
+        visiting page 9 of the same site or page 10 of site 5. As soon as you do the report will show that a new user has achieved the goal,
+        without leaking any information about you.
 
-        <p>Needless to say that this analytics are short of a toy example, but they cover the most typical use-cases which typically require tracking the user. Needless to say, <b>to generate this report we
-        did NOT require to compromise the privacy of the user in any way.</b>
+        <p>Needless to say that this analytics are short of a toy example, but they cover a wide range of use cases of analytics services,
+        which sadly rely on user tracking. To generate this report, we did NOT require to compromise the privacy of users in any way.
 
 
         <h3>1) Basic Stats</h3>
 
-        <p>We can get measures across a whole population, e.g. the number of MAU, DAU internet users in Germany.
-
         <p>During the time of the experiment, from {{ context['stats']['min_ts'] }} to {{ context['stats']['max_ts'] }} we have seen:
         <ul>
             <li> {{ context['stats']['new_all'] }} totally new users (never seen before in any site)
-            <li> {{ context['stats']['new_day'] }} unique users by day (all sites)
-            <li> {{ context['stats']['new_month'] }} unique users by month (all sites)
+            <li> {{ context['stats']['new_day'] }} unique users by day (all sites and all days)
+            <li> {{ context['stats']['new_month'] }} unique users by month (all sites and all months)
         </ul>
 
         <h3>2) Top 3 sites</h3>
 
-        <p>We can measure popularity of sites, both as page loads but naturally as unique visitors too. We can also generate timeseries of the traffic.
+        <p>Popularity of sites, both as page loads (not unique) and as visits (uniques). We can also see the returning time
+            of unique visitors, used to calculated retention.
 
             <table class="table table-striped ">
                 <thead>
@@ -72,7 +78,8 @@
 
         <h3>2) Top 10 pages</h3>
 
-        <p>We can have the same popularity rankings based on pages (segmented by site or not).
+        <p>The same for pages. This time we did not include return times, since retention is most meaningful at the
+        level of the site rather than at the page level.
 
             <table class="table table-striped ">
                 <thead>
@@ -98,8 +105,8 @@
 
         <h3>3) Top-3 Site Correlations</h3>
 
-        <p>Without profiling the user we can obtain useful data about relationships between sites. In here we measure
-            the most popular co-ocurrences of sites by unique users, e.g. users visiting in the same session both focus.de and bild.de.
+        <p>Without tracking all browsing of the users we can calculate correlations among sites; i.e. so many
+            people visited X and Y in the same session.
 
             <table class="table table-striped ">
                 <thead>
@@ -123,10 +130,9 @@
 
         <h3>4) Top-10 Click Patterns</h3>
 
-        <p>We can also capture click-through patterns, to safe-guard the privacy of the user we limited to length 3 and we
-            omitted the transitions between different sites. This information although not the full picture allow us to
-            get a good understanding of where the traffic to a specific pages comes from (if that was across sites, we can achieve
-            the same goal with the goals as we will see later on).
+        <p>We can also capture click-through patterns within the site, the green-tracker agent will obfuscate any transition
+            between sites, since they pose a privacy risk. This obfuscation is not done on the server, but on you browser,
+            so the data already leaves you computer obfuscated.
 
             <table class="table table-striped ">
                 <thead>
@@ -152,12 +158,14 @@
 
         <p>We can also obtain without collecting all navigation of the user complex analytics like goal achievements.
 
-        <p>We have
-            defined one goal in the experiment: a visit to page 10 in site 4, after visiting page 9 in the same site or visiting
-            page 10 in site 5. For the goal to be achieve the user must complete it before 20 minutes or doing less that 4 page
-            visits in between. This setup is typical of advertisement, you can think of the goal page as a successful signup page
-            and the two initiators as pages containing ads for the signup.
+        <p>We have a single goal in the experiment, but we could have hundreds. The goal is achieved after a
+            a visit to page 10 in site 4 (which could be a successful signup page), after visiting either page 9 of
+            site 4 or page 10 of site 5, which could be pages containing advertisement or other content. For the goal
+            to be achieved it must be completed in less that 20 minutes and by doing less than 4 hopes; the goal
+            creator can set-up arbitrarily complex rules.
 
+            The report will show how many user converted, from where, and which is the conversion rate. All without
+            sending any information about the user.
 
         <table class="table table-striped ">
                 <thead>
@@ -180,8 +188,9 @@
 
         <h3>6) Aggregate Data by User</h3>
 
-        <p>We can also obtain aggregated such as number of page loaded and average time spend on the page by user. Every hour, we will collect for all
-            users that have been in site1.com, how many pages and for how long they stayed in the page, all without relying on any tracking. The label
+        <p>We can also obtain aggregated data by user such as the number of page loaded on a given site, or the
+            average time spend of the site segmented by users. All this with relying on tracking, and without
+            having to use beacons to measure time either. The label
             'annon user' is added to stress that this is the per-user aggregated data on the given hour.
 
         <table class="table table-striped ">
