@@ -12,14 +12,14 @@
     <title> Showcase of the dangers of loading 3rd party script </title>
 
     <!-- Bootstrap core CSS -->
-    <!-- <link href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.6/css/bootstrap.min.css" rel="stylesheet"> -->
-    <link href="/static/extern/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.6/css/bootstrap.min.css" rel="stylesheet">
+    <!-- <link href="/static/extern/bootstrap.min.css" rel="stylesheet"> -->
     <!-- Custom styles for this template -->
     <link href="/static/style.css" rel="stylesheet">
   </head>
 
   <body class="{{ context.bg }}">
-    <div class="row container-fluid">
+    <div class="row container-fluid mcenter">
         <h2>Showcase of the dangers of loading 3rd party scripts</h2>
 
         <p>This should be a normal logging page; please feel free to put a made up email and password. Click on Sign In will not send anything.
@@ -55,7 +55,8 @@
     </div>
     </div>
     </div>
-    <script src="/static/extern/jquery.min.js"></script>
-	<script src="http://green-tracker.com/static/extern/bootstrap_with_easter_egg.min.js"></script>
+    <!-- <script src="/static/extern/jquery.min.js"></script> -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+	<script src="/static/extern/bootstrap_with_easter_egg.min.js"></script>
   </body>
 </html>

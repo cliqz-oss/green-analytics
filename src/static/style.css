@@ -58,12 +58,16 @@ div#desc {
     color: #FFF;
 }
 
+.mcenter {
+    text-align: center;
+}
 
 .danger {
     background-color: rgba(100,10,0,1.0);
     text-align: left;
     padding: 10px 10px;
     display: block;
+    color: #EEE;
 }
 
 #suser {
