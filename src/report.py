@@ -55,6 +55,7 @@ def analyze_log(filename, debug=False):
     for line in records:
         try:
             obj = json.loads(line)
+            ts = obj['ts']
         except Exception as e:
             print "Corrupted line: {}".format(line)
             continue

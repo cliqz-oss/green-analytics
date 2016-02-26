@@ -7,7 +7,7 @@
         for(var i=0;i<num;i++) {
 
             var key = localStorage.key(i);
-            if (key.startsWith('gt:') && key!='gt:message-sent-demo-only') {
+            if (key.indexOf('gt:')==0 && key!='gt:message-sent-demo-only') {
 
                 var row = table.insertRow(0);
                 var cell1 = row.insertCell(0);
@@ -54,6 +54,14 @@
         window.location.reload();
 
     }
+
+    function printLS() {
+        localStorage.setItem('xx:count2','42');
+        console.log('debug1  from javascript: ', localStorage.getItem('gt:count'), localStorage.getItem('gt:count2'));
+        document.getElementById("gt").contentWindow.postMessage('debug1',"http://{{ context.tracker_host }}");
+    }
+
+
   </script>
   <body>
     <div class="row container-fluid">
@@ -63,6 +71,7 @@
         <p>To view the messages that you sent to green-tracker click <a href="/introspect/messages">here</a>.
         You can <a href="javascript:reset()">reset</a> your localStorage anytime, it is like starting as a new user.
 
+        <!-- <p><a href="javascript:printLS()">debug1 only</a> -->
         <table class="table table-striped ">
             <thead>
                 <tr>
@@ -75,6 +84,9 @@
             </tbody>
         </table>
     </div>
+
+    <iframe id="gt" src="http://{{context.tracker_host}}/frame" style="display: none;"/>
+
 
   </body>
 </html>

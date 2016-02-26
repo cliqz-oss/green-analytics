@@ -5,13 +5,13 @@
 
 var main = function(url) {
 
-    //
-    // Disclaimer: Code here is not particularly clean or at the right level of abstraction.
-    // Furthermore, it is extremely verbose. Believe it or not this is intentional.
-    // Take this code snippet as an example to illustrate the gist of green-tracker's approach to build
-    // privacy preserving analytics, rather than as a example of javascript programming.
-    // Please bear with it; it's very short and I hope is worthy of your time.
-    //
+    /*
+    Disclaimer: Code here is not particularly clean or at the right level of abstraction.
+    Furthermore, it is extremely verbose. Believe it or not this is intentional.
+    Take this code snippet as an example to illustrate the gist of green-tracker's approach to build
+    privacy preserving analytics, rather than as a example of javascript programming.
+    Please bear with it; it's very short and I hope is worthy of your time.
+    */
 
     var now = gtUtils.getDate(); // instead of 'new Date()' because of the stub for accelerated time
 
@@ -19,29 +19,30 @@ var main = function(url) {
     var timestamp_by_hour = timestamp.slice(0,10);
     var timestamp_by_day = timestamp.slice(0,8);
 
-    var o = localStorage.getItem('gt:count')
+    var o = localStorage.getItem('xt:count')
     if (!o) o = 0;
     else o = parseInt(o);
     o+=1;
-    localStorage.setItem('gt:count', o)
-    console.log('>>>>>' , o, localStorage.length);
+    localStorage.setItem('xt:count', o)
+    console.log('LS >>>>>' , o, localStorage.length, localStorage.getItem('gt:history'));
+    console.log('SS >>>>>' , sessionStorage.length, sessionStorage.getItem('gt:history'));
 
     var tmp = url.replace('http://','').split('/');
     var site = tmp[0], page = '/'+tmp.splice(1,tmp.length).join('/');
 
     var dataToSend = [];
 
-    //
-    // these two messages, will always be sent: a page and a site load
-    //
+    /*
+    these two messages, will always be sent: a page and a site load
+    */
     dataToSend.push({ts: timestamp, type: 'page_load', p: url})
     dataToSend.push({ts: timestamp, type: 'site_load', p: site})
 
-    //
-    // siteMem will have data related to the site being visited, this site must be using
-    // green-tracker. Should be obvious but better to be clear:sites that do not include
-    // green-tracker do not trigger this script.
-    //
+    /*
+    siteMem will have data related to the site being visited, this site must be using
+    green-tracker. Should be obvious but better to be clear:sites that do not include
+    green-tracker do not trigger this script.
+    */
 
     var hSite = gtUtils.hashSHA1(site,20);
 
@@ -124,7 +125,9 @@ var main = function(url) {
     }
     var diffs = gtUtils.timeDiffPeriods(last_visit_in_any_site, timestamp);
     for(var i=0;i<diffs.length;i++) {
-        dataToSend.push({ts: timestamp, type: 'new_'+diffs[i]});
+        if (diffs[i]!='min') {
+            dataToSend.push({ts: timestamp, type: 'new_'+diffs[i]});
+        }
     }
 
     //
@@ -479,12 +482,18 @@ var main = function(url) {
 
 
 var incomingMsg = function(evt) {
-    if (false) {
+    if (true) {
         console.log('incoming message: ' + evt.data);
         console.log('incoming message: ' + evt.origin);
     }
 
-    if (evt.data.startsWith('cmd:')) {
+    if (evt.data=='debug1') {
+        console.log('debug1 from LS: ', localStorage.getItem('gt:count'), localStorage.getItem('gt:count2'));
+
+
+
+    }
+    else if (evt.data.indexOf('cmd:')==0) {
         if (evt.data == 'cmd:resetLocalStorage') {
             localStorage.clear();
             alert('All cleared! You are a new user for any of the sites');
@@ -511,7 +520,7 @@ var incomingMsg = function(evt) {
         setInterval(function() { return function(url) {
             var tmp = url.replace('http://','').split('/');
             var site = tmp[0];
-            if (['site1.com'].indexOf(site)!=-1) {
+            if (['{{ context.site1 }}'].indexOf(site)!=-1) {
                 var now = gtUtils.getDate();
                 var timestamp = gtUtils.dateToTimestamp(now);
                 var timestamp_by_hour = timestamp.slice(0,10);
@@ -635,7 +644,7 @@ var gtUtils = (function() {
 
 
     m.dateToTimestamp = function(d) {
-        var utcYear=d.getUTCFullYear(), utcMonth=d.getUTCMonth(), utcDate=d.getUTCDate(), utcHour=d.getUTCHours(), utcMinutes=d.getUTCMinutes();
+        var utcYear=d.getUTCFullYear(), utcMonth=(d.getUTCMonth()+1), utcDate=d.getUTCDate(), utcHour=d.getUTCHours(), utcMinutes=d.getUTCMinutes();
         return utcYear + twoDigits(utcMonth) + twoDigits(utcDate) + twoDigits(utcHour) + twoDigits(utcMinutes);
     }
 

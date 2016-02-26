@@ -13,8 +13,9 @@ app = Flask(__name__, static_folder='static')
 
 NUM_HOSTS = 5
 
-if True:
+if False:
     VALID_HOSTS = ["site{}.com".format(i) for i in range(1,NUM_HOSTS+1)]
+    VALID_HOSTS[len(VALID_HOSTS)-1] = 'kite5.com'
     TRACKER_HOST = "green-tracker.com"
     ACCELERATE = 1
     LOGFILE = '{}/{}'.format(PATH,'logs/collect.jl')
