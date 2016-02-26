@@ -58,8 +58,8 @@ def any(path):
         if path == 'frame':
             context = {}
             context['tracker_host'] = TRACKER_HOST
-            context['site4'] = VALID_HOSTS[3]
-            context['site5'] = VALID_HOSTS[4]
+            for v, i in zip(VALID_HOSTS, range(0, len(VALID_HOSTS))):
+                context['site{}'.format(i+1)] = v
             if ACCELERATE > 1:
                 context['accelerate'] = {'speed': ACCELERATE, 'start_time': start_time}
             return render_template('/template_frame.html', context=context)

@@ -19,6 +19,13 @@ var main = function(url) {
     var timestamp_by_hour = timestamp.slice(0,10);
     var timestamp_by_day = timestamp.slice(0,8);
 
+    var o = localStorage.getItem('gt:count')
+    if (!o) o = 0;
+    else o = parseInt(o);
+    o+=1;
+    localStorage.setItem('gt:count', o)
+    console.log('>>>>>' , o, localStorage.length);
+
     var tmp = url.replace('http://','').split('/');
     var site = tmp[0], page = '/'+tmp.splice(1,tmp.length).join('/');
 
@@ -411,7 +418,7 @@ var main = function(url) {
     // drains the battery. With the client-side aggregation proposed by Green-tracker, beacons are
     // no longer necessary as we will see in the following example.
     //
-    var monitoringSites = ['site1.com'];
+    var monitoringSites = ['{{ context.site1 }}'];
 
     if (monitoringSites.indexOf(site)!=-1) {
         // The user is at site1.com, the only site for which we want aggregated statistics per user.
