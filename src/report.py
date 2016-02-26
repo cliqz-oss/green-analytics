@@ -120,7 +120,7 @@ def analyze_log(filename, debug=False):
 
             goals[key][ts_by_hour][obj['p']] = goals[key][ts_by_hour].get(obj['p'], 0) + 1
 
-        if ty == 'agg_site1.com':
+        if ty == 'agg_site1.com' or ty == 'agg_site1.test.cliqz.com':
             ts_by_hour = obj['ts']
             site = ty.replace('agg_','')
             o = obj['o']
