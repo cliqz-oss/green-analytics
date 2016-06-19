@@ -1,0 +1,168 @@
+<html>
+<head>
+  <title>Green Tracker Analytics</title>
+  <script type="text/javascript" src="static/extern/jquery.min.js"></script>
+  <script type="text/javascript" src="static/extern/jquery.flot.min.js"></script>
+  <script type="text/javascript" src="static/dddash.js"></script>
+  <script type="text/javascript" src="static/dashboard.js"></script>
+  <link rel="stylesheet" href="static/dashboard.css">
+</head>
+<body>
+  <h1>Green Tracker Analytics</h1>
+  <h3>{{ context['stats']['min_ts'] }} to {{ context['stats']['max_ts'] }}</h3>
+  <h3>Trends</h3>
+  <div id="container">
+    <div class="metric site has-sparkline sortable" rel="0.1">
+      <h2>Unique Visitors</h2>
+      <div class="till_now" >
+        {{ context['stats']['new_all'] }}
+      </div>
+      <div class="sparkline" id="1" data-metric="uv_all"></div>
+      <div class="legend timestamp">Overall</div>
+    </div>
+
+    <div class="metric site has-sparkline sortable" rel="0.2">
+      <h2>Unique Visitors (Month)</h2>
+      <div class="till_now" >
+        {{ context['stats']['new_month'] }}
+      </div>
+      <div class="sparkline" id="1" data-metric="uv_month"></div>
+      <div class="legend timestamp">Overall</div>
+    </div>
+
+
+    <div class="metric site has-sparkline sortable" rel="0.3">
+      <h2>Unique Visitors (Day)</h2>
+      <div class="till_now" >
+        {{ context['stats']['new_day'] }}
+      </div>
+      <div class="sparkline" id="1" data-metric="uv_day"></div>
+      <div class="legend timestamp">Overall</div>
+    </div>
+
+    <div class="metric site has-sparkline sortable" rel="1.0">
+      <h2>Signup Goals</h2>
+      <div class="till_now" >
+        {{ context['goals'][0]['num_succ']}}
+      </div>
+      <div class="sparkline" id="1" data-metric="signup"></div>
+      <div class="legend timestamp">Overall</div>
+    </div>
+
+    {% for item in context.sites %}
+      <div class="metric site has-sparkline sortable" rel="1.1">
+        {% set site_name = item['s'].split('.') %}
+        <h2>{{ site_name[0] }} : Unique Visitors</h2>
+        <div class="till_now" >
+          {{ item['num_visits']}}
+        </div>
+        <div class="sparkline" id="1" data-metric="site_uv|{{ loop.index }}"></div>
+        <div class="legend timestamp">Overall</div>
+      </div>
+
+      <div class="metric site has-sparkline sortable" rel="1.2">
+        {% set site_name = item['s'].split('.') %}
+        <h2>{{ site_name[0] }} : Page Views</h2>
+        <div class="till_now" >
+          {{ item['num_loads']}}
+        </div>
+        <div class="sparkline" id="1" data-metric="site_loads|{{ loop.index }}"></div>
+        <div class="legend timestamp">Overall</div>
+      </div>
+    {% endfor %}
+
+    {% for item in context.correlations %}
+      <div class="metric site has-sparkline sortable" rel="1.2">
+        {%set split_name = item['s'].split('<>')%}
+        {%set x=split_name[0].split('.')%}
+        {%set y=split_name[1].split('.')%}
+        <h3>Correlation : {{ x[0] }} <> {{ y[0] }}</h3>
+        <div class="till_now" >
+          {{ item['num_visits']}}
+        </div>
+        <div class="sparkline" id="1" data-metric="x_y|{{ loop.index }}"></div>
+        <div class="legend timestamp">Overall</div>
+      </div>
+    {% endfor %}
+  </div>
+  <h3>Top 10 pages</h3>
+  <div  class="metric-table">
+
+          <table border="1">
+              <thead>
+              <tr>
+                   <th>Page</th>
+                   <th>Total Unique Visits</th>
+                   <th>Total Loads</th>
+              </tr>
+              </thead>
+              <tbody>
+              {% for item in context.pages %}
+              <tr>
+                 <td>{{ item['s'] }}</td>
+                 <td>{{ item['num_visits'] }}</td>
+                 <td>{{ item['num_loads'] }}</td>
+              </tr>
+              {% endfor %}
+              </tbody>
+          </table>
+
+  </div>
+
+  <h3>Top 10 Click Patterns</h3>
+  <div  class="metric-table">
+  <table border="1">
+      <thead>
+      <tr>
+           <th>Click-through Patterns</th>
+           <th>Total Unique Visits</th>
+      </tr>
+      </thead>
+      <tbody>
+      {% for item in context.patterns %}
+      <tr>
+         <td>{{ item['s'] }}</td>
+         <td>{{ item['num_visits'] }}</td>
+      </tr>
+      {% endfor %}
+      </tbody>
+  </table>
+
+  </div>
+
+
+    <h3>Aggregate Data by User</h3>
+
+    <div  class="metric-table">
+
+        <p>We can also obtain aggregated data by user such as the number of page loaded on a given site, or the
+            average time spend of the site segmented by users. All this without relying on tracking, and without
+            having to use beacons to measure time either. The label
+            'annon user' is added to stress that this is the per-user aggregated data on the given hour.</p>
+        <table border="1">
+                <thead>
+                <tr>
+                     <th>Site</th>
+                     <th>Hour</th>
+                     <th>Breakdown by user (number of page loads, average time spend in the page))</th>
+                </tr>
+                </thead>
+                <tbody>
+                {% for item in context.agg %}
+                <tr>
+                  {% set site_name = item['s'].split('.') %}
+                   <td>{{ site_name[0] }}</td>
+                   <td>{{ item['ts'] }}</td>
+                   <td><pre>{{item['timeseries'] }}</pre></td>
+                </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+
+    </div>
+
+  <p class="updated">
+   <br/>
+    © 2016 Cliqz.com.  </p>
+</body>
+</html>

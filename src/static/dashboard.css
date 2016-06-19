@@ -1,0 +1,291 @@
+body {
+    background-color: #111314;
+    color: #eee;
+    font-family: "Helvetica Neue", Helvetica, sans-serif;
+    text-align: center;
+}
+
+h1 {
+    text-align: center;
+    font-family: "Segoe UI","HelveticaNeue-CondensedBold", "Helvetica Neue Condensed Bold", "Impact", Helvetica, sans-serif;
+    font-weight: bold;
+    font-size: 40px;
+}
+
+div.metric {
+    width: 380px;
+    border: 2px white solid;
+    margin: 3px;
+    border-radius: 6px;
+    background-color: #2A2B2A;
+    display: inline-block;
+    position:relative;
+     margin-bottom: 15px;
+}
+
+div.metric-top-table {
+    width: 760;
+    border: 2px white solid;
+    margin: 3px;
+    border-radius: 6px;
+    background-color: #2A2B2A;
+    display: inline-block;
+    position:relative;
+     margin-bottom: 15px;
+}
+
+div.metric-table {
+    width: 1140px;
+    border: 2px white solid;
+    margin: 3px;
+    border-radius: 6px;
+    background-color: #2A2B2A;
+    display: inline-block;
+    position:relative;
+     margin-bottom: 15px;
+}
+
+div.site {
+    margin-bottom: 15px;
+}
+
+
+div.metric h2 {
+    font-size: 18px;
+    text-align: center;
+    background-color: #232526;
+    color: white;
+    margin: 0px;
+    padding: 6px;
+    border-top-left-radius: 6px;
+    border-top-right-radius: 6px;
+    font-family: "Lato", "Helvetica Neue", Helvetica, Arial, sans-serif;
+}
+
+div.metric h3 {
+    font-size: 15px;
+    text-align: center;
+    background-color: #232526;
+    color: white;
+    margin: 0px;
+    padding: 6px;
+    border-top-left-radius: 6px;
+    border-top-right-radius: 6px;
+    font-family: "Lato", "Helvetica Neue", Helvetica, Arial, sans-serif;
+}
+
+div.metric a {
+    color: inherit;
+    text-decoration: none;
+}
+
+div.metric table{
+
+}
+
+div.sparkline {
+    position: relative;
+    left: 0px;
+    top: 0px;
+    width: 380px;
+    height: 60px;
+}
+
+div.metric p.value {
+    font-family: "HelveticaNeue-CondensedBlack", "Helvetica Neue Condensed Black", "Impact", Helvetica, sans-serif;
+    text-align: center;
+    font-size: 28px;
+    margin: 0;
+    padding: 0 12px;
+    padding-top: 20px;
+    color:white;
+    position:relative;
+}
+
+div.metric p.value1 {
+    font-family: "HelveticaNeue-CondensedBlack", "Helvetica Neue Condensed Black", "Impact", Helvetica, sans-serif;
+    text-align: center;
+    font-size: 30px;
+    margin: 0;
+    padding: 0 12px;
+    padding-top: 10px;
+    color:white;
+}
+
+span.text_current_hour {
+    position:absolute;
+    font-size: 11px;
+    color:white;
+
+
+}
+
+div.wow{
+    width: 220px;
+    border: 2px white solid;
+    margin: 10px;
+    border-radius: 6px;
+    background-color: #2A2B2A;
+    display: inline-block;
+    position:relative;
+    color:white;
+    font-size:30px;
+    font-family:"HelveticaNeue-CondensedBlack", "Helvetica Neue Condensed Black", "Impact", Helvetica, sans-serif;
+}
+
+
+
+p.last_day_value{
+    background-color: #232526;
+    color: white;
+    margin: 0px;
+    padding: 6px;
+    border-top-left-radius: 6px;
+    border-top-right-radius: 6px;
+    font-family:"HelveticaNeue-CondensedBold", "Helvetica Neue Condensed Bold", "Impact";
+    font-size:20px;
+}
+div.metric.has-sparkline p.value {
+    width: 200px;
+}
+
+div.metric span.timestamp {
+    font-family: "Helvetica Neue", Helvetica, sans-serif;
+    display: block;
+    font-weight: 400;
+    font-size: 11px;
+    margin: -12px 0 8px 0;
+    padding: 0;
+    padding-top: 7px;
+}
+
+p.value span.timestamp_lsthr {
+    font-family: "Helvetica Neue", Helvetica, sans-serif;
+    display: block;
+    font-weight: 400;
+    font-size: 11px;
+    margin: -12px 0 8px 0;
+    padding: 0;
+    padding-top: 7px;
+}
+
+p.updated {
+    clear: both;
+    font-weight: 400;
+    font-size: 11px;
+    text-align: center;
+    margin: 0 0 4px 0;
+    padding: 0;
+    opacity: 0.5;
+}
+
+span.metric {
+    width: 220px;
+    border: 2px white solid;
+    margin: 3px;
+    border-radius: 6px;
+    background-color: #2A2B2A;
+    display: inline-block;
+    position:relative;
+    color:white;
+    font-size:30px;
+    font-family:"HelveticaNeue-CondensedBlack", "Helvetica Neue Condensed Black", "Impact", Helvetica, sans-serif;
+}
+
+span.last_hour{
+    float:left;
+}
+
+span.total_day{
+    float:right;
+}
+
+div.positive {
+
+   background-color: #48BF21;
+}
+
+div.negative {
+   background-color: #BF0A00;
+}
+
+
+
+span.zero{
+        color:white;
+        font-size:30px;
+        padding-left:15px;
+        font-family:"HelveticaNeue-CondensedBlack", "Helvetica Neue Condensed Black", "Impact", Helvetica, sans-serif;
+}
+
+div.current_hour{
+    width:49%;
+    float:left;
+    font-family: "HelveticaNeue-CondensedBlack", "Helvetica Neue Condensed Black", "Impact", Helvetica, sans-serif;
+    text-align: center;
+    font-size: 28px;
+    color:white;
+
+}
+div.till_now{
+    width:100%;
+    font-family: "HelveticaNeue-CondensedBlack", "Helvetica Neue Condensed Black", "Impact", Helvetica, sans-serif;
+    text-align: center;
+    font-size: 40px;
+    color:white;
+    padding-top: 30px;
+
+}
+div.last_day{
+        width:100%;
+        text-align:center;
+    font-family: "HelveticaNeue-CondensedBlack", "Helvetica Neue Condensed Black", "Impact", Helvetica, sans-serif;
+    text-align: center;
+    font-size: 30px;
+    color:white;
+    background-color: #232526;
+
+}
+
+div.conversion{
+    font-family: "HelveticaNeue-CondensedBlack", "Helvetica Neue Condensed Black", "Impact", Helvetica, sans-serif;
+    text-align: center;
+    font-size: 30px;
+    margin: 0;
+    padding: 0 12px;
+    padding-top: 10px;
+    color:white;
+
+}
+
+
+
+div.legend{
+    font-family: "HelveticaNeue-CondensedBlack", "Helvetica Neue Condensed Black", "Impact", Helvetica, sans-serif;
+    text-align: center;
+    font-size: 11px;
+    color:grey;
+
+}
+
+#graph {
+    width: 800px;
+    height: 500px;
+    margin: 0 auto;
+}
+
+#hover {
+    position: absolute;
+    display: none;
+    padding: 4px 10px;
+    font-size: 16px;
+    background-color: rgba(0, 0, 0, 0.7);
+    border-radius: 12px;
+}
+
+table {
+   width: 100%;
+   border: 1px solid white;
+}
+tr:nth-child(even) {background: #343434}
+tr:nth-child(odd) {background: #2A2B2A}

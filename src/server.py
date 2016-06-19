@@ -4,14 +4,30 @@
 
 import json
 from flask import Flask, jsonify, request, render_template
-import os, time
+import os, time, datetime
 from report import analyze_log
+import simplejson
+import ast
 
 PATH = os.path.dirname(os.path.realpath(__file__))
 
 app = Flask(__name__, static_folder='static')
 
 NUM_HOSTS = 5
+
+LOGS_DICT = {}
+
+def string_unix_timestamp(s):
+    return time.mktime(datetime.datetime.strptime(s, "%Y/%m/%d").timetuple())
+def parse_timeseries(ts, idx=1):
+    _day_wise = {}
+    for each in ts.split("\n"):
+        _ts = each.replace('[',"").replace(']',"").split('\t')
+        _date = string_unix_timestamp(_ts[0].split()[0])
+        if _day_wise.get(_date, None) is None:
+            _day_wise[_date] = 0
+        _day_wise[_date] += int(_ts[idx])
+    return  [[k,v] for k,v in _day_wise.iteritems()]
 
 if False:
     VALID_HOSTS = ["site{}.com".format(i) for i in range(1,NUM_HOSTS+1)]
@@ -78,6 +94,32 @@ def any(path):
             context['site1'] = VALID_HOSTS[0]
             context['canned_report'] = True
             return render_template('/template_log.html', context=context)
+        elif path == 'dashboard':
+            context = analyze_log(LOGFILE)
+            context['site1'] = VALID_HOSTS[0]
+            print context
+            global LOGS_DICT
+            LOGS_DICT = context
+            return render_template('/dashboard.html', context=context)
+        elif path == 'metric_details':
+            _n = dict([request.query_string.split('=')]).get('name').split("|")
+            n = _n[0]
+            if len(_n) > 1:
+                idx = int(_n[1]) - 1
+            doc = {}
+            slug = []
+            # slug = [[1460930400, 1], [1456700400, 1], [1460066400, 2], [1457564400, 2], [1457391600, 2], [1461189600, 1], [1460325600, 2], [1461276000, 3], [1460412000, 15], [1461016800, 4], [1460498400, 19], [1460584800, 6], [1461535200, 2], [1460671200, 14], [1459375200, 3], [1456441200, 4], [1460757600, 14], [1461708000, 2], [1456527600, 1], [1454713200, 1], [1460844000, 2], [1456614000, 1], [1459980000, 1], [1458082800, 1]]
+            if n == "site_uv":
+                slug = parse_timeseries(LOGS_DICT["sites"][idx]['timeseries'])
+                 #[[1460930400, 1], [1456700400, 1], [1460066400, 2], [1457564400, 2], [1457391600, 2], [1461189600, 1], [1460325600, 2], [1461276000, 3], [1460412000, 15], [1461016800, 4], [1460498400, 19], [1460584800, 6], [1461535200, 2], [1460671200, 14], [1459375200, 3], [1456441200, 4], [1460757600, 14], [1461708000, 2], [1456527600, 1], [1454713200, 1], [1460844000, 2], [1456614000, 1], [1459980000, 1], [1458082800, 1]]
+            elif n == "signup":
+                slug = parse_timeseries(LOGS_DICT["goals"][0]['timeseries'])
+            elif n == "site_loads":
+                slug = parse_timeseries(LOGS_DICT["sites"][idx]['timeseries'], 2)
+            elif n == "x_y":
+                slug = parse_timeseries(LOGS_DICT["correlations"][idx]['timeseries'], 1)
+            doc['data'] =  slug
+            return simplejson.dumps(doc)
         else:
             context = analyze_log(LOGFILE)
             context['site1'] = VALID_HOSTS[0]
@@ -113,5 +155,4 @@ def any(path):
 
 
 if __name__ == '__main__':
-    ##app.run(host='0.0.0.0', port=80, processes=1, debug=True)
     app.run(host='0.0.0.0', port=80, processes=8, debug=False)
