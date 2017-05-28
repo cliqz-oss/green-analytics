@@ -1,4 +1,0 @@
-extern:
-    -
-        repo: deploy
-        branch: v3
