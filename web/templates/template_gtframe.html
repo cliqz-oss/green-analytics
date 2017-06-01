@@ -1,7 +1,7 @@
 <script src="./static/extern/hmac-sha1.js"></script>
 <script src='./static/extern/ua-parser.min.js'></script>
 <script>
-var endPoint = '{{ context.endpoint }}';//'http://green-analytics.test.cliqz.com/collect';//'{{ context.endpoint }}';
+var endPoint = '{{ context.endpoint }}';
 
 var parser = new UAParser();
 var ua = parser.getResult();
@@ -502,7 +502,7 @@ var incomingMsg = function(evt) {
     */
 
     var urlParse = evt.data.urlDetails;
-    var siteID = evt.data.siteID;
+    siteID = evt.data.siteID;
     main(urlParse);
 
     /*

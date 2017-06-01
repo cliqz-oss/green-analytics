@@ -8,7 +8,7 @@ web:
   volumes:
     - ./web:/usr/src/app
   env_file: .env
-  command: /usr/local/bin/gunicorn -w 2 -b :8000 app:app --reload
+  command: /usr/local/bin/gunicorn -w 2 -b :8000 app:app --reload --access-logfile /tmp/access.log --error-logfile  /tmp/error.log
 
 nginx:
   restart: always

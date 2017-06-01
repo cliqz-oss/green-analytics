@@ -13,7 +13,7 @@ def ga_script():
     controller = GreenAnalyticsScript()
     return controller.respond()
 
-@app.route('/collect', methods=['POST'])
+@app.route('/collect', methods=['GET', 'POST'])
 def collect():
     controller = Messages()
     return controller.respond()
