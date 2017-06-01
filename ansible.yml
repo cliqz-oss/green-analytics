@@ -1,0 +1,36 @@
+- hosts: all
+  become: true
+  gather_facts: no
+  tasks:
+    - name: Install docker
+      shell: which docker || curl -sSL https://get.docker.com/ | sh
+
+    - name: Install pip
+      apt:
+        name: python-pip
+
+    - name: Install docker-compose
+      pip:
+        name: docker-compose
+
+    - name: Deploy new version
+      synchronize:
+        src: .
+        dest: .
+        rsync_opts:
+          - "--exclude=web/migrations"
+
+    - name: Docker compose
+      docker_service:
+        project_src: green-analytics
+
+    - name: Create DB
+      shell: docker exec -t greenanalytics_web_1 python create_db.py
+
+    - name: Upgade DB
+      shell: docker exec -t greenanalytics_web_1 python manage.py db upgrade
+
+    - name: Migrate DB
+      shell: docker exec -t greenanalytics_web_1 python manage.py db migrate
+
+
