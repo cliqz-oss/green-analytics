@@ -155,17 +155,18 @@ window.onload = function() {
 
         conf.urlDetails = urlDetails;
         var probeWindow = document.getElementById("green-analytics").contentWindow;
-        probeWindow.postMessage(conf, 'http://green-analytics.test.cliqz.com/collect');
+        probeWindow.postMessage(conf, 'https://green-analytics.test.cliqz.com/collect');
     }
 };
-&lt;iframe id='green-analytics' src='https://green-analytics.com/ga-script' style='display: none;'&gt;&lt;/iframe&gt;
+&gt;
 &lt;/script&gt;
+&lt;iframe id='green-analytics' src='https://green-analytics.com/ga-script' style='display: none;'&gt;&lt;/iframe
 </pre>
 
 
   <h4>Accessing Dashboard</h4>
   <p> <a href='#'>{{ context.dashboard }}/?token={{ context.site_key }}</a> ,
-    <br/>If you loose this link, you will have to regenerate the tokens.
+    <br/>If you lose this link, you will have to regenerate the tokens.
   <p class="important">
     <p><a href="{{ context.dashboard }}?token={{ context.site_key }}" rel="sidebar" title="Dashboard Green Analytics">Dashboard Token: {{ context.site_key }}</a></p>
    </p>
@@ -228,12 +229,12 @@ window.onload = function() {
 
         conf.urlDetails = urlDetails;
         var probeWindow = document.getElementById("green-analytics").contentWindow;
-        probeWindow.postMessage(conf, 'http://green-analytics.test.cliqz.com/collect');
+        probeWindow.postMessage(conf, 'https://green-analytics.test.cliqz.com/collect');
     }
 };
-<iframe id='green-analytics' src='http://green-analytics.test.cliqz.com/ga-script' style='display:none'></iframe>
-</script>
 
+</script>
+<iframe id='green-analytics' src='https://green-analytics.test.cliqz.com/ga-script' style='display:none'></iframe>
 </body>
 
 </html>

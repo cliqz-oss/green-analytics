@@ -314,6 +314,6 @@ body {
 }
 pre::selection {
   text-shadow: none;
-  background: #CCC;
-  background: rgba(100, 100, 100, 0.2);
+  background: #111;
+  background: rgba(10, 10, 10, 0.2);
 }
