@@ -37,9 +37,23 @@ The other very common way of tracking users across websites is adding social sha
 
 ## Getting started
 
-Deploy green analytics with ansible.
+### Run locally
 
-`ansible-playbook ansible.yml  -i <hostname>`
+Everything is dockerized, just run:
+
+```bash
+docker-compose up --build
+```
+
+### Deploy to own server
+
+Deploy green analytics with ansible >= 2.3
+
+```bash
+ansible-playbook ansible.yml  -i <hostname>`,
+```
+
+(notice trailing comma `,`, it is important!)
 
 ## Contributing
 

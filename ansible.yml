@@ -23,6 +23,3 @@
     - name: Docker compose
       docker_service:
         project_src: green-analytics
-
-    - name: Upgade DB
-      shell: docker exec -t greenanalytics_web_1 python manage.py db upgrade
