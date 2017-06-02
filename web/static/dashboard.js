@@ -7,7 +7,7 @@ function format_timestamp(timestamp, period) {
 $(function () {
     $("div.metric div.sparkline").each(function (index, elem) {
         var e = $(elem);
-        var value_element = e.parent().find('div.till_now');
+        var value_element = e.parent().find('div.value');
         var timestamp_element = e.parent().find('div.timestamp');
         var original_value = value_element.html();
         var original_ts_value = timestamp_element.text();
@@ -17,6 +17,7 @@ $(function () {
         //var url = "http://192.168.5.239/dashboard_json_files/" + e.data('metric') + ".json";
         //var url = "konark.php?url=http://192.168.5.239/dashboard_json_files/" + e.data('metric') + ".json";
         $.getJSON(url, function(response) {
+            value_element.text(response.sum);
             // flot time series data needs to be in *milliseconds*, not seconds.
             // fixing this in Python would be easier but would limit reuse.
             for (var i=0; i < response.data.length; i++) {

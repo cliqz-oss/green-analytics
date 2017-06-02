@@ -16,8 +16,9 @@ class Message(db.Model):
     def __init__(self, message):
         self.message = message
         self.site_id = message['site_id']
-        self.received = datetime.utcnow()
-        self.ts = datetime.strptime(message['ts'], '%Y%m%d%H%M%S')
+        self.received = datetime.utcnow()        
+        # fill trailing zeros to make sure the ts string is the expected length
+        self.ts = datetime.strptime(message['ts'] + '0' * (14 - len(message['ts'])), '%Y%m%d%H%M%S')
 
 db.Index('message_type', Message.message['type'])
 db.Index('message_content', Message.message, postgresql_using='gin')
