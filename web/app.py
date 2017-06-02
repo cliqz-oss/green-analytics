@@ -6,6 +6,7 @@ from controllers.analyze import Analyze
 from controllers.metric_detail import MetricData
 from controllers.landing import Landing
 import json
+from flask import request, render_template
 
 from flask import request, render_template
 
