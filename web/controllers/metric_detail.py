@@ -15,26 +15,36 @@ def get_response_string(data):
     return json.dumps(obj)
 
 
+def get_option(value, allowed, default):
+    if value in allowed:
+        return value
+    else:
+        return default
+
+
 class MetricData():
 
     Session = scoped_session(sessionmaker(bind=db.engine))
 
     def respond(self):
         metric = request.args['name']
-        token = request.args['token']
         metric_fn = getattr(self, 'report_' + metric, None)
         if callable(metric_fn):
-            return get_response_string(metric_fn(token, **request.args))
+            return get_response_string(metric_fn(request.args))
         return get_response_string([])
 
-    def report_uv_all(self, token, **kwargs):
-        return self.messages_per_interval(token, message_type='new_all', interval_size='day')
+    def report_uv_all(self, args):
+        return self.messages_per_interval(args.get('token'), message_type='new_all', interval_size='day')
 
-    def report_uv_month(self, token, **kwargs):
-        return self.messages_per_interval(token, message_type='new_month', interval_size='day')
+    def report_uv_month(self, args):
+        return self.messages_per_interval(args.get('token'), message_type='new_month', interval_size='day')
 
-    def report_uv_day(self, token, **kwargs):
-        return self.messages_per_interval(token, message_type='new_day', interval_size='day')
+    def report_uv_day(self, args):
+        return self.messages_per_interval(args.get('token'), message_type='new_day', interval_size='day')
+
+
+    def report_domains(self, args):
+        return self.get_site_hostnames(args.get('token'))
 
     def messages_per_interval(self, token, message_type,
             interval_size='day',
@@ -63,3 +73,22 @@ class MetricData():
         ''', options).fetchall()
 
         return [[int(ts), count] for ts, count in grouped_counts]
+
+    def get_site_hostnames(self, token, since=datetime.utcnow() - timedelta(30), 
+            until=datetime.utcnow()):
+        s = self.Session()
+        options = {
+            'site_key': token,
+            'since': since,
+            'until': until,
+        }
+        hostnames = s.execute('''SELECT message->>'p' AS hostname, count(*) AS pages
+            FROM messages
+            WHERE site_id = (SELECT site_id FROM sites WHERE site_key = :site_key)
+                AND message->>'type' = 'site_load'
+                AND ts >= :since
+                AND ts < :until
+            GROUP BY message->>'p'
+        ''', options).fetchall()
+
+        return map(list, hostnames)
