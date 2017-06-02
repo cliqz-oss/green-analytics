@@ -147,7 +147,7 @@ var conf = {
 window.onload = function() {
     if (navigator.doNotTrack != '1') {
         var urlDetails = {
-            origin: document.location.origin,
+            origin: document.location.host,
             protocol: document.location.protocol,
             href: document.location.href,
             ref: document.referrer
@@ -192,7 +192,7 @@ var conf = {
 window.onload = function() {
     if (navigator.doNotTrack != '1') {
         var urlDetails = {
-            origin: document.location.origin,
+            origin: document.location.host,
             protocol: document.location.protocol,
             href: document.location.href,
             ref: document.referrer
