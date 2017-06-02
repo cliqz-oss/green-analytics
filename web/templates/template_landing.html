@@ -158,7 +158,7 @@ window.onload = function() {
         probeWindow.postMessage(conf, 'http://green-analytics.test.cliqz.com/collect');
     }
 };
-&lt;iframe id='green-analytics' src='{{ context.endpoint }}'&gt;&lt;/iframe&gt;
+&lt;iframe id='green-analytics' src='https://green-analytics.com/ga-script' style='display: none;'&gt;&lt;/iframe&gt;
 &lt;/script&gt;
 </pre>
 
@@ -183,6 +183,56 @@ window.onload = function() {
     </footer>
 
 
+GREEN ANALYTICS
+The most private analyitic tool on earth. Period.*
+
+SAMPLE DATA TRY IT HOST ON YOUR OWN
+ABOUT GREEN ANALYTICS
+
+If your business is audience measurement, advertisement, analytics. It is possible to avoid using user tracking techniques, all information that you require can be gathered using client-side aggregation, which is free of side-effects. Check out the Green-analytics agent.
+
+To preserve privacy we propose an alternative approach based on client-side aggregation, where user-identifiers like cookies, view port resolution, IPs are not needed becasue sessions only exist on the client-side (i.e. the user’s browser). We demonstrate the feasibility of this approach by providing an implementation of a tracking probe – green-analytics – able to gather the data needed to power a service functionaly equivalent to Google Analytics or the likes.
+
+We hope to showcase that server-side data aggregation by user is not actually needed. If your business is to really track users, then move along, nothing to see here.
+
+PAPER   GITHUB
+GET STARTED
+
+Check out the sample data
+
+Think it's cool but do not want to spin up your own server yet, don't worry we got it covered for you. Get started by testing the embed script on your own site, without having to collect the data.
+
+This is a demo script of a green analytics service that can cover a wide range of use-cases:
+
+Unique visits and page loads, Returning customers, Cross site correlations, In-site click-throughs, Visits and time in page per user (without beacons).
+
+Green analytics is completley open-source, feel free to Fork and Deploy it on your own servers.
+
+TRY IT
+
+1. You need to embed the following code at the end of body tag
+
+<script>
+var conf = {
+    siteID: 'fa701af5'
+};
+
+window.onload = function() {
+    if (navigator.doNotTrack != '1') {
+        var urlDetails = {
+            origin: document.location.origin,
+            protocol: document.location.protocol,
+            href: document.location.href,
+            ref: document.referrer
+        };
+
+        conf.urlDetails = urlDetails;
+        var probeWindow = document.getElementById("green-analytics").contentWindow;
+        probeWindow.postMessage(conf, 'http://green-analytics.test.cliqz.com/collect');
+    }
+};
+<iframe id='green-analytics' src='http://green-analytics.test.cliqz.com/ga-script' style='display:none'></iframe>
+</script>
 
 </body>
 
