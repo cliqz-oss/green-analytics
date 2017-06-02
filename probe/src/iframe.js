@@ -1,7 +1,9 @@
-<script src="./static/extern/hmac-sha1.js"></script>
-<script src='./static/extern/ua-parser.min.js'></script>
-<script>
-var endPoint = '{{ context.endpoint }}';
+import UAParser from 'ua-parser-js';
+import CryptoJS from 'crypto-js';
+
+var loc = window.location;
+var collectPath = 'collect';
+var endPoint = loc.protocol + "//" + loc.hostname + (loc.port? ":"+loc.port : "") + "/" + collectPath;
 
 var parser = new UAParser();
 var ua = parser.getResult();
@@ -681,6 +683,3 @@ var gtUtils = (function() {
 
     return m;
 }());
-
-
-</script>

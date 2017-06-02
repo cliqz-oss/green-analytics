@@ -8,4 +8,4 @@ class GreenAnalyticsScript():
         collectorPath = os.environ["COLLECTOR_PATH"]
         protocol = os.environ["PROTOCOL"]
         domain = protocol + "://" + domainName + collectorPath
-        return render_template('template_gtframe.html', context={ "endpoint": domain })
+        return render_template('template_iframe.html', context={ "endpoint": domain })

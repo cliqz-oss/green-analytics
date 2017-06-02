@@ -1,8 +1,120 @@
 from flask import request, render_template
+from models.message import Message
+from models.site import Site
+from index import db, app
+from datetime import datetime, timedelta
+from sqlalchemy.orm import sessionmaker, scoped_session
+from operator import itemgetter
 import json
+
+def get_response_string(data):
+    obj = {
+        'data': data,
+        'sum': sum(map(itemgetter(1), data))
+    }
+    return json.dumps(obj)
+
+
+def get_option(value, allowed, default):
+    if value in allowed:
+        return value
+    else:
+        return default
+
 
 class MetricData():
 
+    Session = scoped_session(sessionmaker(bind=db.engine))
+
     def respond(self):
-        doc = {"data": [[1473984000.0, 1], [1465344000.0, 2], [1480291200.0, 6], [1466294400.0, 3], [1488412800.0, 2], [1468195200.0, 2], [1483056000.0, 2], [1474675200.0, 1], [1480377600.0, 1], [1488499200.0, 1], [1485820800.0, 1], [1460937600.0, 6], [1484956800.0, 1], [1488585600.0, 1], [1469318400.0, 20], [1475798400.0, 1], [1466640000.0, 2], [1473120000.0, 1], [1485993600.0, 1], [1490659200.0, 1], [1459382400.0, 2], [1461283200.0, 3], [1489881600.0, 2], [1491782400.0, 1], [1476144000.0, 1], [1460505600.0, 6], [1485475200.0, 1], [1462406400.0, 6], [1479945600.0, 5], [1470787200.0, 9], [1466208000.0, 2], [1456617600.0, 0], [1490227200.0, 1], [1462060800.0, 3], [1463529600.0, 2], [1492128000.0, 1], [1465430400.0, 1], [1471910400.0, 1], [1484870400.0, 1], [1469232000.0, 2], [1475712000.0, 2], [1473033600.0, 1], [1460073600.0, 1], [1477612800.0, 6], [1461974400.0, 2], [1468454400.0, 1], [1483920000.0, 1], [1474934400.0, 2], [1465776000.0, 2], [1484006400.0, 1], [1473206400.0, 3], [1467676800.0, 2], [1485216000.0, 1], [1491696000.0, 0], [1487116800.0, 2], [1473292800.0, 1], [1460419200.0, 4], [1462320000.0, 3], [1468800000.0, 2], [1481500800.0, 1], [1470700800.0, 7], [1489622400.0, 0], [1466121600.0, 1], [1461542400.0, 3], [1456963200.0, 1], [1476921600.0, 1], [1477699200.0, 3], [1476403200.0, 1], [1495152000.0, 1], [1460764800.0, 8], [1467244800.0, 2], [1480204800.0, 5], [1495238400.0, 1], [1484438400.0, 1], [1464566400.0, 2], [1477526400.0, 4], [1472947200.0, 1], [1457308800.0, 1], [1468368000.0, 2], [1465689600.0, 6], [1471132800.0, 2], [1496188800.0, 1], [1479254400.0, 2], [1457654400.0, 0], [1487030400.0, 1], [1460332800.0, 1], [1466812800.0, 4], [1479340800.0, 6], [1462233600.0, 2], [1468713600.0, 6], [1479427200.0, 1], [1466035200.0, 2], [1476748800.0, 3], [1494633600.0, 1], [1456876800.0, 1], [1471392000.0, 2], [1474416000.0, 1], [1490313600.0, 2], [1480896000.0, 2], [1476835200.0, 5], [1476316800.0, 1], [1471737600.0, 2], [1456444800.0, 3], [1460678400.0, 3], [1490400000.0, 1], [1487721600.0, 1], [1480118400.0, 3], [1464480000.0, 1], [1482019200.0, 1], [1477440000.0, 2], [1461801600.0, 2], [1468281600.0, 2], [1482451200.0, 2], [1474761600.0, 2], [1470182400.0, 1], [1465603200.0, 5], [1461024000.0, 4], [1467504000.0, 4], [1496102400.0, 1], [1480464000.0, 2], [1493424000.0, 1], [1477785600.0, 3], [1462147200.0, 7], [1492646400.0, 1], [1474329600.0, 1], [1477008000.0, 3], [1466553600.0, 2], [1483488000.0, 1], [1471996800.0, 4], [1463270400.0, 0], [1487289600.0, 0], [1460592000.0, 22], [1472083200.0, 1], [1462492800.0, 8], [1479081600.0, 1], [1480032000.0, 6]]}
-        return json.dumps(doc)
+        metric = request.args['name']
+        metric_fn = getattr(self, 'report_' + metric, None)
+        if callable(metric_fn):
+            return get_response_string(metric_fn(request.args))
+        return get_response_string([])
+
+    def report_uv_all(self, args):
+        return self.messages_per_interval(args.get('token'), message_type='new_all', interval_size='day')
+
+    def report_uv_month(self, args):
+        return self.messages_per_interval(args.get('token'), message_type='new_month', interval_size='day')
+
+    def report_uv_day(self, args):
+        return self.messages_per_interval(args.get('token'), message_type='new_day', interval_size='day')
+
+    def report_site_uv(self, args):
+        group_by = get_option(args.get('group_by'), set(['minute', 'hour', 'day', 'month', 'year']), 'day')
+        domain = args.get('domain')
+        return self.messages_per_interval(args.get('token'), 
+            message_type='site_visit_by_{}'.format(group_by), 
+            interval_size=group_by,
+            domain=domain)
+
+    def report_site_visits(self, args):
+        group_by = get_option(args.get('group_by'), set(['minute', 'hour', 'day', 'month', 'year']), 'day')
+        domain = args.get('domain')
+        return self.messages_per_interval(args.get('token'),
+            message_type='page_load',
+            interval_size=group_by,
+            domain='http%://{}/%'.format(domain))
+
+    def report_domains(self, args):
+        return self.get_site_hostnames(args.get('token'))
+
+    def messages_per_interval(self, token, message_type,
+            interval_size='day',
+            domain=None,
+            since=datetime.utcnow() - timedelta(30), 
+            until=datetime.utcnow()):
+        s = self.Session()
+
+        options = {
+            'site_key': token,
+            'msg_type': message_type,
+            'since': since,
+            'until': until,
+            'interval_size': interval_size,
+            'domain': domain,
+        }
+
+        filters = [
+            "site_id = (SELECT site_id FROM sites WHERE site_key = :site_key)",
+            "message->>'type' = :msg_type",
+            "ts >= :since",
+            "ts < :until"
+        ]
+
+        if domain is not None:
+            filters.append("message->>'p' LIKE :domain")
+
+        query = '''
+            SELECT extract(epoch from day) as ts, COUNT(*) AS uniques
+            FROM (SELECT date_trunc(:interval_size, ts) AS day
+                FROM messages
+                WHERE {}) uniques
+            GROUP BY day
+            ORDER BY day ASC
+        '''.format(' AND '.join(filters))
+
+        grouped_counts = s.execute(query, options).fetchall()
+
+        return [[int(ts), count] for ts, count in grouped_counts]
+
+    def get_site_hostnames(self, token, since=datetime.utcnow() - timedelta(30), 
+            until=datetime.utcnow()):
+        s = self.Session()
+        options = {
+            'site_key': token,
+            'since': since,
+            'until': until,
+        }
+        hostnames = s.execute('''SELECT message->>'p' AS hostname, count(*) AS pages
+            FROM messages
+            WHERE site_id = (SELECT site_id FROM sites WHERE site_key = :site_key)
+                AND message->>'type' = 'site_load'
+                AND ts >= :since
+                AND ts < :until
+            GROUP BY message->>'p'
+        ''', options).fetchall()
+
+        return filter(lambda h: ';' not in h[0], map(list, hostnames))

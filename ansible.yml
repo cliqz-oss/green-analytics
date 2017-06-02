@@ -17,20 +17,9 @@
       synchronize:
         src: .
         dest: .
-        rsync_opts:
-          - "--exclude=web/migrations"
+        delete: yes
+        recursive: yes
 
     - name: Docker compose
       docker_service:
         project_src: green-analytics
-
-    - name: Create DB
-      shell: docker exec -t greenanalytics_web_1 python create_db.py
-
-    - name: Upgade DB
-      shell: docker exec -t greenanalytics_web_1 python manage.py db upgrade
-
-    - name: Migrate DB
-      shell: docker exec -t greenanalytics_web_1 python manage.py db migrate
-
-

@@ -8,19 +8,23 @@ web:
   volumes:
     - ./web:/usr/src/app
   env_file: .env
-  command: /usr/local/bin/gunicorn -w 2 -b :8000 app:app --reload --access-logfile /tmp/access.log --error-logfile  /tmp/error.log
 
 nginx:
   restart: always
   build: ./nginx/
   ports:
     - "80:80"
-  volumes:
-    - ./web/static:/www/static
   volumes_from:
     - web
+    - probe
   links:
     - web:web
+
+probe:
+  build: ./probe/
+  volumes:
+    - ./probe:/usr/src/probe
+    - ./probe:/workspace
 
 data:
   restart: always
@@ -34,5 +38,7 @@ postgres:
   image: postgres:latest
   volumes_from:
     - data
+  volumes:
+    - ./init.sql:/docker-entrypoint-initdb.d/init.sql
   ports:
     - "5432:5432"
