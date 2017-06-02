@@ -5,6 +5,7 @@ var endPoint = '{{ context.endpoint }}';
 
 var parser = new UAParser();
 var ua = parser.getResult();
+var siteID = '';
 
 var main = function(urlParse) {
 
@@ -491,57 +492,44 @@ var incomingMsg = function(evt) {
     // The structure of evt is document.location, since we need the origin, path, protocol etc.
 
     /*
-    if (evt.data=='debug1') {
-        console.log('debug1 from LS: ', localStorage.getItem('gt:count'), localStorage.getItem('gt:count2'));
-    }
-    else if (evt.data.indexOf('cmd:')==0) {
-        if (evt.data == 'cmd:resetLocalStorage') {
-            localStorage.clear();
-            alert('All cleared! You are a new user for any of the sites');
-        }
-    }
+    Called to the main script, 'evt.data' contains the url of the parent document passed
+    via postMessage. Because of SOP (Same Origin Policy) iframe from a different origin
+    cannot access the parent document for security reasons. In our case, the iframe is loaded
+    from green-tracker.com and the parent document is loaded from siteX.com. Thanks to the
+    postMessage, however, the siteX.com owner can communicate safely with the iframe, only
+    the information that is required, and the iframe is contained, thus, eliminating the
+    risk of a miss-behaving iframe.
     */
-    // Need to remove the bug IF.
-    if (true) {
-        /*
-        Called to the main script, 'evt.data' contains the url of the parent document passed
-        via postMessage. Because of SOP (Same Origin Policy) iframe from a different origin
-        cannot access the parent document for security reasons. In our case, the iframe is loaded
-        from green-tracker.com and the parent document is loaded from siteX.com. Thanks to the
-        postMessage, however, the siteX.com owner can communicate safely with the iframe, only
-        the information that is required, and the iframe is contained, thus, eliminating the
-        risk of a miss-behaving iframe.
-        */
 
-        var urlParse = evt.data;
-        main(urlParse);
+    var urlParse = evt.data.urlDetails;
+    siteID = evt.data.siteID;
+    main(urlParse);
 
-        /*
-        Because we want to aggregate the visit time per page we will add an interval
-        to the iframe document. Every 2 seconds the code below will be executed for as
-        long as the iframe exists, that is for as long as the user has the page containing
-        the iframe opened.
-        */
-        setInterval(function() { return function(urlParse) {
-            // var tmp = url.replace('http://','').split('/');
-            // var site = tmp[0];
-            var site = urlParse.origin
-            if (['site1.test.cliqz.com'].indexOf(site)!=-1) {
-                var now = gtUtils.getDate();
-                var timestamp = gtUtils.dateToTimestamp(now);
-                var timestamp_by_hour = timestamp.slice(0,10);
-                var hSite = gtUtils.hashSHA1(site, 20);
+    /*
+    Because we want to aggregate the visit time per page we will add an interval
+    to the iframe document. Every 2 seconds the code below will be executed for as
+    long as the iframe exists, that is for as long as the user has the page containing
+    the iframe opened.
+    */
+    setInterval(function() { return function(urlParse) {
+        // var tmp = url.replace('http://','').split('/');
+        // var site = tmp[0];
+        var site = urlParse.origin
+        if (['site1.test.cliqz.com'].indexOf(site)!=-1) {
+            var now = gtUtils.getDate();
+            var timestamp = gtUtils.dateToTimestamp(now);
+            var timestamp_by_hour = timestamp.slice(0,10);
+            var hSite = gtUtils.hashSHA1(site, 20);
 
-                var cache = JSON.parse(localStorage.getItem('gt:agg_cache_time_by_hour:'+hSite) || "{}");
-                var o = cache[timestamp_by_hour];
+            var cache = JSON.parse(localStorage.getItem('gt:agg_cache_time_by_hour:'+hSite) || "{}");
+            var o = cache[timestamp_by_hour];
 
-                if (o && o.hasOwnProperty('agg_page_time')) {
-                    o['agg_page_time'] += 2;
-                    localStorage.setItem('gt:agg_cache_time_by_hour:'+hSite, JSON.stringify(cache));
-                }
+            if (o && o.hasOwnProperty('agg_page_time')) {
+                o['agg_page_time'] += 2;
+                localStorage.setItem('gt:agg_cache_time_by_hour:'+hSite, JSON.stringify(cache));
             }
-        }(urlParse)},2000);
-    }
+        }
+    }(urlParse)},2000);
 }
 
 // Check from the where the origin came.
@@ -587,17 +575,14 @@ var gtUtils = (function() {
         (function(arrint) {
             for(var i=0;i<arrint.length;i++) {
 
-                // Should use sendbeacon
-                if (typeof(navigator.sendBeacon) === undefined) {
-                    var xhr = new XMLHttpRequest();
-                    xhr.open('POST',endPoint);
-                    xhr.setRequestHeader('Content-Type', 'application/json');
-                    xhr.onreadystatechange = function () {}
-                    xhr.send(JSON.stringify(arrint[i]));
-                } else {
-                    var blob= new Blob([JSON.stringify(arrint[i])], {type : 'application/json; charset=UTF-8'});
-                    navigator.sendBeacon(endPoint, blob);
-                }
+                var message = arrint[i];
+                message.site_id = siteID;
+                var xhr = new XMLHttpRequest();
+                xhr.open('POST',endPoint);
+                xhr.setRequestHeader('Content-Type', 'application/json');
+                xhr.onreadystatechange = function () {}
+                xhr.send(JSON.stringify(message));
+
             }
         })(arr);
     };
