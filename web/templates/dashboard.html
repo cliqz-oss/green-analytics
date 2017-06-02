@@ -3,88 +3,103 @@
   <title>Green Tracker Analytics</title>
   <script type="text/javascript" src="static/extern/jquery.min.js"></script>
   <script type="text/javascript" src="static/extern/jquery.flot.min.js"></script>
-  <script type="text/javascript" src="static/dddash.js"></script>
+  <!--<script type="text/javascript" src="static/dddash.js"></script>-->
   <script type="text/javascript" src="static/dashboard.js"></script>
   <link rel="stylesheet" href="static/dashboard.css">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:400italic,700italic,300,700,400&amp;subset=latin">
 </head>
 <body>
   <h1>Green Tracker Analytics</h1>
   <h3>{{ context['stats']['min_ts'] }} to {{ context['stats']['max_ts'] }}</h3>
   <h3>Trends</h3>
-  <div id="container">
-    <div class="metric site has-sparkline sortable" rel="0.1">
-      <h2>Unique Visitors</h2>
-      <div class="till_now" >
+  <div class='container full-width'>
+  <div role='main'>
+    <div class='dashboard-index'>
+    <div class="metric has-sparkline">
+      <h3>Unique Visitors</h3>
+      <div class="value" >
         {{ context['stats']['new_all'] }}
+        <div class="timestamp">Overall</div>
       </div>
-      <div class="sparkline" id="1" data-metric="uv_all"></div>
-      <div class="legend timestamp">Overall</div>
+
+
+      <div class="sparkline" id="1" data-metric="uv_all" style="padding: 0px;"></div>
     </div>
 
-    <div class="metric site has-sparkline sortable" rel="0.2">
-      <h2>Unique Visitors (Month)</h2>
-      <div class="till_now" >
+    <div class="metric has-sparkline" rel="0.2">
+      <h3>Unique Visitors (Month)</h3>
+      <div class="value" >
         {{ context['stats']['new_month'] }}
+        <div class="timestamp">Overall</div>
       </div>
-      <div class="sparkline" id="1" data-metric="uv_month"></div>
-      <div class="legend timestamp">Overall</div>
+      <div class="sparkline" id="1" data-metric="uv_month"  style="padding: 0px;"></div>
+
     </div>
 
 
-    <div class="metric site has-sparkline sortable" rel="0.3">
-      <h2>Unique Visitors (Day)</h2>
-      <div class="till_now" >
+    <div class="metric has-sparkline" rel="0.3">
+      <h3>Unique Visitors (Day)</h3>
+      <div class="value" >
         {{ context['stats']['new_day'] }}
+        <div class="timestamp">Overall</div>
       </div>
       <div class="sparkline" id="1" data-metric="uv_day"></div>
-      <div class="legend timestamp">Overall</div>
+
     </div>
 
-    <div class="metric site has-sparkline sortable" rel="1.0">
-      <h2>Signup Goals</h2>
-      <div class="till_now" >
+    <div class="metric has-sparkline" rel="1.0">
+      <h3>Signup Goals</h3>
+      <div class="value" >
         {{ context['goals'][0]['num_succ']}}
+        <div class="timestamp">Overall</div>
       </div>
       <div class="sparkline" id="1" data-metric="signup"></div>
-      <div class="legend timestamp">Overall</div>
+
     </div>
 
     {% for item in context.sites %}
-      <div class="metric site has-sparkline sortable" rel="1.1">
+      <div class="metric has-sparkline" rel="1.1">
         {% set site_name = item['s'].split('.') %}
-        <h2>{{ site_name[0] }} : Unique Visitors</h2>
-        <div class="till_now" >
+        <h3>{{ site_name[0] }} : Unique Visitors</h3>
+        <div class="value" >
           {{ item['num_visits']}}
+          <div class="timestamp">Overall</div>
         </div>
         <div class="sparkline" id="1" data-metric="site_uv|{{ loop.index }}"></div>
-        <div class="legend timestamp">Overall</div>
+
       </div>
 
-      <div class="metric site has-sparkline sortable" rel="1.2">
+      <div class="metric has-sparkline" rel="1.2">
         {% set site_name = item['s'].split('.') %}
-        <h2>{{ site_name[0] }} : Page Views</h2>
-        <div class="till_now" >
+        <h3>{{ site_name[0] }} : Page Views</h3>
+        <div class="value" >
           {{ item['num_loads']}}
+          <div class="timestamp">Overall</div>
         </div>
         <div class="sparkline" id="1" data-metric="site_loads|{{ loop.index }}"></div>
-        <div class="legend timestamp">Overall</div>
+
       </div>
     {% endfor %}
 
     {% for item in context.correlations %}
-      <div class="metric site has-sparkline sortable" rel="1.2">
+      <div class="metric has-sparkline" rel="1.2">
         {%set split_name = item['s'].split('<>')%}
         {%set x=split_name[0].split('.')%}
         {%set y=split_name[1].split('.')%}
         <h3>Correlation : {{ x[0] }} <> {{ y[0] }}</h3>
-        <div class="till_now" >
+        <div class="value" >
           {{ item['num_visits']}}
+          <div class="timestamp">Overall</div>
         </div>
         <div class="sparkline" id="1" data-metric="x_y|{{ loop.index }}"></div>
-        <div class="legend timestamp">Overall</div>
+
       </div>
     {% endfor %}
-  </div>
+
+ </div>
+</div>
+</div>
+
   <h3>Top 10 pages</h3>
   <div  class="metric-table">
 
@@ -160,7 +175,7 @@
             </table>
 
     </div>
-
+    <div>
   <p class="updated">
    <br/>
     © 2016 Cliqz.com.  </p>

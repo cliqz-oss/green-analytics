@@ -1,8 +1,50 @@
-<html>
-  <head>
-  </head>
-  <body>
-    <p>site_id: {{ context.site_id }}</p>
-    <p>{{ context.site_key }}</p>
-  </body>
-</html>
+{% extends "template_layout.html" %}
+{% block title %}Sign-Up{% endblock %}
+{% block head %}
+  {{ super() }}
+  <style type="text/css">
+    .important { color: #336699; }
+  </style>
+{% endblock %}
+{% block content %}
+  <h2>Trying it out.</h2>
+  There are three ways in which you can try green-analytics :
+  <ul>
+  	<li> Check out data from our sample sites.</li>
+  	<li> Embed the code given below, on your own site[1]</li>
+  	<li> Clone the Github-Repo and deploy on your own infrastructure </li>
+  </ul>
+  <h2>Embed JS</h2>
+  You need to embed the following code at the end of body tag
+
+  <p>
+  		<span style="background-color: #f1f5f9">
+  		&lt;script&gt;
+			var conf = {
+				siteID: '{{ context.site_id }}'
+			};
+
+			window.onload = function() {
+				var urlDetails = {
+					origin: document.location.origin,
+					protocol: document.location.protocol,
+					href: document.location.href,
+					ref: document.referrer
+				};
+
+				conf.urlDetails = urlDetails;
+				document.getElementById("green-analytics").contentWindow.postMessage(conf, 'http://green-analytics.test.cliqz.com');
+			};
+		&lt;/script&gt;
+	</span>
+	<br/></br/>
+	We only suggest to use this approach for purpose of testing, if you want to use it as a full fledged service, please deploy the code in your infra.......
+	</p>
+
+  <h2>Accessing Dashboard</h2>
+  <p> To access the dashboard please use the dashboard token above: https://green-analytics.test.cliqz.com/dashboard?token={{ context.site_key }}
+  <p class="important">
+    <p>Site_id: {{ context.site_id }}</p>
+    <p>Dashboard Token: {{ context.site_key }}</p>
+   </p>
+{% endblock %}

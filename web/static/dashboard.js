@@ -11,6 +11,7 @@ $(function () {
         var timestamp_element = e.parent().find('div.timestamp');
         var original_value = value_element.html();
         var original_ts_value = timestamp_element.text();
+        var green = '#93D7B7';
 
        var url = "/metric_details?name=" + e.data('metric');
         //var url = "http://192.168.5.239/dashboard_json_files/" + e.data('metric') + ".json";
@@ -25,14 +26,14 @@ $(function () {
                 xaxis: {show: false, mode: "time"},
                 yaxis: {show: false, min: 0},
                 grid: {borderWidth: 0, hoverable: true},
-                colors: ["yellow"]
+                colors: [green]
             };
 
              options.bars = {
                     show: true,
-                    barWidth: 40 * 60 * 60 * 1000,
-                    fillColor: "yellow",
-                    lineWidth: 2,
+                    barWidth: (response.period == 'daily' ? 24 * 60 * 60 * 1000 : 24 * 60 * 60 * 7 * 1000),
+                    fillColor: green,
+                    lineWidth: 1,
                     align: "center",
                 };
 
