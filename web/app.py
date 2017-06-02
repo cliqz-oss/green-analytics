@@ -5,6 +5,7 @@ from controllers.green_analytics_script import GreenAnalyticsScript
 from controllers.analyze import Analyze
 from controllers.metric_detail import MetricData
 import json
+from flask import request, render_template
 
 @app.route('/sites', methods=['GET'])
 def sites():
@@ -24,7 +25,7 @@ def collect():
 
 @app.route('/', methods=['GET'])
 def index():
-    return "Hello World!!!"
+    return render_template('template_landing.html', context={})
 
 @app.route('/dashboard', methods=['GET'])
 def testDashboard():
