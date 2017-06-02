@@ -16,11 +16,11 @@
 
     <!-- Custom Fonts -->
     <link href="./static/extern/vendor/font-awesome/css/font-awesome.min.css" rel="stylesheet" type="text/css">
-    <link href="https://fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic" rel="stylesheet" type="text/css">
-    <link href="https://fonts.googleapis.com/css?family=Montserrat:400,700" rel="stylesheet" type="text/css">
+    <link href="./static/family-lora.css" rel="stylesheet" type="text/css">
+    <link href="./static/family-montserrat.css" rel="stylesheet" type="text/css">
 
     <!-- Theme CSS -->
-    <link href="./static/extern/css/grayscale.min.css" rel="stylesheet">
+    <link href="./static/extern/css/grayscale.css" rel="stylesheet">
 
 
 
@@ -35,11 +35,12 @@
                 <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-main-collapse">
                     Menu <i class="fa fa-bars"></i>
                 </button>
+                <!--
                 <a class="navbar-brand page-scroll" href="#page-top">
                     <i class="fa fa-play-circle"></i> <span class="light">Use</span> Green Analytics
                 </a>
+                -->
             </div>
-
             <!-- Collect the nav links, forms, and other content for toggling -->
             <div class="collapse navbar-collapse navbar-right navbar-main-collapse">
                 <ul class="nav navbar-nav">
@@ -51,10 +52,10 @@
                         <a class="page-scroll" href="#about">About</a>
                     </li>
                     <li>
-                        <a class="page-scroll" href="#download">Download</a>
+                        <a class="page-scroll" href="#download">Get started</a>
                     </li>
                     <li>
-                        <a class="page-scroll" href="#contact">Contact</a>
+                        <a class="page-scroll" href="#tryit">Try it</a>
                     </li>
                 </ul>
             </div>
@@ -70,10 +71,13 @@
                 <div class="row">
                     <div class="col-md-8 col-md-offset-2">
                         <h1 class="brand-heading">Green Analytics</h1>
-                        <p class="intro-text">Anaytics that respect your Privacy</p>
-                        <a href="#about" class="btn btn-circle page-scroll">
-                            <i class="fa fa-angle-double-down animated"></i>
-                        </a>
+                        <p class="intro-text">The most private analyitic tool on earth. Period.*</p>
+
+                <!--<div class="col-lg-8 col-lg-offset-2">-->
+                    <a href="https://green-analytics.test.cliqz.com/dashboard?token=48198d67-20a1-4607-b58b-7a3afa639b62" class="btn btn-default btn-lg">Sample data</a>
+                    <a href="#tryit" class="btn btn-default btn-lg">Try it</a>
+                    <a href='https://github.com/cliqz-oss/green-analytics/tree/mozilla-global-sprint' target='_blank' class="btn btn-default btn-lg">Host on your own</a>
+                <!--</div>-->
                     </div>
                 </div>
             </div>
@@ -88,59 +92,97 @@
                 <p>
 If your business is audience measurement, advertisement, analytics. It is possible to avoid using user tracking techniques, all information that you require can be gathered using client-side aggregation, which is free of side-effects. Check out the <a href="https://github.com/cliqz-oss/green-analytics/blob/mozilla-global-sprint/web/templates/template_frame.html" target='_blank'>Green-analytics agent.</a></p>
 
-<p> We hope to showcase that server-side data aggregation by user is not actually needed.  If your business is to really track users, then move along, nothing to see here.</p>
+<p>
+To preserve privacy we propose an alternative approach based on client-side aggregation, where user-identifiers like cookies, view port resolution, IPs are  not needed becasue sessions only exist on the client-side
+(i.e. the user’s browser). We demonstrate the feasibility of this approach by providing an implementation of a tracking probe – green-analytics – able to gather the data needed to power a service functionaly equivalent to Google Analytics or the likes.
 </p>
+
+<p> We hope to showcase that server-side data aggregation by user is not actually needed.  If your business is to really track users, then move along, nothing to see here.</p>
+
             </div>
+
         </div>
+                        <ul class="list-inline banner-social-buttons">
+                    <li>
+                        <a href="http://josepmpujol.net/public/papers/big_green_tracker.pdf" class="btn btn-default btn-lg"><span class="network-name">Paper</span></a>
+                    </li>
+                    <li>
+                        <a href="https://github.com/cliqz-oss/green-analytics/tree/mozilla-global-sprint" class="btn btn-default btn-lg"><i class="fa fa-github fa-fw"></i> <span class="network-name">Github</span></a>
+                    </li>
+                </ul>
     </section>
 
     <!-- Download Section -->
     <section id="download" class="content-section text-center">
-        <div class="download-section">
+        <div class="row">
             <div class="container">
                 <div class="col-lg-8 col-lg-offset-2">
-                    <h2>Use Green-Analytics</h2>
-                    <p>You can start using Green analytics for free on the get started page at Start Green Analytics.</p>
-                    <a href="./sites" class="btn btn-default btn-lg">Get Started</a>
+                    <h2>Get started</h2>
+                    <p> Check out the <a href='https://green-analytics.test.cliqz.com/dashboard?token=48198d67-20a1-4607-b58b-7a3afa639b62' target='_blank'> sample data</a></p>
+                    <p> Think it's cool but do not want to spin up your own server yet, don't worry we got it covered for you. <a href='#' target='_blank'>Get started</a> by testing the embed script on your own site, without having to collect the data.</p>
+
+                    <p>This is a demo script of a green analytics service that can cover a wide range of use-cases:</p>
+
+                        <p>Unique visits and page loads, Returning customers, Cross site correlations, In-site click-throughs, Visits and time in page per user (without beacons).</p>
+                    <p>Green analytics is completley open-source, feel free to <a href='https://github.com/cliqz-oss/green-analytics/tree/mozilla-global-sprint#getting-started' target='_blank'>Fork and Deploy it</a> on your own servers.
+
                 </div>
             </div>
         </div>
     </section>
 
-    <!-- Contact Section -->
-    <section id="contact" class="container content-section text-center">
+        <!-- About Section -->
+    <section id="tryit" class="container content-section text-center">
         <div class="row">
             <div class="col-lg-8 col-lg-offset-2">
-                <h2>Contact Start Bootstrap</h2>
-                <p>Feel free to email us to provide some feedback on our templates, give us suggestions for new templates and themes, or to just say hello!</p>
-                <p><a href="mailto:feedback@startbootstrap.com">feedback@startbootstrap.com</a>
-                </p>
-                <ul class="list-inline banner-social-buttons">
-                    <li>
-                        <a href="https://twitter.com/SBootstrap" class="btn btn-default btn-lg"><i class="fa fa-twitter fa-fw"></i> <span class="network-name">Twitter</span></a>
-                    </li>
-                    <li>
-                        <a href="https://github.com/IronSummitMedia/startbootstrap" class="btn btn-default btn-lg"><i class="fa fa-github fa-fw"></i> <span class="network-name">Github</span></a>
-                    </li>
-                </ul>
+                <h2>Try it</h2>
+  <p>1. You need to embed the following code at the end of body tag</p>
+
+<pre style='text-align:left;background-color:#EEEEEE'>
+&lt;script&gt;
+var conf = {
+    siteID: '{{ context.site_id }}'
+};
+
+window.onload = function() {
+    if (navigator.doNotTrack != '1') {
+        var urlDetails = {
+            origin: document.location.origin,
+            protocol: document.location.protocol,
+            href: document.location.href,
+            ref: document.referrer
+        };
+
+        conf.urlDetails = urlDetails;
+        var probeWindow = document.getElementById("green-analytics").contentWindow;
+        probeWindow.postMessage(conf, 'http://green-analytics.test.cliqz.com/collect');
+    }
+};
+&lt;iframe id='green-analytics' src='{{ context.endpoint }}'&gt;&lt;/iframe&gt;
+&lt;/script&gt;
+</pre>
+
+
+  <h4>Accessing Dashboard</h4>
+  <p> <a href='#'>{{ context.dashboard }}/?token={{ context.site_key }}</a> ,
+    <br/>If you loose this link, you will have to regenerate the tokens.
+  <p class="important">
+    <p><a href="{{ context.dashboard }}?token={{ context.site_key }}" rel="sidebar" title="Dashboard Green Analytics">Dashboard Token: {{ context.site_key }}</a></p>
+   </p>
+    <p><u>Disclaimer:</u>  <b>This approach is only suggested for proof-of-concept. If you want to use it as a full fledged service, please <a href='https://github.com/cliqz-oss/green-analytics/tree/mozilla-global-sprint' target='_blank'>deploy the code in your infra.</a></b>
+    </p>
             </div>
+
         </div>
     </section>
     <!-- Footer -->
     <footer>
         <div class="container text-center">
-            <p>Copyright &copy; Your Website 2016</p>
+            <p></p>
         </div>
     </footer>
 
-    <!-- jQuery -->
-    <script src="./static/extern/vendor/jquery/jquery.js"></script>
 
-    <!-- Bootstrap Core JavaScript -->
-    <script src="./static/extern/vendor/bootstrap/js/bootstrap.min.js"></script>
-
-    <!-- Theme JavaScript -->
-    <script src="./static/extern/js/grayscale.min.js"></script>
 
 </body>
 
