@@ -42,12 +42,28 @@ class MetricData():
     def report_uv_day(self, args):
         return self.messages_per_interval(args.get('token'), message_type='new_day', interval_size='day')
 
+    def report_site_uv(self, args):
+        group_by = get_option(args.get('group_by'), set(['minute', 'hour', 'day', 'month', 'year']), 'day')
+        domain = args.get('domain')
+        return self.messages_per_interval(args.get('token'), 
+            message_type='site_visit_by_{}'.format(group_by), 
+            interval_size=group_by,
+            domain=domain)
+
+    def report_site_visits(self, args):
+        group_by = get_option(args.get('group_by'), set(['minute', 'hour', 'day', 'month', 'year']), 'day')
+        domain = args.get('domain')
+        return self.messages_per_interval(args.get('token'),
+            message_type='page_load',
+            interval_size=group_by,
+            domain='http%://{}/%'.format(domain))
 
     def report_domains(self, args):
         return self.get_site_hostnames(args.get('token'))
 
     def messages_per_interval(self, token, message_type,
             interval_size='day',
+            domain=None,
             since=datetime.utcnow() - timedelta(30), 
             until=datetime.utcnow()):
         s = self.Session()
@@ -57,20 +73,30 @@ class MetricData():
             'msg_type': message_type,
             'since': since,
             'until': until,
-            'interval_size': interval_size
+            'interval_size': interval_size,
+            'domain': domain,
         }
 
-        grouped_counts = s.execute('''
+        filters = [
+            "site_id = (SELECT site_id FROM sites WHERE site_key = :site_key)",
+            "message->>'type' = :msg_type",
+            "ts >= :since",
+            "ts < :until"
+        ]
+
+        if domain is not None:
+            filters.append("message->>'p' LIKE :domain")
+
+        query = '''
             SELECT extract(epoch from day) as ts, COUNT(*) AS uniques
             FROM (SELECT date_trunc(:interval_size, ts) AS day
                 FROM messages
-                WHERE site_id = (SELECT site_id FROM sites WHERE site_key = :site_key)
-                AND message->>'type' = :msg_type
-                AND ts >= :since
-                AND ts < :until) uniques
+                WHERE {}) uniques
             GROUP BY day
             ORDER BY day ASC
-        ''', options).fetchall()
+        '''.format(' AND '.join(filters))
+
+        grouped_counts = s.execute(query, options).fetchall()
 
         return [[int(ts), count] for ts, count in grouped_counts]
 
@@ -91,4 +117,4 @@ class MetricData():
             GROUP BY message->>'p'
         ''', options).fetchall()
 
-        return map(list, hostnames)
+        return filter(lambda h: ';' not in h[0], map(list, hostnames))

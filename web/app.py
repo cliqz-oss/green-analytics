@@ -26,7 +26,7 @@ def collect():
 def index():
     return "Hello World!!!"
 
-@app.route('/sample-dashboard', methods=['GET'])
+@app.route('/dashboard', methods=['GET'])
 def testDashboard():
     controller = Analyze()
     return controller.respond()
