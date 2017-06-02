@@ -4,7 +4,7 @@ from controllers.messages import Messages
 from controllers.green_analytics_script import GreenAnalyticsScript
 from controllers.analyze import Analyze
 from controllers.metric_detail import MetricData
-form controllers.landing import Landing
+from controllers.landing import Landing
 import json
 
 from flask import request, render_template
