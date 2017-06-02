@@ -4,7 +4,9 @@ from controllers.messages import Messages
 from controllers.green_analytics_script import GreenAnalyticsScript
 from controllers.analyze import Analyze
 from controllers.metric_detail import MetricData
+from controllers.landing import Landing
 import json
+
 from flask import request, render_template
 
 @app.route('/sites', methods=['GET'])
@@ -25,7 +27,8 @@ def collect():
 
 @app.route('/', methods=['GET'])
 def index():
-    return render_template('template_landing.html', context={})
+    controller = Landing()
+    return controller.respond()
 
 @app.route('/dashboard', methods=['GET'])
 def testDashboard():
