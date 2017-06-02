@@ -15,12 +15,17 @@ nginx:
   build: ./nginx/
   ports:
     - "80:80"
-  volumes:
-    - ./web/static:/www/static
   volumes_from:
     - web
+    - probe
   links:
     - web:web
+
+probe:
+  build: ./probe/
+  volumes:
+    - ./probe:/usr/src/probe
+    - ./probe:/workspace
 
 data:
   restart: always
