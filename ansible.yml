@@ -17,6 +17,8 @@
       synchronize:
         src: .
         dest: .
+        delete: yes
+        recursive: yes
 
     - name: Docker compose
       docker_service:
