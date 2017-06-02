@@ -4,4 +4,4 @@ RUN yarn global add raureif
 
 WORKDIR /workspace
 
-CMD yarn && raureif build
+CMD yarn && raureif serve
