@@ -105,13 +105,16 @@ class MetricData():
         s = self.Session()
         options = {
             'site_key': token,
-            'since': since,
-            'until': until,
+            'since': since.strftime("%Y%m%d %H:%M"),
+            'until': until.strftime("%Y%m%d %H:%M"),
         }
         hostnames = s.execute('''SELECT message->>'p' AS hostname, count(*) AS pages
             FROM messages
             WHERE site_id = (SELECT site_id FROM sites WHERE site_key = :site_key)
                 AND message->>'type' = 'site_load'
+                AND ts >= :since
+                AND ts < :until
             GROUP BY message->>'p'
         ''', options).fetchall()
+
         return filter(lambda h: ';' not in h[0], map(list, hostnames))
