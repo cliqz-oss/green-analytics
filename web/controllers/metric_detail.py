@@ -45,8 +45,8 @@ class MetricData():
     def report_site_uv(self, args):
         group_by = get_option(args.get('group_by'), set(['minute', 'hour', 'day', 'month', 'year']), 'day')
         domain = args.get('domain')
-        return self.messages_per_interval(args.get('token'), 
-            message_type='site_visit_by_{}'.format(group_by), 
+        return self.messages_per_interval(args.get('token'),
+            message_type='site_visit_by_{}'.format(group_by),
             interval_size=group_by,
             domain=domain)
 
@@ -64,7 +64,7 @@ class MetricData():
     def messages_per_interval(self, token, message_type,
             interval_size='day',
             domain=None,
-            since=datetime.utcnow() - timedelta(30), 
+            since=datetime.utcnow() - timedelta(30),
             until=datetime.utcnow()):
         s = self.Session()
 
@@ -100,7 +100,7 @@ class MetricData():
 
         return [[int(ts), count] for ts, count in grouped_counts]
 
-    def get_site_hostnames(self, token, since=datetime.utcnow() - timedelta(30), 
+    def get_site_hostnames(self, token, since=datetime.utcnow() - timedelta(30),
             until=datetime.utcnow()):
         s = self.Session()
         options = {
@@ -112,9 +112,6 @@ class MetricData():
             FROM messages
             WHERE site_id = (SELECT site_id FROM sites WHERE site_key = :site_key)
                 AND message->>'type' = 'site_load'
-                AND ts >= :since
-                AND ts < :until
             GROUP BY message->>'p'
         ''', options).fetchall()
-
         return filter(lambda h: ';' not in h[0], map(list, hostnames))
