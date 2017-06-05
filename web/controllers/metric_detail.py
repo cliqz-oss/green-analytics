@@ -42,6 +42,9 @@ class MetricData():
     def report_uv_day(self, args):
         return self.messages_per_interval(args.get('token'), message_type='new_day', interval_size='day')
 
+    def report_page_load(self, args):
+        return self.messages_per_interval(args.get('token'), message_type='page_load', interval_size='day')
+
     def report_site_uv(self, args):
         group_by = get_option(args.get('group_by'), set(['minute', 'hour', 'day', 'month', 'year']), 'day')
         domain = args.get('domain')
@@ -54,20 +57,20 @@ class MetricData():
         group_by = get_option(args.get('group_by'), set(['minute', 'hour', 'day', 'month', 'year']), 'day')
         domain = args.get('domain')
         return self.messages_per_interval(args.get('token'),
-            message_type='page_load',
+            message_type='site_load',
             interval_size=group_by,
-            domain='http%://{}/%'.format(domain))
+            domain=domain)
 
     def report_domains(self, args):
         return self.get_site_hostnames(args.get('token'))
 
     def messages_per_interval(self, token, message_type,
             interval_size='day',
-            domain=None,
-            since=datetime.utcnow() - timedelta(30),
-            until=datetime.utcnow()):
+            domain=None):
         s = self.Session()
 
+        since = datetime.utcnow() - timedelta(30)
+        until = datetime.utcnow()
         options = {
             'site_key': token,
             'msg_type': message_type,
