@@ -35,7 +35,7 @@ $(function () {
                     show: true,
                     barWidth: (response.period == 'daily' ? 24 * 60 * 60 * 1000 : 24 * 60 * 60 * 7 * 1000),
                     fillColor: green,
-                    lineWidth: 1,
+                    lineWidth: 0,
                     align: "center",
                 };
 
@@ -51,6 +51,30 @@ $(function () {
                     timestamp_element.html(original_ts_value);
                 }
             });
+        });
+
+//        e.click(function() {
+//            window.location = "/metric_konark/" + e.data('metric') + '/';
+//        })
+    });
+
+
+    $("div.tabular").each(function (index, elem) {
+        var e = $(elem);
+
+       var url = "/metric_details?token=" + token + "&name=" + e.data('metric') + "&domain=" + site;
+        //var url = "http://192.168.5.239/dashboard_json_files/" + e.data('metric') + ".json";
+        //var url = "konark.php?url=http://192.168.5.239/dashboard_json_files/" + e.data('metric') + ".json";
+        $.getJSON(url, function(response) {
+            console.log(response);
+            // table = `<table>`;
+            table = '';
+            response.data.forEach( e => {
+                table += `<b>${e[0]} :</b> ${e[1]}<br/>`;
+            });
+
+            // table += `</table>`;
+            e.html(table);
         });
 
 //        e.click(function() {
