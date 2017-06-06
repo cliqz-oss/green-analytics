@@ -103,8 +103,9 @@ class MetricData():
 
         return [[int(ts), count] for ts, count in grouped_counts]
 
-    def get_site_hostnames(self, token, since=datetime.utcnow() - timedelta(30),
-            until=datetime.utcnow()):
+    def get_site_hostnames(self, token):
+        since = datetime.utcnow() - timedelta(30)
+        until = datetime.utcnow()
         s = self.Session()
         options = {
             'site_key': token,
