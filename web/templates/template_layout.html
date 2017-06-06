@@ -1,0 +1,20 @@
+<!doctype html>
+<html>
+  <head>
+    {% block head %}
+    <link rel="stylesheet" href="{{ url_for('static', filename='lanyon.css') }}">
+    <title>{% block title %}{% endblock %} </title>
+    {% endblock %}
+  </head>
+  <body class="theme-base-08">
+    <h1 align='center'>Green-Analytics : Anaytics that respect your Privacy</h1>
+    <div id="content">{% block content %}{% endblock %}</div>
+    <div id="footer" align="center">
+      {% block footer %}
+      <hr/>
+      Home | About | GitHub | Signup <br/>
+      &copy; Copyright 2017 by <a href="https://green-analytics.test.cliqz.com/">Green-Analytics</a>.
+      {% endblock %}
+    </div>
+  </body>
+</html>

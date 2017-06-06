@@ -1,0 +1,25 @@
+- hosts: all
+  become: true
+  gather_facts: no
+  tasks:
+    - name: Install docker
+      shell: which docker || curl -sSL https://get.docker.com/ | sh
+
+    - name: Install pip
+      apt:
+        name: python-pip
+
+    - name: Install docker-compose
+      pip:
+        name: docker-compose
+
+    - name: Deploy new version
+      synchronize:
+        src: .
+        dest: .
+        delete: yes
+        recursive: yes
+
+    - name: Docker compose
+      docker_service:
+        project_src: green-analytics

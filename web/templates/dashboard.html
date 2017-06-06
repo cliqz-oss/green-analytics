@@ -1,0 +1,80 @@
+<html>
+<head>
+  <title>Green Tracker Analytics</title>
+  <script type="text/javascript" src="static/extern/jquery.min.js"></script>
+  <script type="text/javascript" src="static/extern/jquery.flot.min.js"></script>
+  <!--<script type="text/javascript" src="static/dddash.js"></script>-->
+  <script type="text/javascript">
+    var token = '{{ context['token'] }}';
+    var site = '{{ context['selected_site'] }}';
+  </script>
+  <script type="text/javascript" src="static/dashboard.js"></script>
+  <link rel="stylesheet" href="static/dashboard.css">
+  <link rel="stylesheet" href="static/extern/bootstrap.min.css">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:400italic,700italic,300,700,400&amp;subset=latin">
+</head>
+<body>
+  <div class='container'>
+    <div class="row">
+      <div class="col-md-3">
+      <h1>Green Tracker Analytics</h1>
+      <h3>{{ context['from'] }} to {{ context['to'] }}</h3>
+      <ul class="list-group">
+      {% for item in context.sites %}
+  <li class="list-group-item"><a href="/dashboard?token={{ context['token'] }}&site={{ item[0] }}">{{ item[0] }}</a></li>
+      {% endfor %}
+      </ul>
+
+      </div>
+      <div class="col-md-9">
+
+        <div class='dashboard-index'>
+          <div class="metric has-sparkline">
+            <h3>Unique Visitors</h3>
+            <div>
+              <div class="value">
+              -
+              </div>
+              <div class="timestamp">Total</div>
+            </div>
+
+
+            <div class="sparkline" id="1" data-metric="site_uv" style="padding: 0px;"></div>
+          </div>
+
+        </div>
+
+        <div class='dashboard-index'>
+          <div class="metric has-sparkline">
+            <h3>Site loads</h3>
+            <div>
+              <div class="value">
+              -
+              </div>
+              <div class="timestamp">Total</div>
+            </div>
+
+
+            <div class="sparkline" id="1" data-metric="site_visits" style="padding: 0px;"></div>
+          </div>
+
+        <div class='dashboard-index'>
+          <div class="metric has-sparkline">
+            <h3>Page views</h3>
+            <div>
+              <div class="value">
+              -
+              </div>
+              <div class="timestamp">Total</div>
+            </div>
+
+
+            <div class="sparkline" id="1" data-metric="page_load" style="padding: 0px;"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</body>
+</html>
