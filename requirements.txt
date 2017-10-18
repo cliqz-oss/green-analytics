@@ -1,5 +1,4 @@
 flask
-psycopg2
 gunicorn
 redis
 msgpack-python	
