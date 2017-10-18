@@ -44,7 +44,6 @@ def te():
 					return jsonify(result=lines)
 				else:
 					lines.append(msgpack.loads(zlib.decompress(data)))
-					print len(data)
 	return jsonify(result=[])
 
 if __name__ == "__main__":
