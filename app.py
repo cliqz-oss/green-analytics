@@ -7,7 +7,7 @@ import json
 import zlib
 import msgpack
 app = Flask(__name__)
-db=redis.from_url(os.environ.get('REDIS_URL', None)
+db=redis.from_url(os.environ.get('REDIS_URL', None))
 token = os.environ.get('DATA_TOKEN', None)
 
 def write(data):
