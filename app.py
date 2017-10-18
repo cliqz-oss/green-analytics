@@ -1,3 +1,5 @@
+
+from __future__ import unicode_literals
 from flask import Flask
 from flask import render_template
 from flask import request, jsonify
@@ -43,7 +45,11 @@ def te():
 					count += 1
 					return jsonify(result=lines)
 				else:
-					lines.append(msgpack.loads(zlib.decompress(data)))
+					data = msgpack.loads(zlib.decompress(data))
+					_data = {}
+					for k,v in data.items():
+						_data[k.decode('utf-8')] = v.decode('utf-8')
+					lines.append(_data)
 	return jsonify(result=[])
 
 if __name__ == "__main__":
