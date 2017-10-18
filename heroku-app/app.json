@@ -1,0 +1,6 @@
+{
+  "name": "Start redis queue on Heroku",
+  "description": "A barebones Python app, to store temporary data",
+  "keywords": ["python", "flask" ],
+  "addons": [ "heroku-redis" ]
+}
