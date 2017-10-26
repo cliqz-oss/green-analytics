@@ -11,11 +11,16 @@
       "size": "free"
     }
   },
+  "scripts": {
+    "postdeploy": "python -c 'from app import db; db.create_all()'"
+  },
   "image": "heroku/python",
   "env": {
     "DATA_TOKEN": {
-      "description": "Visit https://duckduckgo.com/?q=password+12+strong&ia=answer and select the random string shown. (Please note it somewhere), We will need it once.",
       "generator": "secret"
     }
-  }
+  },
+  "addons": [
+    "heroku-postgresql"
+  ]
 }

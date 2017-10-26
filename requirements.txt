@@ -1,4 +1,4 @@
 flask
 gunicorn
-redis
-msgpack-python	
+Flask-SQLAlchemy
+psycopg2
