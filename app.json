@@ -15,4 +15,5 @@
       "description": "Visit https://duckduckgo.com/?q=password+12+strong&ia=answer and select the random string shown. (Please note it somewhere), We will need it once.",
       "generator": "secret"
     }
+  }
 }
