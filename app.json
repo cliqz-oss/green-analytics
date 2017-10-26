@@ -3,6 +3,9 @@
   "description": "A barebones Python app, to store temporary data",
   "keywords": ["python", "flask" ],
   "addons": [ "rediscloud" ],
+  "repository": "https://github.com/cliqz-oss/green-analytics/tree/heroku-deploy",
+  "logo": "https://i.imgur.com/PEkdHpr.png",
+  "success_url": "/",
   "formation": {
     "web": {
       "quantity": 1,
