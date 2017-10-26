@@ -21,7 +21,7 @@ db = SQLAlchemy(app)
 
 class rows(db.Model):
     id = db.Column(db.Integer, primary_key=True)
-    row = db.Column(db.Text, nullable=False)
+    row = db.Column(db.String(12000), nullable=False)
 
     def __init__(self, row):
         self.row = row
