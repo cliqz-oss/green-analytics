@@ -2,5 +2,17 @@
   "name": "Start redis queue on Heroku",
   "description": "A barebones Python app, to store temporary data",
   "keywords": ["python", "flask" ],
-  "addons": [ "rediscloud" ]
+  "addons": [ "rediscloud" ],
+  "formation": {
+    "web": {
+      "quantity": 1,
+      "size": "free"
+    }
+  },
+  "image": "heroku/python",
+  "env": {
+    "DATA_TOKEN": {
+      "description": "Visit https://duckduckgo.com/?q=password+12+strong&ia=answer and select the random string shown. (Please note it somewhere), We will need it once.",
+      "generator": "secret"
+    }
 }
