@@ -50,7 +50,7 @@ def hello():
 @app.route('/collect', methods=['GET', 'POST'])
 def collect():
 	if request.method == "POST":
-		write(request.data)
+		write(json.dumps(json.loads(request.data)))
 	return ""
 
 @app.route('/frame')
@@ -67,7 +67,10 @@ def te():
 			lines = []
 			_rows = read()
 			for each in _rows:
-				lines.append([each.id, json.loads(each.row)])
+				try:
+					lines.append([each.id, json.loads(each.row)])
+				except:
+					pass
 			db.session.query(rows).delete()
 			db.session.commit()
 			return jsonify(result=lines)
