@@ -64,6 +64,109 @@ class MetricData():
     def report_domains(self, args):
         return self.get_site_hostnames(args.get('token'))
 
+    def report_returning_visitors(self, args):
+
+        s = self.Session()
+        since = datetime.utcnow() - timedelta(30)
+        until = datetime.utcnow()
+        token = args.get('token')
+        domain = args.get('domain')
+        options = {
+            'site_key': token,
+            'since': since,
+            'until': until,
+            'domain': domain,
+        }
+
+        query = '''
+        SELECT extract(epoch from date_trunc('day', ts)) AS day,
+        count(message->>'returning_from_ts')
+        FROM messages WHERE
+        message->>'returning_from_ts' is not null AND
+        message->>'type' ='site_visit_by_day' AND
+        site_id = (SELECT site_id FROM sites WHERE site_key = :site_key) AND
+        message->>'p' LIKE :domain AND
+        ts >= :since AND
+        ts < :until
+        GROUP BY
+        day;
+        '''
+
+        grouped_counts = s.execute(query,options).fetchall()
+        return [[int(ts), count] for ts, count in grouped_counts]
+
+    def report_os(self, args):
+
+        s = self.Session()
+        token = args.get('token')
+
+        options = {
+            'site_key': token
+        }
+
+        query = '''
+        select message->>'os' as os, count(1) as count
+        from messages WHERE
+        message->>'os' is not null AND
+        message->>'type'='new_year' AND
+        site_id = (SELECT site_id FROM sites WHERE site_key = :site_key)
+        GROUP BY os
+        ORDER BY count DESC
+        LIMIT 5
+        '''
+
+        grouped_counts = s.execute(query,options).fetchall()
+
+        return [[ua, count] for ua, count in grouped_counts]
+
+    def report_ua(self, args):
+
+        s = self.Session()
+        token = args.get('token')
+
+        options = {
+            'site_key': token
+        }
+
+        query = '''
+        select message->>'browser' as browser, count(1) as count
+        from messages WHERE
+        message->>'browser' is not null AND
+        message->>'type'='new_year' AND
+        site_id = (SELECT site_id FROM sites WHERE site_key = :site_key)
+        GROUP BY browser
+        ORDER BY count DESC
+        LIMIT 5
+        '''
+
+        grouped_counts = s.execute(query,options).fetchall()
+
+        return [[ua, count] for ua, count in grouped_counts]
+
+    def report_top_pages(self, args):
+
+        s = self.Session()
+        token = args.get('token')
+        domain = 'http%://' + args.get('domain') + '%'
+        options = {
+            'site_key': token,
+            'domain': domain
+        }
+
+        query = '''
+        select message->>'p' as p, count(1) as count
+        from messages WHERE
+        message->>'type'='page_visit_by_year' AND
+        message->>'p' LIKE :domain AND
+        site_id = (SELECT site_id FROM sites WHERE site_key = :site_key)
+        GROUP BY p
+        ORDER BY count DESC
+        LIMIT 5
+        '''
+
+        grouped_counts = s.execute(query,options).fetchall()
+
+        return [[ua, count] for ua, count in grouped_counts]
     def messages_per_interval(self, token, message_type,
             interval_size='day',
             domain=None):
@@ -101,6 +204,7 @@ class MetricData():
 
         grouped_counts = s.execute(query, options).fetchall()
 
+        print grouped_counts
         return [[int(ts), count] for ts, count in grouped_counts]
 
     def get_site_hostnames(self, token):
