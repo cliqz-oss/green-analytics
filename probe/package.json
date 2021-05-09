@@ -8,6 +8,6 @@
   },
   "dependencies": {
     "crypto-js": "^3.1.9-1",
-    "ua-parser-js": "^0.7.12"
+    "ua-parser-js": "^0.7.24"
   }
 }
